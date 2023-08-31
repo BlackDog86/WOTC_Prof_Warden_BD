@@ -1,0 +1,1 @@
+class X2DLCInfo_WOTC_Prof_Warden_BD extends X2DownloadableContentInfo;
