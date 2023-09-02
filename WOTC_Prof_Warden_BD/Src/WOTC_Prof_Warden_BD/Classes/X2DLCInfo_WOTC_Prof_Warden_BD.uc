@@ -5,17 +5,18 @@ static event OnPostTemplatesCreated()
 	SetupGTSUnlocks();
 }
 
-static function bool AbilityTagExpandHandler_CH(string InString, out string OutString, Object ParseObj, Object StrategyParseObj, XComGameState GameState)
-{
-	local XComGameState_Ability AbilityState;
-	local XComGameState_Effect EffectState;
-	local X2AbilityTemplate AbilityTemplate;
-	local X2ItemTemplate ItemTemplate;
-	local name Type;
+
+//static function bool AbilityTagExpandHandler_CH(string InString, out string OutString, Object ParseObj, Object StrategyParseObj, XComGameState GameState)
+//{
+//	local XComGameState_Ability AbilityState;
+//	local XComGameState_Effect EffectState;
+//	local X2AbilityTemplate AbilityTemplate;
+//	local X2ItemTemplate ItemTemplate;
+//	local name Type;
 	
-    Type = name(InString);
-    switch(Type)
-    {
+//    Type = name(InString);
+//    switch(Type)
+//    {
 	//	case 'DEFILADE_DEFENSE_BONUS':
 	//		OutString = string(class'X2Effect_Defilade'.default.DEFILADE_DEFENSE_BONUS);
 	//		return true;	
@@ -36,9 +37,9 @@ static function bool AbilityTagExpandHandler_CH(string InString, out string OutS
 	//		OutString = string(class'X2Effect_LoneWolf'.default.LONEWOLF_MIN_DIST_TILES);				
 	//		return true;
 	//	default:
-     //       return false;
-    }
-}
+    
+//    }
+//}
 
 static function SetupGTSUnlocks()
 {

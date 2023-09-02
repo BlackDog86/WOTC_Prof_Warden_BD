@@ -19,10 +19,10 @@ LocHelpText="Ranged Stance"
 LocPromotionPopupText="<Bullet/> No cooldown."
 LocFlyOverText="Ranged Stance"
 
-[Warden_BD_EbbAndFlow X2AbilityTemplate]
-LocFriendlyName="Ebb"
-LocLongDescription="Change stance & gain bonuses"
-LocHelpText="Gain additional defense. Retain stance."
+[Warden_BD_EbbAndFlowDummy X2AbilityTemplate]
+LocFriendlyName="Ebb & Flow"
+LocLongDescription="Change stance at the start of the next turn"
+LocHelpText="Change stance at the start of the next turn."
 LocPromotionPopupText="<Bullet/> No cooldown."
 LocFlyOverText="Ebb"
 

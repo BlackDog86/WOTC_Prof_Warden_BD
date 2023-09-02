@@ -47,6 +47,7 @@ static function array<X2DataTemplate> CreateTemplates()
 	Templates.AddItem(Warden_BD_MeleeStance());	
 	Templates.AddItem(Warden_BD_RangedStance());	
 	Templates.AddItem(Warden_BD_EbbAndFlow());
+	Templates.AddItem(Warden_BD_EbbAndFlowDummy());
 	Templates.AddItem(Warden_BD_ApplyAdditionalDamage());
 	Templates.AddItem(Warden_BD_Rewind());
 	Templates.AddItem(Warden_BD_Blockade());	
@@ -80,7 +81,7 @@ static final function X2AbilityTemplate Warden_BD_MeleeStance()
 	local X2AbilityTemplate										Template;
 	local X2AbilityTrigger_EventListener						MeleeTrigger;
 	local X2Effect_SetUnitValue									SetUnitValueEffect;
-	local X2Effect_ClearUnitValue								ClearUnitValueEffect;	
+	local X2Effect_ClearUnitValue								ClearUnitValueEffect, ClearUnitValueEffect2;
 	local X2Condition_WOTC_APA_Class_TargetRankRequirement		RankCondition1, RankCondition2, RankCondition3;
 	local X2Effect_PersistentStatChange							MobilityEffect1, MobilityEffect2, MobilityEffect3;						
 
@@ -163,6 +164,11 @@ static final function X2AbilityTemplate Warden_BD_MeleeStance()
 	ClearUnitValueEffect.UnitValueName = default.RangedStanceValueName;
 	Template.AddTargetEffect(ClearUnitValueEffect);
 
+	ClearUnitValueEffect2 = new Class'X2Effect_ClearUnitValue';
+	ClearUnitValueEffect2.UnitValueName = default.FlowAPGrantedValueName;
+	`Log("I just cleared the Flow AP unitvalue from melee stance");
+	Template.AddTargetEffect(ClearUnitValueEffect2);
+
 	// # State and Visualization	
 	Template.CustomSelfFireAnim = 'HL_IdleA';
 	Template.Hostility = eHostility_Neutral;
@@ -179,7 +185,7 @@ static final function X2AbilityTemplate Warden_BD_RangedStance()
 	local X2AbilityTemplate										Template;	
 	local X2AbilityTrigger_EventListener						RangedTrigger;
 	local X2Effect_SetUnitValue									SetUnitValueEffect;
-	local X2Effect_ClearUnitValue								ClearUnitValueEffect;
+	local X2Effect_ClearUnitValue								ClearUnitValueEffect, ClearUnitValueEffect2;
 	local X2Condition_WOTC_APA_Class_TargetRankRequirement		RankCondition1, RankCondition2, RankCondition3;
 	local X2Effect_WardenCounterDefense							IgnoreCoverEffect1, IgnoreCoverEffect2, IgnoreCoverEffect3;
 	local X2Effect_ReturnFire									ReturnFireEffect1,ReturnFireEffect2,ReturnFireEffect3;
@@ -295,6 +301,11 @@ static final function X2AbilityTemplate Warden_BD_RangedStance()
 	ClearUnitValueEffect.UnitValueName = default.MeleeStanceValueName;
 	Template.AddTargetEffect(ClearUnitValueEffect);
 
+	ClearUnitValueEffect2 = new Class'X2Effect_ClearUnitValue';
+	ClearUnitValueEffect2.UnitValueName = default.FlowAPGrantedValueName;
+	`Log("I just cleared the Flow AP unitvalue from ranged stance");
+	Template.AddTargetEffect(ClearUnitValueEffect2);
+
 	// # State and Visualization
 	Template.Hostility = eHostility_Neutral;
 	Template.bShowActivation = true;
@@ -309,6 +320,56 @@ static final function X2AbilityTemplate Warden_BD_RangedStance()
 
 	return Template;
 }
+
+static final function X2AbilityTemplate Warden_BD_EbbAndFlowDummy()
+{
+	local X2AbilityTemplate										Template;
+	local X2AbilityCost_ActionPoints							ActionPointCost;	
+	local X2Effect_Persistent									PersistentEffect;
+	
+	`CREATE_X2ABILITY_TEMPLATE(Template, 'Warden_BD_EbbAndFlowDummy');
+	
+	// # Icon Setup
+	Template.AbilitySourceName = 'eAbilitySource_Psionic';
+	Template.IconImage = "img:///Warden_BD_PerkIcons.UIPerk_WardenFlow";
+	Template.ShotHUDPriority = class'UIUtilities_Tactical'.const.CLASS_SQUADDIE_PRIORITY;
+	Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_AlwaysShow;
+
+	// # Targeting and Triggering
+	Template.AbilityToHitCalc = default.DeadEye;
+	Template.AbilityTargetStyle = default.SelfTarget;	
+	Template.AbilityTriggers.AddItem(default.PlayerInputTrigger);
+
+	ActionPointCost = new class'X2AbilityCost_ActionPoints';
+	ActionPointCost.iNumPoints = 1; 
+	ActionPointCost.bConsumeAllPoints = true;
+	ActionPointCost.AllowedTypes.Length = 0;
+	ActionPointCost.AllowedTypes.AddItem(default.SpecialMomentumAP);
+	Template.AbilityCosts.AddItem(ActionPointCost);		
+
+	PersistentEffect = new class'X2Effect_Persistent';
+	PersistentEffect.BuildPersistentEffect(1, false, true);
+	PersistentEffect.SetDisplayInfo(ePerkBuff_Passive, Template.LocFriendlyName, Template.LocLongDescription, Template.IconImage, true, , Template.AbilitySourceName);
+	Template.AddTargetEffect(PersistentEffect);
+
+	// # Shooter Conditions
+	Template.AbilityShooterConditions.AddItem(default.LivingShooterProperty);
+	
+	// # State and Visualization
+	// TODO: Figure out better activation speech (limited to existing lines in XComCharacterVoiceBank.uc)
+	Template.ActivationSpeech = 'RunAndGun';
+		
+	// TODO: Figure out more fitting confirm sound or use standard.
+	Template.AbilityConfirmSound = "TacticalUI_SwordConfirm";
+	Template.Hostility = eHostility_Neutral;
+	Template.bShowActivation = true;
+	Template.bSkipFireAction = true;
+	Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
+	Template.BuildVisualizationFn = TypicalAbility_BuildVisualization;
+	
+	return Template;
+}
+
 // Ebb & Flow
 static final function X2AbilityTemplate Warden_BD_EbbandFlow()
 {
@@ -318,6 +379,7 @@ static final function X2AbilityTemplate Warden_BD_EbbandFlow()
 	local X2Effect_TriggerEvent									TriggerRangedEvent;
 	local X2Condition_Unitvalue									CheckMeleeStance;
 	local X2Condition_Unitvalue									CheckRangedStance;
+	local X2Condition_Unitvalue									CheckFlowAPsGranted;
 	local X2AbilityTrigger_EventListener						EventListener;
 	local X2Effect_RemoveEffects								RemoveMeleeEffects, RemoveRangedEffects;
 
@@ -340,19 +402,20 @@ static final function X2AbilityTemplate Warden_BD_EbbandFlow()
 	EventListener.ListenerData.EventFn = class'XComGameState_Ability'.static.AbilityTriggerEventListener_Self;
 	Template.AbilityTriggers.AddItem(EventListener);
 
-	// # Shooter Conditions
-	Template.AbilityShooterConditions.AddItem(default.LivingShooterProperty);
-	Template.AddShooterEffectExclusions();
+	// Check if flow APs were granted on the last turn
+	CheckFlowAPsGranted = new Class'X2Condition_Unitvalue';
+	CheckFlowAPsGranted.AddCheckValue(default.FlowAPGrantedValueName,1,eCheck_Exact);
 	
-	// # State and Visualization
-	// TODO: Figure out better activation speech (limited to existing lines in XComCharacterVoiceBank.uc)
-	Template.ActivationSpeech = 'RunAndGun';
+	// Only fire if flow APs were granted before
+	Template.AbilityShooterConditions.AddItem(default.LivingShooterProperty);
+	Template.AbilityShooterConditions.AddItem(CheckFlowAPsGranted);
+	Template.AddShooterEffectExclusions();
 	
 	// Check if we're in melee stance
 	CheckMeleeStance = new Class'X2Condition_Unitvalue';
 	CheckMeleeStance.AddCheckValue(default.MeleeStanceValueName,1,eCheck_Exact);
-	
-	// If we are, remove melee stance persistent effects 
+
+	// Remove melee stance persistent effects if we're switching
 	RemoveMeleeEffects = new Class'X2Effect_RemoveEffects';
 	RemoveMeleeEffects.EffectNamesToRemove.AddItem(default.MeleeStanceHitEffectName);
 	RemoveMeleeEffects.EffectNamesToRemove.AddItem(default.MeleeStanceMobilityEffectName);
@@ -383,7 +446,6 @@ static final function X2AbilityTemplate Warden_BD_EbbandFlow()
 	Template.AddTargetEffect(TriggerMeleeEvent);
 
 	// TODO: Figure out more fitting confirm sound or use standard.
-	Template.AbilityConfirmSound = "TacticalUI_SwordConfirm";
 	Template.Hostility = eHostility_Neutral;
 	Template.bShowActivation = false;
 	Template.bSkipFireAction = true;
@@ -1250,18 +1312,19 @@ static final function EventListenerReturn SpecialAPTrigger_EventListenerFn(Objec
     local XComGameState_Ability         ActivatedAbilityState;
     local X2AbilityTemplate             AbilityTemplate;
     local XComGameState_Unit            SourceUnit; 
+	local XComGameState_Item            SourceWeapon;
 	local UnitValue						UV;   
     local XComGameStateContext_Ability  AbilityContext; 
 		    
     AbilityContext = XComGameStateContext_Ability(GameState.GetContext());
     if(AbilityContext == none || AbilityContext.InterruptionStatus == eInterruptionStatus_Interrupt)
         return ELR_NoInterrupt;
- 
-    // This is the ability state of the ability that triggered the 'AbilityActivated' event.
+
+	// This is the ability state of the ability that triggered the 'AbilityActivated' event.
     // When that event is triggered, you get the ability state object as EventData.
     ActivatedAbilityState = XComGameState_Ability(EventData);
-    
-    // We 'none check' everything just in case, though it shouldn't be possible for this ability state to be 'none'.
+
+    // Check ability exists and is not triggered at the start of the mission
     if (ActivatedAbilityState == none)
         return ELR_NoInterrupt;  		
 
@@ -1270,20 +1333,42 @@ static final function EventListenerReturn SpecialAPTrigger_EventListenerFn(Objec
     if (SourceUnit == none)     
         return ELR_NoInterrupt; 
    
-    // Fallback if no template 
+	// Fallback if no template
     AbilityTemplate = ActivatedAbilityState.GetMyTemplate();
-    if (AbilityTemplate == none) 
+    if (AbilityTemplate == none)
+        return ELR_NoInterrupt;
+	
+	// fallback if it's not offensive
+    if (AbilityTemplate.Hostility != eHostility_Offensive)
+        return ELR_NoInterrupt;  
+        
+    // fallback if it does no damage
+     if (!AbilityTemplate.TargetEffectsDealDamage(SourceWeapon, ActivatedAbilityState))
+        return ELR_NoInterrupt;
+
+	// Fallback if no weapon
+	SourceWeapon = ActivatedAbilityState.GetSourceWeapon();
+    if (SourceWeapon == none)
         return ELR_NoInterrupt;  
 		
 	// Fallback if flow APs have been granted already
 	If (SourceUnit.GetUnitValue(default.FlowAPGrantedValueName, UV))
 		return ELR_NoInterrupt;
+		
+	// Grant APs if turn ending sword attach in Melee stance
+    if (SourceUnit.GetUnitValue(default.MeleeStanceValueName, UV) && SourceWeapon.InventorySlot == eInvSlot_SecondaryWeapon && SourceUnit.NumAllActionPoints() == 0)
+    {
+        `LOG("The ability which activated this listener for melee is:" @ ActivatedAbilityState.GetMyTemplateName());
+		GrantFlowAP(SourceUnit);        
+    }
 
-    // If ability ends the turn, grant flow APs
-	if (SourceUnit.NumAllActionPoints() == 0)  
+	// Grant APs if turn ending bullpup attack in Ranged stance
+    else if (SourceUnit.GetUnitValue(default.RangedStanceValueName, UV) && SourceWeapon.InventorySlot == eInvSlot_PrimaryWeapon && SourceUnit.NumAllActionPoints() == 0)
+    {
+        `LOG("The ability which activated this listener for ranged is:" @ ActivatedAbilityState.GetMyTemplateName());
 		GrantFlowAP(SourceUnit);
-	 
-    return ELR_NoInterrupt;
+    }
+	return ELR_NoInterrupt;
 }
 // Melee-Stance Additional Damage EventListener
 static final function EventListenerReturn ApplyAdditionalDamage_EventListenerFn(Object EventData, Object EventSource, XComGameState GameState, Name EventID, Object CallbackData)
@@ -1578,11 +1663,13 @@ static function X2AbilityTemplate WOTC_Prof_Warden_BD_AcademyAbility()
 static final function GrantFlowAP(XComGameState_Unit UnitState)
 {
     local XComGameState NewGameState;
-        
+
     NewGameState = class'XComGameStateContext_ChangeContainer'.static.CreateChangeState("Adding Special AP to:" @ UnitState.GetFullName());
     UnitState = XComGameState_Unit(NewGameState.ModifyStateObject(UnitState.class, UnitState.ObjectID));
     UnitState.ActionPoints.AddItem(default.SpecialMomentumAP);  
-    UnitState.SetUnitFloatValue(default.FlowAPGrantedValueName, 1, eCleanup_BeginTurn);
+    UnitState.SetUnitFloatValue(default.FlowAPGrantedValueName, 1, eCleanup_BeginTactical);
+	
+	`Log("I just set the FlowAP unitvalue in GrantFlowAPs");
     `GAMERULES.SubmitGameState(NewGameState);
 }
 // Rewind Helper
