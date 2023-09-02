@@ -25,31 +25,31 @@
     <Content Include="Config\XComGameData.ini">
       <SubType>Content</SubType>
     </Content>
-    <Content Include="Config\XcomWardenSkills.ini">
+    <Content Include="Config\XComWardenSkills.ini">
       <SubType>Content</SubType>
     </Content>
     <Content Include="Config\XComWOTC_CostBasedAbilityColors.ini">
       <SubType>Content</SubType>
     </Content>
-    <Content Include="ContentForCook\Perk_Warden_BD_Blockade.upk">
+    <Content Include="Content\Perk_Warden_BD_Blockade.upk">
       <SubType>Content</SubType>
     </Content>
-    <Content Include="ContentForCook\Perk_Warden_BD_KineticArmour.upk">
+    <Content Include="Content\Perk_Warden_BD_KineticArmour.upk">
       <SubType>Content</SubType>
     </Content>
-    <Content Include="ContentForCook\Perk_Warden_BD_Melee.upk">
+    <Content Include="Content\Perk_Warden_BD_Melee.upk">
       <SubType>Content</SubType>
     </Content>
-    <Content Include="ContentForCook\Perk_Warden_BD_Pillar.upk">
+    <Content Include="Content\Perk_Warden_BD_Pillar.upk">
       <SubType>Content</SubType>
     </Content>
-    <Content Include="ContentForCook\Perk_Warden_BD_Ranged.upk">
+    <Content Include="Content\Perk_Warden_BD_Ranged.upk">
       <SubType>Content</SubType>
     </Content>
-    <Content Include="ContentForCook\Perk_Warden_BD_SwordSlice.upk">
+    <Content Include="Content\Perk_Warden_BD_SwordSlice.upk">
       <SubType>Content</SubType>
     </Content>
-    <Content Include="ContentForCook\Warden_BD_PerkIcons.upk">
+    <Content Include="Content\Warden_BD_PerkIcons.upk">
       <SubType>Content</SubType>
     </Content>
     <Content Include="ReadMe.txt" />
@@ -70,9 +70,6 @@
       <SubType>Content</SubType>
     </Content>
     <Content Include="Src\WOTC_Prof_Warden_BD\Classes\X2Condition_WOTC_APA_Class_TargetRankRequirement.uc">
-      <SubType>Content</SubType>
-    </Content>
-    <Content Include="Src\WOTC_Prof_Warden_BD\Classes\X2DLCInfo_WardenRemaster.uc">
       <SubType>Content</SubType>
     </Content>
     <Content Include="Src\WOTC_Prof_Warden_BD\Classes\X2DLCInfo_WOTC_Prof_Warden_BD.uc" />
@@ -100,9 +97,6 @@
       <SubType>Content</SubType>
     </Content>
     <Content Include="Src\WOTC_Prof_Warden_BD\Classes\X2Effect_WardenCounterDefense.uc">
-      <SubType>Content</SubType>
-    </Content>
-    <Content Include="Src\WOTC_Prof_Warden_BD\Classes\X2Effect_WardenSword.uc">
       <SubType>Content</SubType>
     </Content>
     <Content Include="Src\WOTC_Prof_Warden_BD\Classes\X2Effect_WardenSwordDamage.uc">

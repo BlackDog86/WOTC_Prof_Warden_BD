@@ -70,6 +70,7 @@ static function array<X2DataTemplate> CreateTemplates()
 //	Templates.AddItem(Warden_BD_StrongWill());
 //	Templates.AddItem(Warden_BD_Retribution());
 	Templates.AddItem(Warden_BD_Pillar());
+	Templates.AddItem(WOTC_Prof_Warden_BD_AcademyAbility());
 	return Templates;
 }
 
@@ -90,20 +91,20 @@ static final function X2AbilityTemplate Warden_BD_MeleeStance()
 	RankCondition1.iMinRank = -1;	// No minimum rank for level 1 bonuses
 	RankCondition1.iMaxRank = 2;	// Max rank is 1 below minimum rank for level 2 bonuses
 	RankCondition1.LogEffectName = "Melee Hit 1";	// EffectName to use in logs
-	RankCondition1.ExcludeProject = 'Warden_BD_Unlock1';
+	RankCondition1.ExcludeProject = 'WOTC_Prof_Warden_BD_Unlock1';
 
 	RankCondition2 = new class 'X2Condition_WOTC_APA_Class_TargetRankRequirement';
 	RankCondition2.iMinRank = 3;
 	RankCondition2.iMaxRank = 5;
 	RankCondition2.LogEffectName = "Melee Hit 2";
-	RankCondition2.ExcludeProject = 'Warden_BD_Unlock2';
-	RankCondition2.GiveProject = 'Warden_BD_Unlock2';
+	RankCondition2.ExcludeProject = 'WOTC_Prof_Warden_BD_Unlock2';
+	RankCondition2.GiveProject = 'WOTC_Prof_Warden_BD_Unlock1';
 	
 	RankCondition3 = new class 'X2Condition_WOTC_APA_Class_TargetRankRequirement';
 	RankCondition3.iMinRank = 6;
 	RankCondition3.iMaxRank = -1;	// No max rank for level 3 bonuses
 	RankCondition3.LogEffectName = "Melee Hit 3";
-	RankCondition3.GiveProject = 'Warden_BD_Unlock3';	 
+	RankCondition3.GiveProject = 'WOTC_Prof_Warden_BD_Unlock2';	 
 	
 	// # Icon Setup
 	Template.AbilitySourceName = 'eAbilitySource_Psionic';
@@ -190,20 +191,20 @@ static final function X2AbilityTemplate Warden_BD_RangedStance()
 	RankCondition1.iMinRank = -1;	// No minimum rank for level 1 bonuses
 	RankCondition1.iMaxRank = 2;	// Max rank is 1 below minimum rank for level 2 bonuses
 	RankCondition1.LogEffectName = "Ranged Hit 1";	// EffectName to use in logs
-	RankCondition1.ExcludeProject = 'Warden_BD_Unlock1';
+	RankCondition1.ExcludeProject = 'WOTC_Prof_Warden_BD_Unlock1';
 
 	RankCondition2 = new class 'X2Condition_WOTC_APA_Class_TargetRankRequirement';
 	RankCondition2.iMinRank = 3;
 	RankCondition2.iMaxRank = 5;
 	RankCondition2.LogEffectName = "Melee Hit 2";
-	RankCondition2.ExcludeProject = 'Warden_BD_Unlock2';
-	RankCondition2.GiveProject = 'Warden_BD_Unlock1';
+	RankCondition2.ExcludeProject = 'WOTC_Prof_Warden_BD_Unlock2';
+	RankCondition2.GiveProject = 'WOTC_Prof_Warden_BD_Unlock1';
 	
 	RankCondition3 = new class 'X2Condition_WOTC_APA_Class_TargetRankRequirement';
 	RankCondition3.iMinRank = 6;
 	RankCondition3.iMaxRank = -1;	// No max rank for level 3 bonuses
 	RankCondition3.LogEffectName = "Ranged Hit 3";
-	RankCondition3.GiveProject = 'Warden_BD_Unlock2';	
+	RankCondition3.GiveProject = 'WOTC_Prof_Warden_BD_Unlock2';	
 
 	// # Icon Setup
 	Template.AbilitySourceName = 'eAbilitySource_Psionic';
@@ -317,32 +318,11 @@ static final function X2AbilityTemplate Warden_BD_EbbandFlow()
 	local X2Effect_TriggerEvent									TriggerRangedEvent;
 	local X2Condition_Unitvalue									CheckMeleeStance;
 	local X2Condition_Unitvalue									CheckRangedStance;
-	local X2Condition_WOTC_APA_Class_TargetRankRequirement		RankCondition1, RankCondition2, RankCondition3;
-	local X2AbilityTrigger_EventListener						EventTrigger;
+	local X2AbilityTrigger_EventListener						EventListener;
 	local X2Effect_RemoveEffects								RemoveMeleeEffects, RemoveRangedEffects;
 
 	`CREATE_X2ABILITY_TEMPLATE(Template, 'Warden_BD_EbbandFlow');
 	
-	// Create Ranks for Proficiency Effects
-	RankCondition1 = new class 'X2Condition_WOTC_APA_Class_TargetRankRequirement';
-	RankCondition1.iMinRank = -1;	// No minimum rank for level 1 bonuses
-	RankCondition1.iMaxRank = 2;	// Max rank is 1 below minimum rank for level 2 bonuses
-	RankCondition1.LogEffectName = "Mobility & ReturnFire 1";	// EffectName to use in logs
-	RankCondition1.ExcludeProject = 'Warden_BD_Unlock1';
-
-	RankCondition2 = new class 'X2Condition_WOTC_APA_Class_TargetRankRequirement';
-	RankCondition2.iMinRank = 3;
-	RankCondition2.iMaxRank = 5;
-	RankCondition2.LogEffectName = "Mobility & ReturnFire 2";
-	RankCondition2.ExcludeProject = 'Warden_BD_Unlock2';
-	RankCondition2.GiveProject = 'Warden_BD_Unlock1';
-	
-	RankCondition3 = new class 'X2Condition_WOTC_APA_Class_TargetRankRequirement';
-	RankCondition3.iMinRank = 6;
-	RankCondition3.iMaxRank = -1;	// No max rank for level 3 bonuses
-	RankCondition3.LogEffectName = "Mobility & ReturnFire 3";
-	RankCondition3.GiveProject = 'Warden_BD_Unlock2';	
-
 	// # Icon Setup
 	Template.AbilitySourceName = 'eAbilitySource_Perk';
 	Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_regeneration";
@@ -353,18 +333,12 @@ static final function X2AbilityTemplate Warden_BD_EbbandFlow()
 	Template.AbilityToHitCalc = default.DeadEye;
 	Template.AbilityTargetStyle = default.SelfTarget;	
 	
-	EventTrigger = new class'X2AbilityTrigger_EventListener';
-	EventTrigger.ListenerData.Deferral = ELD_OnStateSubmitted;
-	EventTrigger.ListenerData.EventID = 'PlayerTurnEnded';
-	EventTrigger.ListenerData.Filter = eFilter_Player;
-	EventTrigger.ListenerData.EventFn = class'XComGameState_Ability'.static.AbilityTriggerEventListener_Self;
-	Template.AbilityTriggers.AddItem(EventTrigger);
-	Template.AbilityTriggers.AddItem(default.PlayerInputTrigger);
-
-	ActionPointCost = new class'X2AbilityCost_ActionPoints';
-	ActionPointCost.iNumPoints = 0; 
-	ActionPointCost.bConsumeAllPoints = false;
-	Template.AbilityCosts.AddItem(ActionPointCost);		
+	EventListener = new class'X2AbilityTrigger_EventListener';
+	EventListener.ListenerData.Deferral = ELD_OnStateSubmitted;
+	EventListener.ListenerData.EventID = 'PlayerTurnBegun';
+	EventListener.ListenerData.Filter = eFilter_Player;
+	EventListener.ListenerData.EventFn = class'XComGameState_Ability'.static.AbilityTriggerEventListener_Self;
+	Template.AbilityTriggers.AddItem(EventListener);
 
 	// # Shooter Conditions
 	Template.AbilityShooterConditions.AddItem(default.LivingShooterProperty);
@@ -380,8 +354,8 @@ static final function X2AbilityTemplate Warden_BD_EbbandFlow()
 	
 	// If we are, remove melee stance persistent effects 
 	RemoveMeleeEffects = new Class'X2Effect_RemoveEffects';
-	RemoveMeleeEffects.EffectNamesToRemove.AddItem(default.RangedStanceCDefEffectName);
-	RemoveMeleeEffects.EffectNamesToRemove.AddItem(default.RangedStanceReturnFireEffectName);
+	RemoveMeleeEffects.EffectNamesToRemove.AddItem(default.MeleeStanceHitEffectName);
+	RemoveMeleeEffects.EffectNamesToRemove.AddItem(default.MeleeStanceMobilityEffectName);
 	RemoveMeleeEffects.TargetConditions.AddItem(CheckMeleeStance);
 	Template.AddTargetEffect(RemoveMeleeEffects);
 
@@ -397,8 +371,8 @@ static final function X2AbilityTemplate Warden_BD_EbbandFlow()
 
 	//  If we are, remove ranged stance persistent effects 
 	RemoveRangedEffects = new Class'X2Effect_RemoveEffects';
-	RemoveRangedEffects.EffectNamesToRemove.AddItem(default.MeleeStanceHitEffectName);
-	RemoveRangedEffects.EffectNamesToRemove.AddItem(default.MeleeStanceMobilityEffectName);
+	RemoveRangedEffects.EffectNamesToRemove.AddItem(default.RangedStanceCDefEffectName);
+	RemoveRangedEffects.EffectNamesToRemove.AddItem(default.RangedStanceReturnFireEffectName);
 	RemoveRangedEffects.TargetConditions.AddItem(CheckRangedStance);
 	Template.AddTargetEffect(RemoveRangedEffects);
 
@@ -555,20 +529,20 @@ static final function X2AbilityTemplate Warden_BD_KineticArmour()
 	RankCondition1.iMinRank = -1;	// No minimum rank for level 1 bonuses
 	RankCondition1.iMaxRank = 2;	// Max rank is 1 below minimum rank for level 2 bonuses
 	RankCondition1.LogEffectName = "Kinetic Armour 1";	// EffectName to use in logs
-	RankCondition1.ExcludeProject = 'Warden_BD_Unlock1';
+	RankCondition1.ExcludeProject = 'WOTC_Prof_Warden_BD_Unlock1';
 
 	RankCondition2 = new class 'X2Condition_WOTC_APA_Class_TargetRankRequirement';
 	RankCondition2.iMinRank = 3;
 	RankCondition2.iMaxRank = 5;
 	RankCondition2.LogEffectName = "Kinetic Armour 2";
-	RankCondition2.ExcludeProject = 'Warden_BD_Unlock2';
-	RankCondition2.GiveProject = 'Warden_BD_Unlock2';
+	RankCondition2.ExcludeProject = 'WOTC_Prof_Warden_BD_Unlock2';
+	RankCondition2.GiveProject = 'WOTC_Prof_Warden_BD_Unlock1';
 	
 	RankCondition3 = new class 'X2Condition_WOTC_APA_Class_TargetRankRequirement';
 	RankCondition3.iMinRank = 6;
 	RankCondition3.iMaxRank = -1;	// No max rank for level 3 bonuses
 	RankCondition3.LogEffectName = "Kinetic Armour 3";
-	RankCondition3.GiveProject = 'Warden_BD_Unlock3';	 
+	RankCondition3.GiveProject = 'WOTC_Prof_Warden_BD_Unlock2';	 
 
 	// # Costs and Cooldowns
 	Cooldown = new class'X2AbilityCooldown';
@@ -1096,20 +1070,20 @@ static function X2AbilityTemplate Warden_BD_ApplyAdditionalDamage()
 	RankCondition1.iMinRank = -1;	// No minimum rank for level 1 bonuses
 	RankCondition1.iMaxRank = 2;	// Max rank is 1 below minimum rank for level 2 bonuses
 	RankCondition1.LogEffectName = "Melee Stance Damage 1";	// EffectName to use in logs
-	RankCondition1.ExcludeProject = 'Warden_BD_Unlock1';
+	RankCondition1.ExcludeProject = 'WOTC_Prof_Warden_BD_Unlock1';
 
 	RankCondition2 = new class 'X2Condition_WOTC_APA_Class_TargetRankRequirement';
 	RankCondition2.iMinRank = 3;
 	RankCondition2.iMaxRank = 5;
 	RankCondition2.LogEffectName = "Melee Stance Damage 2";
-	RankCondition2.ExcludeProject = 'Warden_BD_Unlock2';
-	RankCondition2.GiveProject = 'Warden_BD_Unlock1';
+	RankCondition2.ExcludeProject = 'WOTC_Prof_Warden_BD_Unlock2';
+	RankCondition2.GiveProject = 'WOTC_Prof_Warden_BD_Unlock1';
 	
 	RankCondition3 = new class 'X2Condition_WOTC_APA_Class_TargetRankRequirement';
 	RankCondition3.iMinRank = 6;
 	RankCondition3.iMaxRank = -1;	// No max rank for level 3 bonuses
 	RankCondition3.LogEffectName = "Melee Stance Damage 3";
-	RankCondition3.GiveProject = 'Warden_BD_Unlock2';	
+	RankCondition3.GiveProject = 'WOTC_Prof_Warden_BD_Unlock2';	
 
 	// Icon Setup
 	Template.IconImage = "img:///IRIPerkPack_UILibrary.UIPerk_Singe";
@@ -1583,6 +1557,19 @@ function Pillar_BuildVisualization(XComGameState VisualizeGameState)
 	class'X2Action_ShowSpawnedDestructible'.static.AddToVisualizationTree(BuildTrack, VisualizeGameState.GetContext());
 }
 
+// GTS Dummy Ability
+static function X2AbilityTemplate WOTC_Prof_Warden_BD_AcademyAbility()
+{
+	local X2AbilityTemplate				Template;
+
+	Template = Class'X2Ability_Warden'.static.CreatePassiveAbility('WOTC_Prof_Warden_BD_AcademyAbility',,,false);
+	Template.bDisplayInUITooltip = false;
+	Template.bDisplayInUITacticalText = false;
+	Template.bDontDisplayInAbilitySummary = true;
+
+	return Template;
+}
+
 //	========================================
 //				Active Helper Functions 
 //	========================================
@@ -1658,6 +1645,36 @@ static function SetHidden(out X2AbilityTemplate Template)
 	Template.bDontDisplayInAbilitySummary = true;
 	Template.bHideOnClassUnlock = true;
 }
+//Createpassive
+static function X2AbilityTemplate CreatePassiveAbility(name AbilityName, optional string IconString, optional name IconEffectName = AbilityName, optional bool bDisplayIcon = true)
+{
+	
+	local X2AbilityTemplate					Template;
+	local X2Effect_Persistent				IconEffect;
+	
+	`CREATE_X2ABILITY_TEMPLATE (Template, AbilityName);
+	Template.IconImage = IconString;
+	Template.AbilitySourceName = 'eAbilitySource_Perk';
+	Template.eAbilityIconBehaviorHUD = EAbilityIconBehavior_NeverShow;
+	Template.Hostility = eHostility_Neutral;
+	Template.AbilityToHitCalc = default.DeadEye;
+	Template.AbilityTargetStyle = default.SelfTarget;
+	Template.AbilityTriggers.AddItem(default.UnitPostBeginPlayTrigger);
+	Template.bCrossClassEligible = false;
+	Template.bUniqueSource = true;
+	Template.bIsPassive = true;
+
+	// Dummy effect to show a passive icon in the tactical UI for the SourceUnit
+	IconEffect = new class'X2Effect_Persistent';
+	IconEffect.BuildPersistentEffect(1, true, false);
+	IconEffect.SetDisplayInfo(ePerkBuff_Passive, Template.LocFriendlyName, Template.LocHelpText, Template.IconImage, bDisplayIcon,, Template.AbilitySourceName);
+	IconEffect.EffectName = IconEffectName;
+	Template.AddTargetEffect(IconEffect);
+
+	Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
+	return Template;
+}
+
 
 //	========================================
 //				Misc Helper Functions

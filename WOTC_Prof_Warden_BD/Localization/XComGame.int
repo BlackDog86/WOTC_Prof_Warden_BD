@@ -1,16 +1,208 @@
-[HoloTargeting X2AbilityTemplate]
-LocFriendlyName="Holo Targeting"
-LocLongDescription="Any directed <Ability:WeaponName/> shot, hit or miss, will mark the target, increasing your squad's aim by +<Ability:HOLOTARGETAIMBONUS/> against this target."
-LocHelpText="Shooting at a target grants bonus Aim to allies against that target"
-LocPromotionPopupText="<Bullet/> Directed <Ability:WeaponName/>-specific abilities will grant Holo Targeting.<br/><Bullet/> Any <Ability:ClassName/> abilities that target multiple units will not grant Holo Targeting.<br/>"
-LocFlyOverText="Holo Targeting"
+[Warden_BD_SwordSlice X2AbilityTemplate]
+LocFriendlyName="Sword Strike"
+LocLongDescription="Attack an enemy with the Warden's Sword - Deal additional psionic damage if in Melee Stance."
+LocHelpText="Melee Stance"
+LocPromotionPopupText="<Bullet/> No cooldown."
+LocFlyOverText="Melee Stance"
 
-[BattleScanner X2WeaponTemplate]
-FriendlyName="Battle Scanner"
-FriendlyNamePlural="Battle Scanners"
-BriefSummary="The Battle Scanner provides extra vision on the battlefield. Soldiers deploy it like a grenade, throwing it to a hidden area of the map that they want to reveal. Any hidden or disguised enemies will be revealed as well."
-TacticalText="<Bullet/> Battle Scanners reveal an area hidden by the \"fog of war\" for multiple turns.\n<Bullet/> Battle Scanners also reveal hidden or disguised enemies."
-AbilityDescName="shotgun"
+[Warden_BD_MeleeStance X2AbilityTemplate]
+LocFriendlyName="Melee Stance"
+LocLongDescription="The Warden is granted an additional <Ability:MELEESTANCE_I_HIT_BONUS> - <Ability:MELEESTANCE_III_HIT_BONUS> to-hit chance & <Ability:MELEESTANCE_I_DAMAGE_BONUS> - <Ability:MELEESTANCE_III_DAMAGE_BONUS> psionic bonus damage with the sword, depending on proficiency."
+LocHelpText="Melee Stance"
+LocPromotionPopupText="<Bullet/> No cooldown."
+LocFlyOverText="Melee Stance"
 
-[ClausMecShotgun_CV_Schematic X2SchematicTemplate]
-m_strClassLabel="RANGER"
+[Warden_BD_RangedStance X2AbilityTemplate]
+LocFriendlyName="Ranged Stance"
+LocLongDescription="The Warden is granted a redution of <Ability:RANGEDSTANCE_I_CDEF_BONUS> - <Ability:RANGEDSTANCE_III_CDEF_BONUS> in enemy defense from cover while shooting with the bullpup, depending on proficiency"
+LocHelpText="Ranged Stance"
+LocPromotionPopupText="<Bullet/> No cooldown."
+LocFlyOverText="Ranged Stance"
+
+[Warden_BD_EbbAndFlow X2AbilityTemplate]
+LocFriendlyName="Ebb"
+LocLongDescription="Change stance & gain bonuses"
+LocHelpText="Gain additional defense. Retain stance."
+LocPromotionPopupText="<Bullet/> No cooldown."
+LocFlyOverText="Ebb"
+
+[Warden_BD_ApplyAdditionalDamage X2AbilityTemplate]
+LocFriendlyName="Warden's Sword"
+LocLongDescription="This should be a hidden ability - This effect applies the additional psi damage to the sword."
+LocHelpText="Apply Additional Damage"
+LocPromotionPopupText="<Bullet/> No cooldown."
+LocFlyOverText="Warden's Sword"
+
+[Warden_BD_Rewind X2AbilityTemplate]
+LocFriendlyName="Rewind"
+LocLongDescription="Teleport back to the turn-start location. Switch Stance."
+LocHelpText="Teleport back to the turn-start location. Switch Stance."
+LocPromotionPopupText="<Bullet/> No cooldown."
+LocFlyOverText="Rewind"
+
+[Warden_BD_Blockade X2AbilityTemplate]
+LocFriendlyName="Blockade"
+LocLongDescription="Incoming damage is reduced by <Ability: KINETIC_ARMOUR_SHIELD_HP_PERCENTAGE> & any psionic attacks made against the warden are nullified for two turns. Retain Stance."
+LocHelpText="Incoming damage is reduced by <Ability: KINETIC_ARMOUR_SHIELD_HP_PERCENTAGE> & any psionic attacks made against the warden are nullified for two turns. Retain Stance."
+LocPromotionPopupText="<Bullet/> No cooldown."
+LocFlyOverText="Blockade"
+
+[Warden_BD_KineticArmour X2AbilityTemplate]
+LocFriendlyName="Kinetic Armour"
+LocLongDescription="Gain <Ability:KINETICARMOUR_I_SHIELDHP> - <Ability:KINETICARMOUR_III> ablative hit points dependin on proficiency. Return damage dealt to the shields as psi. Switch Stance."
+LocHelpText="Gain ablative hit points depending on proficiency. Return damage dealt to the shields as psi. Switch Stance."
+LocPromotionPopupText="<Bullet/> No cooldown."
+LocFlyOverText="Kinetic Armour"
+
+[Warden_BD_SoulBlade X2AbilityTemplate]
+LocFriendlyName="Soul-Blade"
+LocLongDescription="Channel additional psionic energy into your sword, doubling psionic bonus damage from melee stance on the next turn. Switch Stance."
+LocHelpText="Double psionic bonus damage from melee stance on the next turn. Switch Stance."
+LocPromotionPopupText="<Bullet/> No cooldown."
+LocFlyOverText="Soul-Blade"
+
+[Warden_BD_DestroyAbomination X2AbilityTemplate]
+LocFriendlyName="Destroy Abomination"
+LocLongDescription="Deal a large amount of guaranteed damage (1.5 x your current hit-points) to any zombie, psi-zombie or 'beast-like' enemy. Switch Stance."
+LocHelpText="Deal damage equal to 2 x your current hit-points to any single psionically linked unit, zombie or other abomination. Switch Stance."
+LocPromotionPopupText="<Bullet/> No cooldown."
+LocFlyOverText="Destroy Abomination"
+
+[Warden_BD_Consume X2AbilityTemplate]
+LocFriendlyName="Consume"
+LocLongDescription="Cleanse any mental and active DOT effects from an XCOM unit and gain +2 damage per effect removed to the Warden’s next attack. Switch Stance."
+LocHelpText="Cleanse any mental and active DOT effects from an XCOM unit and gain +2 damage per effect removed to the Warden’s Sword. Switch Stance."
+LocPromotionPopupText="<Bullet/> No cooldown."
+LocFlyOverText="Consume"
+
+[Warden_BD_Refocus X2AbilityTemplate]
+LocFriendlyName="Refocus"
+LocLongDescription="Convert a flow action point into a Run & Gun action point. Retain Stance."
+LocHelpText="Convert a flow action point into a Run & Gun action point. Retain Stance."
+LocPromotionPopupText="<Bullet/> No cooldown."
+LocFlyOverText="Refocus"
+
+[Warden_BD_MindWard X2AbilityTemplate]
+LocFriendlyName="Mind Ward"
+LocLongDescription="Place a nullifying ward around the minds of all units in a 3 tile AOE. Warded units are protected against psionic attacks for 2 turns & the warden is granted an additional action point (Maximum 1 per-turn) if a psionic ability is used against them. Switch Stance."
+LocHelpText="Place a nullifying ward around the minds of all units in a 3 tile AOE. Warded units are protected against psionic attacks for 2 turns & the warden is granted an additional action point (Maximum 1 per-turn) if a psionic ability is used against them. Switch Stance."
+LocPromotionPopupText="<Bullet/> No cooldown."
+LocFlyOverText="Mind Ward"
+
+[Warden_BD_Revenge X2AbilityTemplate]
+LocFriendlyName="Revenge"
+LocLongDescription="Gain an immediate action point if an attack hits you on the next turn. Interrupts the enemy turn. Retain Stance."
+LocHelpText="Gain an immediate action point if an attack hits you on the next turn. Interrupts the enemy turn. Retain Stance."
+LocPromotionPopupText="<Bullet/> No cooldown."
+LocFlyOverText="Revenge"
+
+[Warden_BD_Torrent X2AbilityTemplate]
+LocFriendlyName="Torrent"
+LocLongDescription="Choose a target. Gain bonus damage against that target each time you switch stance, does not expire. Switch Stance."
+LocHelpText="Overwatch now grants flow action points & flow action points may be used to enter overwatch. Switch Stance."
+LocPromotionPopupText="<Bullet/> No cooldown."
+LocFlyOverText="Torrent"
+
+[Warden_BD_WardensRage X2AbilityTemplate]
+LocFriendlyName="Warden's Rage"
+LocLongDescription="Switch stance, then take a follow-up shot with your bullpup against any psionic enemy in range."
+LocHelpText="Switch stance, then take a follow-up shot with your bullpup against any psionic enemy in range."
+LocPromotionPopupText="<Bullet/> No cooldown."
+LocFlyOverText="Warden's Rage"
+
+[Warden_BD_WardensMark X2AbilityTemplate]
+LocFriendlyName="Warden's Mark"
+LocLongDescription="Select a target. Gain an additional covering fire overwatch shot against it for each non-movement action it takes. Stacks with and grants covering fire to standard Overwatch. Retain Stance."
+LocHelpText="Select a target. Gain an additional covering fire overwatch shot against it for each non-movement action it takes. Stacks with and grants covering fire to standard Overwatch. Retain Stance."
+LocPromotionPopupText="<Bullet/> No cooldown."
+LocFlyOverText="Warden's Mark"
+
+[Warden_BD_WardensTide X2AbilityTemplate]
+LocFriendlyName="Warden's Tide"
+LocLongDescription="Knocks down enemies in a 6 tile AOE around the warden. Does 2-3 fall damage (ignoring cover & armour) & stuns for 1AP. Retain Stance."
+LocHelpText="Knocks down enemies in a 6 tile AOE around the warden. Does 2-3 fall damage (ignoring cover & armour) & stuns for 1AP. Retain Stance."
+LocPromotionPopupText="<Bullet/> No cooldown."
+LocFlyOverText="Warden's Tide"
+
+[Warden_BD_SilencingScream X2AbilityTemplate]
+LocFriendlyName="Silencing Scream"
+LocLongDescription="Create a psionic soundwave in a 12 tile AOE around you which prevents enemies from using any psionic abilities for 2 turns. Retain Stance."
+LocHelpText="Create a psionic soundwave in a 12 tile AOE around you which prevents enemies from using any psionic abilities for 2 turns. Retain Stance."
+LocPromotionPopupText="<Bullet/> No cooldown."
+LocFlyOverText="Silencing Scream"
+
+[Warden_BD_Fissure X2AbilityTemplate]
+LocFriendlyName="Fissure"
+LocLongDescription="Mark an area, at the end of the next turn, all units inside the fissure are ruptured. Switch Stance."
+LocHelpText="Mark an area, at the end of the next turn, all units inside the fissure are ruptured. Switch Stance."
+LocPromotionPopupText="<Bullet/> No cooldown."
+LocFlyOverText="Fissure"
+
+[Warden_BD_WardensCharge X2AbilityTemplate]
+LocFriendlyName="Warden's Charge"
+LocLongDescription="Switch stance and gain an additional sword slash attack that can be used once your ranged turn is over."
+LocHelpText="Switch stance and gain an additional sword slash attack that can be used once your ranged turn is over."
+LocPromotionPopupText="<Bullet/> No cooldown."
+LocFlyOverText="Warden's Charge"
+
+[Warden_BD_Imprison X2AbilityTemplate]
+LocFriendlyName="Imprison"
+LocLongDescription="Immobilize a single target for 2 turns. Switch Stance."
+LocHelpText="Immobilize a single target for 2 turns. Switch Stance."
+LocPromotionPopupText="<Bullet/> No cooldown."
+LocFlyOverText="Imprison"
+
+[Warden_BD_WardensReflection X2AbilityTemplate]
+LocFriendlyName="Warden's Reflection"
+LocLongDescription="Reflect up to three attacks back at the attacker on the enemy turn. Switch Stance."
+LocHelpText="Reflect up to three attacks back at the attacker on the enemy turn. Switch Stance."
+LocPromotionPopupText="<Bullet/> No cooldown."
+LocFlyOverText="Warden's Reflection"
+
+[Warden_BD_Pillar X2AbilityTemplate]
+LocFriendlyName="Pillar"
+LocLongDescription="Create a destructible obelisk at the target location. Switch Stance."
+LocHelpText="Create a destructible obelisk at the target location. Switch Stance."
+LocPromotionPopupText="<Bullet/> No cooldown."
+LocFlyOverText="Pillar"
+
+[WOTC_APA_Fuse X2AbilityTemplate]
+LocFriendlyName="Fuse"
+LocLongDescription="Activate to detonate an enemy's explosive. Triggers Melee Stance."
+LocHelpText="This ability has not been defined yet"
+LocPromotionPopupText="<Bullet/> No cooldown."
+LocFlyOverText="Fuse"
+
+[WOTC_Warden_BD X2SoldierClassTemplate]
+DisplayName="Warden"
+ClassSummary="Blah blah templar militia close range psionics blah"
+AbilityTreeTitles[0]="Templar SpecOps"
+AbilityTreeTitles[1]="Nullifier"
+AbilityTreeTitles[2]="Counter"
+AbilityTreeTitles[3]="XCOM"
+
++RandomNickNames = "McLovin"
++RandomNickNames = "SheBango"
++RandomNickNames_Male = "Paladin"
++RandomNickNames_Female = "Historia"
+
++PhotoboothSoloBLines_Female = "Close quarters, no mercy."
++PhotoboothSoloBLines_Female = "Her blade will bring JUSTICE!"
++PhotoboothSoloBLines_Female = "Close, Personal, and DEADLY!"
+
++PhotoboothSoloBLines_Male = "Close quarters, no mercy."
++PhotoboothSoloBLines_Male = "His blade will bring JUSTICE!"
++PhotoboothSoloBLines_Male = "Close, Personal, and DEADLY!"
+
+[WOTC_Warden_BD X2EncyclopediaTemplate]
+ListTitle = "Warden Class"
+DescriptionTitle = "Warden Class"
+DescriptionEntry = "Blah blah templar militia close range psionics blah"
+
+[WOTC_Prof_Warden_BD_Unlock1 X2SoldierAbilityUnlockTemplate]
+DisplayName = "Warden: Concentration I"
+Summary = "All Warden's Stance proficiencies will start at level 2, regardless of rank."
+
+[WOTC_Prog_Warden_BD_Unlock2 X2SoldierAbilityUnlockTemplate]
+DisplayName = "Warden: Concentration II"
+Summary = "All Warden's Stance proficiencies will start at level 3, regardless of rank.<br/><br/><font color='#CA7200'>Requires Warden Concentration I</font>"
