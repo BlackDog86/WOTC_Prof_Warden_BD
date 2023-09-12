@@ -1,4 +1,4 @@
-class X2Effect_MZPillar extends X2Effect_SpawnDestructible;
+class X2Effect_WardenPillar extends X2Effect_SpawnDestructible;
 
 var int Duration;
 

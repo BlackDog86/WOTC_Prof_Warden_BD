@@ -75,28 +75,25 @@
     <Content Include="Src\WOTC_Prof_Warden_BD\Classes\X2DLCInfo_WOTC_Prof_Warden_BD.uc" />
     <Content Include="Src\WOTC_Prof_Warden_BD\Classes\Help.uc" />
     <Content Include="Src\WOTC_Prof_Warden_BD\Classes\ConfigEngine.uc" />
-    <Content Include="Src\WOTC_Prof_Warden_BD\Classes\X2Effect_Blockade.uc">
+    <Content Include="Src\WOTC_Prof_Warden_BD\Classes\X2Effect_WardenBlockade.uc">
       <SubType>Content</SubType>
     </Content>
     <Content Include="Src\WOTC_Prof_Warden_BD\Classes\X2Effect_ClearUnitValue.uc">
       <SubType>Content</SubType>
     </Content>
-    <Content Include="Src\WOTC_Prof_Warden_BD\Classes\X2Effect_Consume.uc">
+    <Content Include="Src\WOTC_Prof_Warden_BD\Classes\X2Effect_WardenConsume.uc">
       <SubType>Content</SubType>
     </Content>
-    <Content Include="Src\WOTC_Prof_Warden_BD\Classes\X2Effect_DestroyAbomination.uc">
+    <Content Include="Src\WOTC_Prof_Warden_BD\Classes\X2Effect_WardenMindWard.uc">
       <SubType>Content</SubType>
     </Content>
-    <Content Include="Src\WOTC_Prof_Warden_BD\Classes\X2Effect_KineticArmourReturnFire.uc">
-      <SubType>Content</SubType>
-    </Content>
-    <Content Include="Src\WOTC_Prof_Warden_BD\Classes\X2Effect_MindWard.uc">
-      <SubType>Content</SubType>
-    </Content>
-    <Content Include="Src\WOTC_Prof_Warden_BD\Classes\X2Effect_MZPillar.uc">
+    <Content Include="Src\WOTC_Prof_Warden_BD\Classes\X2Effect_WardenPillar.uc">
       <SubType>Content</SubType>
     </Content>
     <Content Include="Src\WOTC_Prof_Warden_BD\Classes\X2Effect_WardenCounterDefense.uc">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Src\WOTC_Prof_Warden_BD\Classes\X2Effect_WardenKineticArmour.uc">
       <SubType>Content</SubType>
     </Content>
     <Content Include="Src\WOTC_Prof_Warden_BD\Classes\X2Effect_WardenSwordDamage.uc">

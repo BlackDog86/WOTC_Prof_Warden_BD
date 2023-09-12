@@ -1,4 +1,4 @@
-class X2Effect_Blockade extends X2Effect_Persistent config(WardenSkills);
+class X2Effect_WardenBlockade extends X2Effect_Persistent config(WardenSkills);
 
 var float		DamageReduction;
 var int			DamageReductionAbs;

@@ -78,7 +78,7 @@ static function X2SoldierAbilityUnlockTemplate WOTC_Prof_Warden_BD_Unlock2()
 	Template.Cost.ResourceCosts.AddItem(Resources);
 
 	// Ability
-	Template.AbilityName = 'WOTC_Prof_Warden_BD_AcademyAbility';
+	Template.AbilityName = 'WOTC_Prof_Warden_BD_Ability';
 	
 	return Template;
 }

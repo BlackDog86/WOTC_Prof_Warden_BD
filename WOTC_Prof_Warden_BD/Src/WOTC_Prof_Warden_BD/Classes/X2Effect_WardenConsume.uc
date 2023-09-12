@@ -1,5 +1,4 @@
-//Remove Everything!
-class X2Effect_Consume extends X2Effect_RemoveEffectsByDamageType;
+class X2Effect_WardenConsume extends X2Effect_RemoveEffectsByDamageType;
 
 simulated protected function OnEffectAdded(const out EffectAppliedData ApplyEffectParameters, XComGameState_BaseObject kNewTargetState, XComGameState NewGameState, XComGameState_Effect NewEffectState)
 {

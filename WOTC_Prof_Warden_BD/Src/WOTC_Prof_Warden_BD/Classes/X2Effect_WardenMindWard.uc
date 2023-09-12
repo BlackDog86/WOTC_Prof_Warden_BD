@@ -5,7 +5,7 @@
 //---------------------------------------------------------------------------------------
 //  Copyright (c) 2016 Firaxis Games, Inc. All rights reserved.
 //---------------------------------------------------------------------------------------
-class X2Effect_MindWard extends X2Effect_Persistent;
+class X2Effect_WardenMindWard extends X2Effect_Persistent;
 
 var array<name> IgnoreDamageTypes;       //  effects with the listed damage type will be allowed to hit the original target
 var array<name> IgnoreAbilities;         //  abilities listed here will be allowed to hit the original target
