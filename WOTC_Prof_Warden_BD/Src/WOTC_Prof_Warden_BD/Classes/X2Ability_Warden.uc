@@ -91,7 +91,10 @@ static function array<X2DataTemplate> CreateTemplates()
 	Templates.AddItem(Warden_BD_ChargePassive());
 //	Templates.AddItem(Warden_BD_Retribution());
 	Templates.AddItem(Warden_BD_Pillar());
-	Templates.AddItem(WOTC_Prof_Warden_BD_AcademyAbility());
+//	Templates.AddItem(Warden_BD_Fuse());
+//	Templates.AddItem(Warden_BD_Brand());
+//	Templates.AddItem(Warden_BD_PsiStrike());
+//	Templates.AddItem(WOTC_Prof_Warden_BD_AcademyAbility());
 	return Templates;
 }
 

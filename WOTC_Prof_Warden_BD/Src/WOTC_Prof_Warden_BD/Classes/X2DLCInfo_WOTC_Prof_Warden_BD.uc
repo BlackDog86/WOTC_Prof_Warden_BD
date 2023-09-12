@@ -91,7 +91,7 @@ static function PatchStandardShot()
     local array<X2DataTemplate>				DifficultyVariants;
     local X2DataTemplate					DifficultyVariant;
 	local X2AbilityCost_ActionPoints		ActionPointCost;
-
+	
     AbilityTemplateManager = class'X2AbilityTemplateManager'.static.GetAbilityTemplateManager();
 
     AbilityTemplateManager.FindDataTemplateAllDifficulties('StandardShot', DifficultyVariants);
@@ -101,7 +101,8 @@ static function PatchStandardShot()
         Template = X2AbilityTemplate(DifficultyVariant);
         if (Template != none)
         {
-            ActionPointCost.AllowedTypes.AddItem(class 'X2Ability_Warden'.default.RageAP);
+            ActionPointCost = new class'X2AbilityCost_ActionPoints';
+			ActionPointCost.AllowedTypes.AddItem(class 'X2Ability_Warden'.default.RageAP);
 			ActionPointCost.AllowedTypes.AddItem(class 'X2Ability_Warden'.default.DefenderRageAP);
 			ActionPointCost.AllowedTypes.AddItem(class 'X2Ability_Warden'.default.CrusaderRageAP);
 			ActionPointCost.AllowedTypes.AddItem(class 'X2Ability_Warden'.default.WatcherRageAP);
@@ -116,6 +117,7 @@ static function PatchStandardShot()
 			ActionPointCost.AllowedTypes.AddItem(class 'X2Ability_Warden'.default.DefenderWatcherRageChargeAP);
 			ActionPointCost.AllowedTypes.AddItem(class 'X2Ability_Warden'.default.CrusaderWatcherRageChargeAP);
 			ActionPointCost.AllowedTypes.AddItem(class 'X2Ability_Warden'.default.DefenderCrusaderWatcherRageChargeAP);
+			Template.AbilityCosts.AddItem(ActionPointCost);
         }
     }
 }
@@ -137,7 +139,8 @@ static function PatchSwordSlice()
         Template = X2AbilityTemplate(DifficultyVariant);
         if (Template != none)
         {
-            ActionPointCost.AllowedTypes.AddItem(class 'X2Ability_Warden'.default.ChargeAP);
+            ActionPointCost = new class'X2AbilityCost_ActionPoints';
+		    ActionPointCost.AllowedTypes.AddItem(class 'X2Ability_Warden'.default.ChargeAP);
 			ActionPointCost.AllowedTypes.AddItem(class 'X2Ability_Warden'.default.DefenderChargeAP);
 			ActionPointCost.AllowedTypes.AddItem(class 'X2Ability_Warden'.default.CrusaderChargeAP);
 			ActionPointCost.AllowedTypes.AddItem(class 'X2Ability_Warden'.default.WatcherChargeAP);
@@ -152,7 +155,7 @@ static function PatchSwordSlice()
 			ActionPointCost.AllowedTypes.AddItem(class 'X2Ability_Warden'.default.DefenderWatcherRageChargeAP);
 			ActionPointCost.AllowedTypes.AddItem(class 'X2Ability_Warden'.default.CrusaderWatcherRageChargeAP);
 			ActionPointCost.AllowedTypes.AddItem(class 'X2Ability_Warden'.default.DefenderCrusaderWatcherRageChargeAP);
-
+			Template.AbilityCosts.AddItem(ActionPointCost);
         }
     }
 }
@@ -174,7 +177,8 @@ static function PatchOverwatch()
         Template = X2AbilityTemplate(DifficultyVariant);
         if (Template != none)
         {
-            ActionPointCost.AllowedTypes.AddItem(class 'X2Ability_Warden'.default.WatcherAP);
+            ActionPointCost = new class'X2AbilityCost_ActionPoints';
+			ActionPointCost.AllowedTypes.AddItem(class 'X2Ability_Warden'.default.WatcherAP);
 			ActionPointCost.AllowedTypes.AddItem(class 'X2Ability_Warden'.default.DefenderWatcherAP);
 			ActionPointCost.AllowedTypes.AddItem(class 'X2Ability_Warden'.default.CrusaderWatcherAP);
 			ActionPointCost.AllowedTypes.AddItem(class 'X2Ability_Warden'.default.WatcherRageAP);
@@ -189,6 +193,7 @@ static function PatchOverwatch()
 			ActionPointCost.AllowedTypes.AddItem(class 'X2Ability_Warden'.default.DefenderWatcherRageChargeAP);
 			ActionPointCost.AllowedTypes.AddItem(class 'X2Ability_Warden'.default.CrusaderWatcherRageChargeAP);
 			ActionPointCost.AllowedTypes.AddItem(class 'X2Ability_Warden'.default.DefenderCrusaderWatcherRageChargeAP);
+			Template.AbilityCosts.AddItem(ActionPointCost);
         }
     }
 }
@@ -210,7 +215,8 @@ static function PatchHunker()
         Template = X2AbilityTemplate(DifficultyVariant);
         if (Template != none)
         {
-            ActionPointCost.AllowedTypes.AddItem(class 'X2Ability_Warden'.default.DefenderAP);
+            ActionPointCost = new class'X2AbilityCost_ActionPoints';
+			ActionPointCost.AllowedTypes.AddItem(class 'X2Ability_Warden'.default.DefenderAP);
 			ActionPointCost.AllowedTypes.AddItem(class 'X2Ability_Warden'.default.DefenderCrusaderAP);
 			ActionPointCost.AllowedTypes.AddItem(class 'X2Ability_Warden'.default.DefenderWatcherAP);
 			ActionPointCost.AllowedTypes.AddItem(class 'X2Ability_Warden'.default.DefenderRageAP);
@@ -225,6 +231,7 @@ static function PatchHunker()
 			ActionPointCost.AllowedTypes.AddItem(class 'X2Ability_Warden'.default.DefenderCrusaderRageChargeAP);
 			ActionPointCost.AllowedTypes.AddItem(class 'X2Ability_Warden'.default.DefenderWatcherRageChargeAP);
 			ActionPointCost.AllowedTypes.AddItem(class 'X2Ability_Warden'.default.DefenderCrusaderWatcherRageChargeAP);
+			Template.AbilityCosts.AddItem(ActionPointCost);
         }
     }
 }
@@ -246,7 +253,8 @@ static function PatchReload()
         Template = X2AbilityTemplate(DifficultyVariant);
         if (Template != none)
         {
-            ActionPointCost.AllowedTypes.AddItem(class 'X2Ability_Warden'.default.DefenderAP);
+            ActionPointCost = new class'X2AbilityCost_ActionPoints';
+			ActionPointCost.AllowedTypes.AddItem(class 'X2Ability_Warden'.default.DefenderAP);
 			ActionPointCost.AllowedTypes.AddItem(class 'X2Ability_Warden'.default.DefenderCrusaderAP);
 			ActionPointCost.AllowedTypes.AddItem(class 'X2Ability_Warden'.default.CrusaderWatcherAP);
 			ActionPointCost.AllowedTypes.AddItem(class 'X2Ability_Warden'.default.CrusaderRageAP);
@@ -261,6 +269,7 @@ static function PatchReload()
 			ActionPointCost.AllowedTypes.AddItem(class 'X2Ability_Warden'.default.DefenderCrusaderRageChargeAP);
 			ActionPointCost.AllowedTypes.AddItem(class 'X2Ability_Warden'.default.DefenderWatcherRageChargeAP);
 			ActionPointCost.AllowedTypes.AddItem(class 'X2Ability_Warden'.default.DefenderCrusaderWatcherRageChargeAP);
+			Template.AbilityCosts.AddItem(ActionPointCost);
         }
     }
 }
