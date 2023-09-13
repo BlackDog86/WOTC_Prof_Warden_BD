@@ -188,6 +188,7 @@ static final function X2AbilityTemplate Warden_BD_MeleeStance()
 	CounterEffect.UnitName = default.MeleeFocusCounterValueName;
 	CounterEffect.NewValueToSet = 1;
 	CounterEffect.CleanupType = eCleanup_BeginTactical;
+	`Log("Melee stance has been entered " @ default.GunFocusCounterValueName @ " times this mission");
 	Template.AddTargetEffect(CounterEffect);
 
 	ClearUnitValueEffect = new Class'X2Effect_ClearUnitValue';
@@ -303,6 +304,7 @@ static final function X2AbilityTemplate Warden_BD_RangedStance()
 	CounterEffect = new Class'X2Effect_IncrementUnitValue';
 	CounterEffect.UnitName = default.GunFocusCounterValueName;
 	CounterEffect.NewValueToSet = 1;
+	`Log("Ranged stance has been entered " @ default.GunFocusCounterValueName @ " times this mission");
 	CounterEffect.CleanupType = eCleanup_BeginTactical;
 	Template.AddTargetEffect(CounterEffect);
 
@@ -500,7 +502,7 @@ static function X2AbilityTemplate Warden_BD_WardensSwordPassive()
 
 	// Icon Properties
 	`CREATE_X2ABILITY_TEMPLATE(Template, 'Warden_BD_WardensSwordPassive');
-	Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_momentum";
+	Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_SwordSlash";
 
 	Template.AbilitySourceName = 'eAbilitySource_Perk';
 	Template.eAbilityIconBehaviorHUD = EAbilityIconBehavior_NeverShow;
@@ -532,21 +534,8 @@ static function X2AbilityTemplate Warden_BD_DefenderPassive()
 {
 	local X2AbilityTemplate						Template;
 
-	// Icon Properties
-	`CREATE_X2ABILITY_TEMPLATE(Template, 'Warden_BD_DefenderPassive');
-	Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_momentum";
-
-	Template.AbilitySourceName = 'eAbilitySource_Perk';
-	Template.eAbilityIconBehaviorHUD = EAbilityIconBehavior_NeverShow;
-	Template.Hostility = eHostility_Neutral;
-
-	Template.AbilityToHitCalc = default.DeadEye;
-	Template.AbilityTargetStyle = default.SelfTarget;
-	Template.AbilityTriggers.AddItem(default.UnitPostBeginPlayTrigger);
-		
-	Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
-	//  NOTE: No visualization on purpose!
-
+	Template = PurePassive('Warden_BD_DefenderPassive', "img:///UILibrary_PerkIcons.UIPerk_one_for_all", false, 'eAbilitySource_Psionic', true);
+	
 	return Template;
 }
 
@@ -554,20 +543,7 @@ static function X2AbilityTemplate Warden_BD_CrusaderPassive()
 {
 	local X2AbilityTemplate						Template;
 
-	// Icon Properties
-	`CREATE_X2ABILITY_TEMPLATE(Template, 'Warden_BD_CrusaderPassive');
-	Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_momentum";
-
-	Template.AbilitySourceName = 'eAbilitySource_Perk';
-	Template.eAbilityIconBehaviorHUD = EAbilityIconBehavior_NeverShow;
-	Template.Hostility = eHostility_Neutral;
-
-	Template.AbilityToHitCalc = default.DeadEye;
-	Template.AbilityTargetStyle = default.SelfTarget;
-	Template.AbilityTriggers.AddItem(default.UnitPostBeginPlayTrigger);
-		
-	Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
-	//  NOTE: No visualization on purpose!
+	Template = PurePassive('Warden_BD_CrusaderPassive', "img:///UILibrary_XPACK_Common.PerkIcons.UIPerk_chimeraxws", false, 'eAbilitySource_Psionic', true);
 
 	return Template;
 }
@@ -576,20 +552,7 @@ static function X2AbilityTemplate Warden_BD_WatcherPassive()
 {
 	local X2AbilityTemplate						Template;
 
-	// Icon Properties
-	`CREATE_X2ABILITY_TEMPLATE(Template, 'Warden_BD_WatcherPassive');
-	Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_momentum";
-
-	Template.AbilitySourceName = 'eAbilitySource_Perk';
-	Template.eAbilityIconBehaviorHUD = EAbilityIconBehavior_NeverShow;
-	Template.Hostility = eHostility_Neutral;
-
-	Template.AbilityToHitCalc = default.DeadEye;
-	Template.AbilityTargetStyle = default.SelfTarget;
-	Template.AbilityTriggers.AddItem(default.UnitPostBeginPlayTrigger);
-		
-	Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
-	//  NOTE: No visualization on purpose!
+	Template = PurePassive('Warden_BD_WatcherPassive', "img:///UILibrary_PerkIcons.UIPerk_observer", false, 'eAbilitySource_Psionic', true);
 
 	return Template;
 }
@@ -598,20 +561,7 @@ static function X2AbilityTemplate Warden_BD_RagePassive()
 {
 	local X2AbilityTemplate						Template;
 
-	// Icon Properties
-	`CREATE_X2ABILITY_TEMPLATE(Template, 'Warden_BD_RagePassive');
-	Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_momentum";
-
-	Template.AbilitySourceName = 'eAbilitySource_Perk';
-	Template.eAbilityIconBehaviorHUD = EAbilityIconBehavior_NeverShow;
-	Template.Hostility = eHostility_Neutral;
-
-	Template.AbilityToHitCalc = default.DeadEye;
-	Template.AbilityTargetStyle = default.SelfTarget;
-	Template.AbilityTriggers.AddItem(default.UnitPostBeginPlayTrigger);
-		
-	Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
-	//  NOTE: No visualization on purpose!
+	Template = PurePassive('Warden_BD_RagePassive', "img:////UILibrary_PerkIcons.UIPerk_rapidfire", false, 'eAbilitySource_Psionic', true);
 
 	return Template;
 }
@@ -620,20 +570,8 @@ static function X2AbilityTemplate Warden_BD_ChargePassive()
 {
 	local X2AbilityTemplate						Template;
 
-	// Icon Properties
-	`CREATE_X2ABILITY_TEMPLATE(Template, 'Warden_BD_ChargePassive');
-	Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_momentum";
+	Template = PurePassive('Warden_BD_ChargePassive', "img:///UILibrary_PerkIcons.UIPerk_charge", false, 'eAbilitySource_Psionic', true);
 
-	Template.AbilitySourceName = 'eAbilitySource_Perk';
-	Template.eAbilityIconBehaviorHUD = EAbilityIconBehavior_NeverShow;
-	Template.Hostility = eHostility_Neutral;
-
-	Template.AbilityToHitCalc = default.DeadEye;
-	Template.AbilityTargetStyle = default.SelfTarget;
-	Template.AbilityTriggers.AddItem(default.UnitPostBeginPlayTrigger);
-		
-	Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
-	//  NOTE: No visualization on purpose!
 
 	return Template;
 }
@@ -649,7 +587,7 @@ static function X2AbilityTemplate Warden_BD_Rewind()
 	`CREATE_X2ABILITY_TEMPLATE(Template, 'Warden_BD_Rewind');
 	Template.AbilitySourceName = 'eAbilitySource_Psionic';
 	Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_AlwaysShow;
-	Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_codex_teleport";
+	Template.IconImage = "img:///Warden_BD_PerkIcons.UIPerk_WardenRewind";
 
 	// # Costs and Cooldowns
 	Cooldown = new class'X2AbilityCooldown';
@@ -719,15 +657,14 @@ static function X2AbilityTemplate Warden_BD_Mirror()
 {
 	local X2AbilityTemplate					Template;
 	local X2AbilityCost_ActionPoints		ActionPointCost;
-	local X2Condition_Unitvalue				CheckStance;
 	local X2AbilityCooldown					Cooldown;
-	local X2Effect_WardenBlockade					BlockadeDREffect;
+	local X2Effect_WardenBlockade			BlockadeDREffect;
 	local X2Effect_DamageImmunity			BlockadeImmunityEffect;
 
 	`CREATE_X2ABILITY_TEMPLATE(Template, 'Warden_BD_Mirror');
 	Template.AbilitySourceName = 'eAbilitySource_Psionic';
 	Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_AlwaysShow;
-	Template.IconImage = "img:///UILibrary_XPACK_Common.PerkIcons.UIPerk_parry";
+	Template.IconImage = "img:///UILibrary_XPACK_Common.PerkIcons.UIPerk_reflectshot";
 
 	// # Costs and Cooldowns
 	Cooldown = new class'X2AbilityCooldown';
@@ -776,15 +713,6 @@ static function X2AbilityTemplate Warden_BD_Mirror()
 	Template.AbilityTargetStyle = default.SelfTarget;	
 	Template.AbilityTriggers.AddItem(default.PlayerInputTrigger);
 
-	// # Shooter Conditions - ability user must fulfill these conditions before the ability can be used.
-	CheckStance = new Class'X2Condition_Unitvalue';
-
-	// Unit must be in melee stance to activate the ability
-	CheckStance.AddCheckValue(default.MeleeStanceValueName,1,eCheck_Exact);
-	Template.AbilityShooterConditions.AddItem(CheckStance);	
-	Template.AbilityShooterConditions.AddItem(default.LivingShooterProperty);
-	Template.AddShooterEffectExclusions();
-
 	// Create a persistent effect which reduces damage
 	BlockadeDREffect = new class'X2Effect_WardenBlockade';	
 	BlockadeDREffect.EffectName = default.BlockadeDREffectName;
@@ -824,7 +752,7 @@ static final function X2AbilityTemplate Warden_BD_KineticArmour()
 
 	`CREATE_X2ABILITY_TEMPLATE(Template, 'Warden_BD_KineticArmour');
 	Template.AbilitySourceName = 'eAbilitySource_Perk';
-	Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_riposte";
+	Template.IconImage = "img:///UILibrary_XPACK_Common.PerkIcons.UIPerk_divinearmor";
 	Template.ShotHUDPriority = class'UIUtilities_Tactical'.const.CLASS_CORPORAL_PRIORITY;
 	Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_AlwaysShow;
 	
@@ -913,10 +841,7 @@ static final function X2AbilityTemplate Warden_BD_KineticArmour()
 	// This will determine whether this ability can appear in randomly generated XCOM rows of other soldier classes.
 	// Since this is a niche ability that applies only to melee damage, best not to make it cross-class.
 	Template.bCrossClassEligible = false;
-	
-	// Add the return fire bit
-	Template.AdditionalAbilities.AddItem('Warden_BD_KineticArmour_ReturnFire');
-	
+		
 	return Template;
 }
 
@@ -931,7 +856,7 @@ static final function X2AbilityTemplate Warden_BD_SoulBlade()
 
 	`CREATE_X2ABILITY_TEMPLATE(Template, 'Warden_BD_SoulBlade');
 	Template.AbilitySourceName = 'eAbilitySource_Psionic';
-	Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_burn";
+	Template.IconImage = "img:///UILibrary_XPACK_Common.PerkIcons.UIPerk_ceramicblade";
 	Template.ShotHUDPriority = class'UIUtilities_Tactical'.const.CLASS_SERGEANT_PRIORITY;
 	Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_AlwaysShow;
 		
@@ -1105,7 +1030,7 @@ static function X2AbilityTemplate Warden_BD_ApplyAdditionalDamage()
 	`CREATE_X2ABILITY_TEMPLATE(Template, 'Warden_BD_ApplyAdditionalDamage');
 
 	// Icon Setup
-	Template.IconImage = "img:///IRIPerkPack_UILibrary.UIPerk_Singe";
+	Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_SwordSlash";
 	Template.eAbilityIconBehaviorHUD = EAbilityIconBehavior_NeverShow;
 	Sethidden(Template);
 

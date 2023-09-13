@@ -1,6 +1,48 @@
+;  ///////////////
+;  // Character //
+;  ///////////////
+
+[WOTC_Prof_Warden_BD X2SoldierClassTemplate]
+DisplayName="Warden"
+ClassSummary="Blah blah templar militia close range psionics blah"
+AbilityTreeTitles[0]="Templar SpecOps"
+AbilityTreeTitles[1]="Nullifier"
+AbilityTreeTitles[2]="Counter"
+AbilityTreeTitles[3]="XCOM"
+
++RandomNickNames = "McLovin"
++RandomNickNames = "SheBango"
++RandomNickNames_Male = "Paladin"
++RandomNickNames_Female = "Historia"
+
++PhotoboothSoloBLines_Female = "Close quarters, no mercy."
++PhotoboothSoloBLines_Female = "Her blade will bring JUSTICE!"
++PhotoboothSoloBLines_Female = "Close, Personal, and DEADLY!"
+
++PhotoboothSoloBLines_Male = "Close quarters, no mercy."
++PhotoboothSoloBLines_Male = "His blade will bring JUSTICE!"
++PhotoboothSoloBLines_Male = "Close, Personal, and DEADLY!"
+
+[WOTC_Warden_BD X2EncyclopediaTemplate]
+ListTitle = "Warden Class"
+DescriptionTitle = "Warden Class"
+DescriptionEntry = "Blah blah templar militia close range psionics blah"
+
+[WOTC_Prof_Warden_BD_Unlock1 X2SoldierAbilityUnlockTemplate]
+DisplayName = "Warden: Concentration I"
+Summary = "All Warden's Stance proficiencies will start at level 2, regardless of rank."
+
+[WOTC_Prog_Warden_BD_Unlock2 X2SoldierAbilityUnlockTemplate]
+DisplayName = "Warden: Concentration II"
+Summary = "All Warden's Stance proficiencies will start at level 3, regardless of rank.<br/><br/><font color='#CA7200'>Requires Warden Concentration I</font>"
+
+;  ////////////////
+;  // Abilities  //
+;  ////////////////
+
 [Warden_BD_MeleeStance X2AbilityTemplate]
 LocFriendlyName="Melee Stance"
-LocLongDescription="The Warden is granted an additional <Ability:MELEESTANCE_I_HIT_BONUS> - <Ability:MELEESTANCE_III_HIT_BONUS> to-hit chance & <Ability:MELEESTANCE_I_DAMAGE_BONUS> - <Ability:MELEESTANCE_III_DAMAGE_BONUS> psionic bonus damage with the sword, depending on proficiency."
+LocLongDescription="The Warden is granted an additional <Ability:MELEESTANCE_I_MOBILITY_BONUS> - <Ability:MELEESTANCE_III_MOBILITY_BONUS> mobility, depending on proficiency."
 LocHelpText="Melee Stance"
 LocPromotionPopupText="<Bullet/> No cooldown."
 LocFlyOverText="Melee Stance"
@@ -56,14 +98,14 @@ LocFlyOverText="Blockade"
 
 [Warden_BD_KineticArmour X2AbilityTemplate]
 LocFriendlyName="Kinetic Armour"
-LocLongDescription="Gain <Ability:KINETICARMOUR_I_SHIELDHP> - <Ability:KINETICARMOUR_III> ablative hit points dependin on proficiency. Return damage dealt to the shields as psi. Switch Stance."
+LocLongDescription="Gain ablative hit points equal to 1/3 of max. health. Any damage dealt to the shield on this turn will be added to the Warden's attack on the next."
 LocHelpText="Gain ablative hit points depending on proficiency. Return damage dealt to the shields as psi. Switch Stance."
 LocPromotionPopupText="<Bullet/> No cooldown."
 LocFlyOverText="Kinetic Armour"
 
 [Warden_BD_DefenderPassive X2AbilityTemplate]
 LocFriendlyName="Defender"
-LocLongDescription="Use Hunker with Flow APs - immunity to impairments"
+LocLongDescription="Use Hunker with Flow APs - immunity to mental impairments"
 LocHelpText="Double psionic bonus damage from melee stance on the next turn. Switch Stance."
 LocPromotionPopupText="<Bullet/> No cooldown."
 LocFlyOverText="Defender"
@@ -84,15 +126,15 @@ LocFlyOverText="Watcher"
 
 [Warden_BD_ImbueAmmo X2AbilityTemplate]
 LocFriendlyName="Imbue Ammo"
-LocLongDescription="Channel psionic energy into your ammo, dealing additional psi damage on the next turn"
+LocLongDescription="Channel psionic energy into your ammo, converting its damage type to psionic & ignoring armour & shields."
 LocHelpText="Imbue Ammo"
 LocPromotionPopupText="<Bullet/> No cooldown."
 LocFlyOverText="Imbue Ammo"
 
 [Warden_BD_SoulBlade X2AbilityTemplate]
 LocFriendlyName="Soul-Blade"
-LocLongDescription="Channel additional psionic energy into your sword, doubling psionic bonus damage from melee stance on the next turn. Switch Stance."
-LocHelpText="Double psionic bonus damage from melee stance on the next turn. Switch Stance."
+LocLongDescription="Channel psionic energy into your sword, converting its damage type to psionic & ignoring armour & shields."
+LocHelpText="Channel psionic energy into your sword, converting its damage type to psionic & ignoring armour & shields."
 LocPromotionPopupText="<Bullet/> No cooldown."
 LocFlyOverText="Soul-Blade"
 
@@ -138,7 +180,7 @@ LocHelpText="Sword slash can be used from flow APs"
 LocPromotionPopupText="<Bullet/> No cooldown."
 LocFlyOverText="Warden's Charge"
 
-[Warden_BD_WardensRetribution X2AbilityTemplate]
+[Warden_BD_Retribution X2AbilityTemplate]
 LocFriendlyName="Warden's Retribution"
 LocLongDescription="Completely reflect all attacks back at the attacker on the next enemy turn."
 LocHelpText="Completely reflect all attacks back at the attacker on the next enemy turn."
@@ -173,36 +215,3 @@ LocHelpText="Stun & knock back a nearby enemy"
 LocPromotionPopupText="<Bullet/> No cooldown."
 LocFlyOverText="Stun Strike"
 
-[WOTC_Warden_BD X2SoldierClassTemplate]
-DisplayName="Warden"
-ClassSummary="Blah blah templar militia close range psionics blah"
-AbilityTreeTitles[0]="Templar SpecOps"
-AbilityTreeTitles[1]="Nullifier"
-AbilityTreeTitles[2]="Counter"
-AbilityTreeTitles[3]="XCOM"
-
-+RandomNickNames = "McLovin"
-+RandomNickNames = "SheBango"
-+RandomNickNames_Male = "Paladin"
-+RandomNickNames_Female = "Historia"
-
-+PhotoboothSoloBLines_Female = "Close quarters, no mercy."
-+PhotoboothSoloBLines_Female = "Her blade will bring JUSTICE!"
-+PhotoboothSoloBLines_Female = "Close, Personal, and DEADLY!"
-
-+PhotoboothSoloBLines_Male = "Close quarters, no mercy."
-+PhotoboothSoloBLines_Male = "His blade will bring JUSTICE!"
-+PhotoboothSoloBLines_Male = "Close, Personal, and DEADLY!"
-
-[WOTC_Warden_BD X2EncyclopediaTemplate]
-ListTitle = "Warden Class"
-DescriptionTitle = "Warden Class"
-DescriptionEntry = "Blah blah templar militia close range psionics blah"
-
-[WOTC_Prof_Warden_BD_Unlock1 X2SoldierAbilityUnlockTemplate]
-DisplayName = "Warden: Concentration I"
-Summary = "All Warden's Stance proficiencies will start at level 2, regardless of rank."
-
-[WOTC_Prog_Warden_BD_Unlock2 X2SoldierAbilityUnlockTemplate]
-DisplayName = "Warden: Concentration II"
-Summary = "All Warden's Stance proficiencies will start at level 3, regardless of rank.<br/><br/><font color='#CA7200'>Requires Warden Concentration I</font>"
