@@ -42,85 +42,99 @@ Summary = "All Warden's Stance proficiencies will start at level 3, regardless o
 
 [Warden_BD_MeleeStance X2AbilityTemplate]
 LocFriendlyName="Melee Stance"
-LocLongDescription="The Warden is granted an additional <Ability:MELEESTANCE_I_MOBILITY_BONUS> - <Ability:MELEESTANCE_III_MOBILITY_BONUS> mobility, depending on proficiency."
+LocLongDescription="Mobility is increased in melee stance by <Ability:MELEESTANCE_I_MOBILITY_BONUS>,<Ability:MELEESTANCE_II_MOBILITY_BONUS>,<Ability:MELEESTANCE_III_MOBILITY_BONUS> at Squaddie, Sergeant & Major Ranks Respectively"
 LocHelpText="Melee Stance"
 LocPromotionPopupText="<Bullet/> No cooldown."
-LocFlyOverText="Melee Stance"
+LocFlyOverText="Mobility is increased in melee stance by <Ability:MELEESTANCE_I_MOBILITY_BONUS>,<Ability:MELEESTANCE_II_MOBILITY_BONUS>,<Ability:MELEESTANCE_III_MOBILITY_BONUS> at Squaddie, Sergeant & Major Ranks Respectively"
 
 [Warden_BD_RangedStance X2AbilityTemplate]
 LocFriendlyName="Ranged Stance"
-LocLongDescription="The Warden is granted a redution of <Ability:RANGEDSTANCE_I_CDEF_BONUS> - <Ability:RANGEDSTANCE_III_CDEF_BONUS> in enemy defense from cover while shooting with the bullpup, depending on proficiency"
+LocLongDescription="Enemy defense from cover is reduced in ranged stance by <Ability:RANGEDSTANCE_I_CDEF_BONUS>, <Ability:RANGEDSTANCE_II_CDEF_BONUS>, <Ability:RANGEDSTANCE_III_CDEF_BONUS>% at Squaddie, Sergeant & Major Ranks Respectively"
 LocHelpText="Ranged Stance"
 LocPromotionPopupText="<Bullet/> No cooldown."
-LocFlyOverText="Ranged Stance"
+LocFlyOverText="Enemy defense from cover is reduced in ranged stance by <Ability:RANGEDSTANCE_I_CDEF_BONUS>, <Ability:RANGEDSTANCE_II_CDEF_BONUS>, <Ability:RANGEDSTANCE_III_CDEF_BONUS>% at Squaddie, Sergeant & Major Ranks Respectively"
 
 [Warden_BD_EbbAndFlow X2AbilityTemplate]
-LocFriendlyName="Ebb & Flow"
-LocLongDescription="Hidden ability which basically just ends the turn but looks like preparation"
+LocFriendlyName="Ebb & Flow - Hidden"
+LocLongDescription="Hidden ability which actually does the stance switching"
 LocHelpText="Ebb & Flow"
 LocPromotionPopupText="<Bullet/> No cooldown."
-LocFlyOverText="Ebb"
+LocFlyOverText="Ebb & Flow - Hidden"
 
 [Warden_BD_EbbAndFlowDummy X2AbilityTemplate]
 LocFriendlyName="Ebb & Flow"
-LocLongDescription="Change stance at the start of the next turn"
+LocLongDescription="Switch stance at the start of the next turn"
 LocHelpText="Ebb & Flow"
 LocPromotionPopupText="<Bullet/> No cooldown."
-LocFlyOverText="Ebb"
+LocFlyOverText="Switch stance at the start of the next turn"
 
-[Warden_BD_WardensSwordPassive X2AbilityTemplate]
-LocFriendlyName="Warden's Sword"
-LocLongDescription="Hidden ability which holds various sword buffs (passive aim, damage counter from bladefocus etc.)"
-LocHelpText="Warden's Sword"
+[Warden_BD_EbbAndFlowManual X2AbilityTemplate]
+LocFriendlyName="Flow Mastery"
+LocLongDescription="Switch stance Immediately - No action point cost (Cannot be activated with flow action points)"
+LocHelpText="Flow Mastery"
 LocPromotionPopupText="<Bullet/> No cooldown."
-LocFlyOverText="Ebb"
+LocFlyOverText="Switch stance Immediately - No action point cost (Cannot be activated with flow action points)"
 
-[Warden_BD_ApplyAdditionalDamage X2AbilityTemplate]
-LocFriendlyName="Warden's Sword"
-LocLongDescription="This should be a hidden ability - This effect applies the additional psi damage to the sword."
-LocHelpText="Apply Additional Damage"
+[Warden_BD_ProficiencyPassives X2AbilityTemplate]
+LocFriendlyName="Proficiency Bonuses - Warden"
+LocLongDescription="Hidden ability which grants proficiency skills to the warden"
+LocHelpText="Proficiency Bonuses - Warden"
 LocPromotionPopupText="<Bullet/> No cooldown."
-LocFlyOverText="Warden's Sword"
+LocFlyOverText="Proficiency Bonuses - Warden"
 
 [Warden_BD_Rewind X2AbilityTemplate]
 LocFriendlyName="Rewind"
 LocLongDescription="Teleport back to the turn-start location"
 LocHelpText="Teleport back to the turn-start location"
 LocPromotionPopupText="<Bullet/> No cooldown."
-LocFlyOverText="Rewind"
+LocFlyOverText="Teleport back to the turn-start location"
 
 [Warden_BD_Mirror X2AbilityTemplate]
 LocFriendlyName="Mirror"
-LocLongDescription="Next two attacks will graze. Damage is returned to the attacher."
+LocLongDescription="The next two attacks against you will automatically graze. Any damage received is returned psionically to the attacker."
 LocHelpText="Mirror"
 LocPromotionPopupText="<Bullet/> No cooldown."
-LocFlyOverText="Blockade"
+LocFlyOverText="The next two attacks against you will automatically graze. Any damage received is returned psionically to the attacker."
+
+[Warden_BD_MirrorReturnFire X2AbilityTemplate]
+LocFriendlyName="Mirror - Return Fire"
+LocLongDescription="Hidden ability which handles returning psi damage."
+LocHelpText="Mirror - Return Fire"
+LocPromotionPopupText="<Bullet/> No cooldown."
+LocFlyOverText="Hidden ability which handles returning psi damage.
 
 [Warden_BD_KineticArmour X2AbilityTemplate]
 LocFriendlyName="Kinetic Armour"
-LocLongDescription="Gain ablative hit points equal to 1/3 of max. health. Any damage dealt to the shield on this turn will be added to the Warden's attack on the next."
+LocLongDescription="Gain ablative hit points equal to 1/3 of max. health. Any damage dealt to the shield on this turn will be added to the Warden's attack on the next turn."
 LocHelpText="Gain ablative hit points depending on proficiency. Return damage dealt to the shields as psi. Switch Stance."
 LocPromotionPopupText="<Bullet/> No cooldown."
 LocFlyOverText="Kinetic Armour"
 
 [Warden_BD_DefenderPassive X2AbilityTemplate]
 LocFriendlyName="Defender"
-LocLongDescription="Use Hunker with Flow APs - immunity to mental impairments"
-LocHelpText="Double psionic bonus damage from melee stance on the next turn. Switch Stance."
+LocLongDescription="Use Hunker with Flow APs - Immunity to mental impairments"
+LocHelpText="Hunker down may be used with Flow Action Points - Using hunker grants immunity to mental impairments & psionic damage"
 LocPromotionPopupText="<Bullet/> No cooldown."
 LocFlyOverText="Defender"
+
+[Warden_BD_DefenderHunker X2AbilityTemplate]
+LocFriendlyName="Defender - Hunker"
+LocLongDescription="Hidden ability which grants immunity to mental status effects (Panic, disorient, stun, unconscious) while hunkered"
+LocHelpText="Defender - Hunker"
+LocPromotionPopupText="<Bullet/> No cooldown."
+LocFlyOverText="Hidden ability which grants immunity to mental status effects (Panic, disorient, stun, unconscious) while hunkered"
 
 [Warden_BD_CrusaderPassive X2AbilityTemplate]
 LocFriendlyName="Crusader"
 LocLongDescription="Reload from flow APs - sword has +5 aim"
-LocHelpText="Crusader"
+LocHelpText="Reload from flow APs - sword has +5 aim and +5 crit"
 LocPromotionPopupText="<Bullet/> No cooldown."
 LocFlyOverText="Crusader"
 
 [Warden_BD_WatcherPassive X2AbilityTemplate]
 LocFriendlyName="Watcher"
 LocLongDescription="Overwatch can be used from flow APs, Aim penalty removed"
-LocHelpText="Watcher"
+LocHelpText="Overwatch can be used from flow APs, Aim penalty removed"
 LocPromotionPopupText="<Bullet/> No cooldown."
 LocFlyOverText="Watcher"
 
@@ -138,12 +152,33 @@ LocHelpText="Channel psionic energy into your sword, converting its damage type 
 LocPromotionPopupText="<Bullet/> No cooldown."
 LocFlyOverText="Soul-Blade"
 
-[Warden_BD_Intercept X2AbilityTemplate]
-LocFriendlyName="Intercept"
-LocLongDescription="Attack the nearest enemee that comes into movement range with your sword, dealing psi damage"
+[Warden_BD_Combatives X2AbilityTemplate]
+LocFriendlyName="Counter"
+LocLongDescription="Attack the nearest enemee that comes into melee range with your sword"
 LocHelpText="Intercept"
 LocPromotionPopupText="<Bullet/> No cooldown."
-LocFlyOverText="Intercept"
+LocFlyOverText="Counter"
+
+[Warden_BD_FirearmFocusPassive X2AbilityTemplate]
+LocFriendlyName="Firearm Focus"
+LocLongDescription="Add +1 damage to the bullpup (maximum +5) each time ranged stance is entered"
+LocHelpText="Add +1 damage to the bullpup (maximum +5) each time ranged stance is entered"
+LocPromotionPopupText="<Bullet/> No cooldown."
+LocFlyOverText="Firearm Focus"
+
+[Warden_BD_MeleeFocusPassive X2AbilityTemplate]
+LocFriendlyName="Blade Focus"
+LocLongDescription="Add +1 damage to the warden's sword (maximum +5) each time melee stance is entered"
+LocHelpText="Add +1 damage to the bullpup (maximum +5) each time ranged stance is entered"
+LocPromotionPopupText="<Bullet/> No cooldown."
+LocFlyOverText="Blade Focus"
+
+[Warden_BD_OverwatchFocusPassive X2AbilityTemplate]
+LocFriendlyName="Overwatch Focus"
+LocLongDescription="Overwatch shots gain +1 damage (maximum +5) & ignore +1 armour (maximum +3) each time ranged stance is entered"
+LocHelpText="Overwatch shots gain +1 damage (maximum +5) & ignore +1 armour (maximum +3) each time ranged stance is entered"
+LocPromotionPopupText="<Bullet/> No cooldown."
+LocFlyOverText="Overwatch Focus"
 
 [Warden_BD_Fissure X2AbilityTemplate]
 LocFriendlyName="Fissure"
@@ -157,7 +192,7 @@ LocFriendlyName="Tide"
 LocLongDescription="Knocks down enemies in a 6 tile AOE around the warden. Does 2-3 fall damage (ignoring cover & armour) & stuns for 1AP. Retain Stance."
 LocHelpText="Knocks down enemies in a 6 tile AOE around the warden. Does 2-3 fall damage (ignoring cover & armour) & stuns for 1AP. Retain Stance."
 LocPromotionPopupText="<Bullet/> No cooldown."
-LocFlyOverText="Warden's Tide"
+LocFlyOverText="Tide"
 
 [Warden_BD_Consume X2AbilityTemplate]
 LocFriendlyName="Consume"
@@ -180,7 +215,7 @@ LocHelpText="Sword slash can be used from flow APs"
 LocPromotionPopupText="<Bullet/> No cooldown."
 LocFlyOverText="Warden's Charge"
 
-[Warden_BD_Retribution X2AbilityTemplate]
+[Warden_BD_RetributionPassive X2AbilityTemplate]
 LocFriendlyName="Warden's Retribution"
 LocLongDescription="Completely reflect all attacks back at the attacker on the next enemy turn."
 LocHelpText="Completely reflect all attacks back at the attacker on the next enemy turn."

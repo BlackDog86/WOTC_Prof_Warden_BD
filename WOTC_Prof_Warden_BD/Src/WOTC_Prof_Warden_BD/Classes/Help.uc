@@ -149,8 +149,6 @@ WOTC_LW2SecondaryWeapons
 
 */
 
-
-
 static final function XComGameState_HeadquartersXCom GetAndPrepXComHQ(XComGameState NewGameState)
 {
     local XComGameState_HeadquartersXCom XComHQ;
@@ -737,47 +735,7 @@ static function X2AbilityTemplate Warden_BD_MindWard()
 	return Template;
 }
 
-// Kinetic Armour Return Damage
-Static final function X2AbilityTemplate Warden_BD_KineticArmour_ReturnFire()
-{
-	local X2AbilityTemplate						Template;
-	local X2AbilityToHitCalc_PercentChance		ChanceToHit;
-	local X2AbilityTrigger_EventListener		Trigger;
-	local X2Effect_KineticArmourReturnFire		DamageEffect;
 
-	`CREATE_X2ABILITY_TEMPLATE(Template, 'Warden_BD_KineticArmour_ReturnFire');
-
-	Template.AbilitySourceName = 'eAbilitySource_Psionic';
-	Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_NeverShow;
-	Template.Hostility = eHostility_Offensive;
-	Template.IconImage = "img:///UILibrary_XPACK_Common.PerkIcons.UIPerk_ReflectShot";
-
-	ChanceToHit = new class'X2AbilityToHitCalc_PercentChance';
-	ChanceToHit.PercentToHit = 100;
-	Template.AbilityToHitCalc = ChanceToHit;
-
-	Trigger = new class'X2AbilityTrigger_EventListener';
-    Trigger.ListenerData.Deferral = ELD_OnStateSubmitted;
-    Trigger.ListenerData.EventID = 'UnitTakeEffectDamage';
-    Trigger.ListenerData.Filter = eFilter_Unit;
-	Trigger.ListenerData.EventFn = KineticArmourReturnFireListener;
-	Template.AbilityTriggers.AddItem(Trigger);
-
-	Template.AbilityTargetStyle = default.SimpleSingleTarget;
-	Template.AbilityShooterConditions.AddItem(default.LivingShooterProperty);
-
-	DamageEffect = new class'X2Effect_KineticArmourReturnFire';	
-	DamageEffect.EffectDamageValue.DamageType = 'Psi';
-	DamageEffect.bBypassShields = true;
-	DamageEffect.bIgnoreArmor = true;
-	Template.AddTargetEffect(DamageEffect);
-
-	Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
-	Template.BuildVisualizationFn = TypicalAbility_BuildVisualization;
-	Template.bSkipFireAction = true;
-
-	return Template;
-}
 
 // Total Combat Check Function
 static final function bool IsAbilityAffectedByTotalCombat(const X2AbilityTemplate Template)
@@ -860,4 +818,149 @@ defaultproperties
     bIgnoreBaseDamage = true
 }
 // This is an Unreal Script
+
+
+// Melee-Stance Additional Damage EventListener
+static final function EventListenerReturn ApplyAdditionalDamage_EventListenerFn(Object EventData, Object EventSource, XComGameState GameState, Name EventID, Object CallbackData)
+{
+	local XComGameStateContext_Ability	AbilityContext;
+	local XComGameState_Ability			AbilityState;
+	local XComGameState_Ability			ApplyAdditionalDamageAbilityState;
+	local XComGameStateContext			FindContext;
+    local int							VisualizeIndex;
+	local XComGameStateHistory			History;
+	local X2AbilityTemplate				AbilityTemplate;
+	local X2Effect						Effect;
+	local XComGameState_Item			SourceWeapon;
+	local XComGameState_Unit			SourceUnit;
+	local UnitValue						UV;
+
+	// Fallback on interrupt or if no context
+	AbilityContext = XComGameStateContext_Ability(GameState.GetContext());
+	if (AbilityContext == none || AbilityContext.InterruptionStatus == eInterruptionStatus_Interrupt)
+		return ELR_NoInterrupt;
+
+	// Triggered by 'Activate Ability' Event
+	AbilityState = XComGameState_Ability(EventData);	
+	if (AbilityState == none)
+		return ELR_NoInterrupt;
+	
+	// Fallback if ability is not attached to the sword 
+	SourceWeapon = AbilityState.GetSourceWeapon();
+	If (SourceWeapon.InventorySlot != eInvSlot_SecondaryWeapon)
+		return ELR_NoInterrupt;  	
+		
+	SourceUnit = XComGameState_Unit(EventSource);
+	//Fallback if No Unit
+	    if (SourceUnit == none)     
+        return ELR_NoInterrupt;
+
+	// Fallback if Ranged Stance uses Sword
+	if (SourceUnit.GetUnitValue(default.RangedStanceValueName, UV) && SourceWeapon.InventorySlot == eInvSlot_SecondaryWeapon)
+	return ELR_NoInterrupt; 
+	
+	// Prevent the ability triggering its-self
+	ApplyAdditionalDamageAbilityState = XComGameState_Ability(CallbackData);
+	if (ApplyAdditionalDamageAbilityState == none ||
+		AbilityContext.InputContext.AbilityTemplateName == ApplyAdditionalDamageAbilityState.GetMyTemplateName()) 
+	return ELR_NoInterrupt;
+
+	// Fallback if no template
+	AbilityTemplate = AbilityState.GetMyTemplate();
+	if (AbilityTemplate == none)
+		return ELR_NoInterrupt;
+		
+	History = `XCOMHISTORY;
+
+	// Trigger against primary target of the triggering ability, if it exists, the ability is capable of dealing damage, and it hit.
+		if (AbilityContext.InputContext.PrimaryTarget.ObjectID != 0 && AbilityContext.IsResultContextHit())
+	{
+		foreach AbilityTemplate.AbilityTargetEffects(Effect)
+		{
+			if (Effect.bAppliesDamage)
+			{
+				//	Calculate Visualize Index for later use by Merge Vis Fn.
+				VisualizeIndex = GameState.HistoryIndex;
+				FindContext = AbilityContext;
+				while (FindContext.InterruptionHistoryIndex > -1)
+				{
+					FindContext = History.GetGameStateFromHistory(FindContext.InterruptionHistoryIndex).GetContext();
+					VisualizeIndex = FindContext.AssociatedState.HistoryIndex;
+				}
+				// Do the second attack against the target
+				ApplyAdditionalDamageAbilityState.AbilityTriggerAgainstSingleTarget(AbilityContext.InputContext.PrimaryTarget, false, VisualizeIndex);		
+				break;
+			}
+		}
+	}
+	
+	return ELR_NoInterrupt;
+}
+
+
+ApplyAdditionalDamage: Hidden ability to apply bonus psi damage to target
+static function X2AbilityTemplate Warden_BD_ApplyAdditionalDamage()
+{
+	local X2AbilityTemplate										Template;
+	local X2AbilityTrigger_EventListener						Trigger;
+	local X2Condition_UnitProperty								LivingTargetProperty;	
+	local X2Effect_WardenSwordDamage							AdditionalDamageEffect1;
+
+	`CREATE_X2ABILITY_TEMPLATE(Template, 'Warden_BD_ApplyAdditionalDamage');
+
+	// Icon Setup
+	Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_SwordSlash";
+	Template.eAbilityIconBehaviorHUD = EAbilityIconBehavior_NeverShow;
+	Sethidden(Template);
+
+	// Targeting and Triggering
+	Template.AbilityTargetStyle = default.SimpleSingleTarget;
+	Template.AbilityToHitCalc = default.DeadEye;
+
+	Trigger = new class'X2AbilityTrigger_EventListener';	
+	Trigger.ListenerData.EventID = 'AbilityActivated';
+	Trigger.ListenerData.Deferral = ELD_OnStateSubmitted;
+	Trigger.ListenerData.Filter = eFilter_Unit;
+	Trigger.ListenerData.Priority = 52;
+	Trigger.ListenerData.EventFn = ApplyAdditionalDamage_EventListenerFn;
+	Template.AbilityTriggers.AddItem(Trigger);
+
+	// Shooter Conditions
+	Template.AbilityShooterConditions.AddItem(default.LivingShooterProperty);
+
+	// Target Conditions
+	// TODO: Visibility condition!
+	LivingTargetProperty = new class'X2Condition_UnitProperty';
+	LivingTargetProperty.ExcludeAlive = false;
+	LivingTargetProperty.ExcludeDead = true;
+	LivingTargetProperty.ExcludeFriendlyToSource = false;
+	LivingTargetProperty.ExcludeHostileToSource = false;
+	Template.AbilityTargetConditions.AddItem(LivingTargetProperty);
+	
+	// Ability Effects
+	AdditionalDamageEffect1 = new class'X2Effect_WardenSwordDamage';
+	AdditionalDamageEffect1.EffectDamageValue.DamageType = 'Psi';
+	AdditionalDamageEffect1.EffectDamageValue.Damage = 4;
+	AdditionalDamageEffect1.bAllowFreeKill = false;
+	AdditionalDamageEffect1.bAllowWeaponUpgrade = false;
+	AdditionalDamageEffect1.bIgnoreBaseDamage = true;
+	AdditionalDamageEffect1.bBypassShields = true;
+	AdditionalDamageEffect1.bIgnoreArmor = true;
+	Template.AddTargetEffect(AdditionalDamageEffect1);
+
+	// State and Vis
+	Template.FrameAbilityCameraType = eCameraFraming_Never; 
+	Template.bSkipExitCoverWhenFiring = true;
+	Template.bSkipFireAction = true;
+	Template.bShowActivation = true;
+	Template.bUsesFiringCamera = false;
+	Template.Hostility = eHostility_Neutral;
+	Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
+	Template.BuildVisualizationFn = ApplyAdditionalDamage_BuildVisualization;
+	Template.MergeVisualizationFn = ApplyAdditionalDamage_MergeVisualization;
+	Template.BuildInterruptGameStateFn = none;
+
+	return Template;
+}
 */
+
