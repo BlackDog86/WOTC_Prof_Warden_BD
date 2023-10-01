@@ -1,5 +1,5 @@
 
-class X2Condition_WOTC_APA_Class_TargetRankRequirement extends X2Condition;
+class X2Condition_WardenTargetRankRequirement extends X2Condition;
 
 // Variables to pass into the condition check:
 var int		iMinRank;			//»» Values of -1 (default) mean no min/max

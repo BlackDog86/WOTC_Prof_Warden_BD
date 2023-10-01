@@ -16,22 +16,20 @@ function GetToHitModifiers(XComGameState_Effect EffectState, XComGameState_Unit 
 	if (EffectState.ApplyEffectParameters.ItemStateObjectRef.ObjectID != AbilityState.SourceWeapon.ObjectID) return;
 	
 	// Get target's Defense from character template (base stat) and from other effects.
-	TargetDefense = Target.GetCurrentStat(eStat_Defense);
-
+	//TargetDefense = Target.GetCurrentStat(eStat_Defense);
+	TargetDefense = 0.0f;
 	//	Get target's Defense from Cover, if any.
 	if (Target.CanTakeCover() && `TACTICALRULES.VisibilityMgr.GetVisibilityInfo(Attacker.ObjectID, Target.ObjectID, VisInfo))
 	{	
-		switch (VisInfo.TargetCover)
-		{
-			case CT_MidLevel:
-				TargetDefense += class'X2AbilityToHitCalc_StandardAim'.default.LOW_COVER_BONUS;
-			case CT_Standing:
-				TargetDefense += class'X2AbilityToHitCalc_StandardAim'.default.HIGH_COVER_BONUS;
-			default:
-				break;
-		}
+		if (VisInfo.TargetCover == CT_MidLevel)
+			{
+			TargetDefense = class'X2AbilityToHitCalc_StandardAim'.default.LOW_COVER_BONUS;
+			}
+		else if (VisInfo.TargetCover == CT_Standing)
+			{
+			TargetDefense = class'X2AbilityToHitCalc_StandardAim'.default.HIGH_COVER_BONUS;				
+			}
 	}
-	
 	// Don't need to compensate for enemy Defense if they don't have any.
 	if (TargetDefense <= 0)
 	{
@@ -40,17 +38,17 @@ function GetToHitModifiers(XComGameState_Effect EffectState, XComGameState_Unit 
 	
 	if (AttackerRank == 1)
 	{
-		DefenseReduction = default.RANGEDSTANCE_I_CDEF_BONUS;
+		DefenseReduction = Round((TargetDefense * float(default.RANGEDSTANCE_I_CDEF_BONUS) / 100.0f));
 	}
 	else if (AttackerRank == 2)
 	{
-		DefenseReduction = default.RANGEDSTANCE_II_CDEF_BONUS;
+		DefenseReduction = Round((TargetDefense * float(default.RANGEDSTANCE_II_CDEF_BONUS) / 100.0f));
 	}
 	else if (AttackerRank == 3)
 	{
-		DefenseReduction = default.RANGEDSTANCE_III_CDEF_BONUS;
+		DefenseReduction = Round((TargetDefense * float(default.RANGEDSTANCE_III_CDEF_BONUS) / 100.0f));
 	}
-
+		
 	ModInfo.ModType = eHit_Success;
 	ModInfo.Reason = FriendlyName;
 	ModInfo.Value = Min(TargetDefense, DefenseReduction); // Give bonus aim equal to the lowest between the target's current defense and defense reduction

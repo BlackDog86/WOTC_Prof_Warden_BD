@@ -34,7 +34,7 @@
     <Content Include="Content\Perk_Warden_BD_Combatives.upk">
       <SubType>Content</SubType>
     </Content>
-    <Content Include="Content\Perk_Warden_BD_KineticArmour.upk">
+    <Content Include="Content\Perk_Warden_BD_KineticArmor.upk">
       <SubType>Content</SubType>
     </Content>
     <Content Include="Content\Perk_Warden_BD_Melee.upk">
@@ -66,13 +66,13 @@
     <Content Include="Localization\XComGame.int" />
     <Content Include="Localization\WOTC_Prof_Warden_BD.int" />
     <Content Include="Src\extra_globals.uci" />
+    <Content Include="Src\WOTC_Prof_Warden_BD\Classes\X2Condition_WardenTargetRankRequirement.uc">
+      <SubType>Content</SubType>
+    </Content>
     <Content Include="Src\WOTC_Prof_Warden_BD\Classes\WardenGTSUnlocks.uc">
       <SubType>Content</SubType>
     </Content>
     <Content Include="Src\WOTC_Prof_Warden_BD\Classes\X2Ability_Warden.uc">
-      <SubType>Content</SubType>
-    </Content>
-    <Content Include="Src\WOTC_Prof_Warden_BD\Classes\X2Condition_WOTC_APA_Class_TargetRankRequirement.uc">
       <SubType>Content</SubType>
     </Content>
     <Content Include="Src\WOTC_Prof_Warden_BD\Classes\X2DLCInfo_WOTC_Prof_Warden_BD.uc" />
@@ -81,13 +81,16 @@
     <Content Include="Src\WOTC_Prof_Warden_BD\Classes\X2Effect_NegateOWPenalty.uc">
       <SubType>Content</SubType>
     </Content>
-    <Content Include="Src\WOTC_Prof_Warden_BD\Classes\X2Effect_WardenBlockade.uc">
+    <Content Include="Src\WOTC_Prof_Warden_BD\Classes\X2Effect_WardenAddAbilitiesToTarget.uc">
       <SubType>Content</SubType>
     </Content>
     <Content Include="Src\WOTC_Prof_Warden_BD\Classes\X2Effect_ClearUnitValue.uc">
       <SubType>Content</SubType>
     </Content>
     <Content Include="Src\WOTC_Prof_Warden_BD\Classes\X2Effect_WardenConsume.uc">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Src\WOTC_Prof_Warden_BD\Classes\X2Effect_WardenKineticArmorDamage.uc">
       <SubType>Content</SubType>
     </Content>
     <Content Include="Src\WOTC_Prof_Warden_BD\Classes\X2Effect_WardenMeleeDamageFocus.uc">
@@ -102,13 +105,16 @@
     <Content Include="Src\WOTC_Prof_Warden_BD\Classes\X2Effect_WardenMirrorReturnFire.uc">
       <SubType>Content</SubType>
     </Content>
+    <Content Include="Src\WOTC_Prof_Warden_BD\Classes\X2Effect_WardenModifyAbilityCharges.uc">
+      <SubType>Content</SubType>
+    </Content>
     <Content Include="Src\WOTC_Prof_Warden_BD\Classes\X2Effect_WardenPillar.uc">
       <SubType>Content</SubType>
     </Content>
     <Content Include="Src\WOTC_Prof_Warden_BD\Classes\X2Effect_WardenCounterDefense.uc">
       <SubType>Content</SubType>
     </Content>
-    <Content Include="Src\WOTC_Prof_Warden_BD\Classes\X2Effect_WardenKineticArmour.uc">
+    <Content Include="Src\WOTC_Prof_Warden_BD\Classes\X2Effect_WardenKineticArmor.uc">
       <SubType>Content</SubType>
     </Content>
     <Content Include="Src\WOTC_Prof_Warden_BD\Classes\X2Effect_WardenRangedDamageFocus.uc">
@@ -118,9 +124,6 @@
       <SubType>Content</SubType>
     </Content>
     <Content Include="Src\WOTC_Prof_Warden_BD\Classes\X2Effect_WardenSwordDamage.uc">
-      <SubType>Content</SubType>
-    </Content>
-    <Content Include="Src\WOTC_Prof_Warden_BD\Classes\X2Effect_WOTC_APA_Class_AddAbilitiesToTarget.uc">
       <SubType>Content</SubType>
     </Content>
   </ItemGroup>

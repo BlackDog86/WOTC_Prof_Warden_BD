@@ -8,13 +8,17 @@ var const name	SoulBladeValueName;
 var const name	GunFocusCounterValueName;
 var const name	MeleeFocusCounterValueName;
 var const name	NumberOfCounterAttacksValueName;
+var const name	KineticArmorExpendedShields;
+var const name	KineticArmorBonusDamageValue;
+
 //Effect Names
 var const name	MeleeStanceHitEffectName;
 var const name	MeleeStanceMobilityEffectName;
 var const name	RangedStanceCdefEffectName;
 var const name	MirrorEffectName;
 var const name	MirrorReturnFireEffectName;
-var const name	KineticArmourEffectName;
+var const name	KineticArmorEffectName;
+var const name	KineticArmorDamageEffectName;
 var const name	DefenderImmunityEffectName;
 
 //AP Types
@@ -67,6 +71,7 @@ var config int	PILLAR_DURATION;
 
 var config int	COUNTERATTACK_DODGE_AMOUNT;
 var config int	MAX_COUNTERATTACKS_ALLOWED;
+var config int	KINETIC_ARMOR_SHIELD_HP_PERCENTAGE;
 
 var localized string CounterattackDodgeName;
 
@@ -82,7 +87,7 @@ static function array<X2DataTemplate> CreateTemplates()
 	Templates.AddItem(Warden_BD_EbbAndFlowManual());
 	Templates.AddItem(Warden_BD_ProficiencyPassives());
 	Templates.AddItem(Warden_BD_Rewind());
-	Templates.AddItem(Warden_BD_KineticArmour());
+	Templates.AddItem(Warden_BD_KineticArmor());
 	Templates.AddItem(Warden_BD_Mirror());
 	Templates.AddItem(Warden_BD_MirrorReturnFire());
 	Templates.AddItem(Warden_BD_DefenderPassive());	
@@ -91,14 +96,14 @@ static function array<X2DataTemplate> CreateTemplates()
 	Templates.AddItem(Warden_BD_WatcherPassive());
 	Templates.AddItem(Warden_BD_ImbueAmmo());
 	Templates.AddItem(Warden_BD_SoulBlade());
+	Templates.AddItem(Warden_BD_OverwatchNew());
+	Templates.AddItem(Warden_BD_FirearmFocusPassive());
+	Templates.AddItem(Warden_BD_MeleeFocusPassive());
 	Templates.AddItem(Warden_BD_Combatives());
 	Templates.AddItem(Warden_BD_CombativesAttack());
 	Templates.AddItem(Warden_BD_CombativesPreparation());
 	Templates.AddItem(Warden_BD_CombativesCounterattack());
 	Templates.AddItem(Warden_BD_CombativesStats());
-	Templates.AddItem(Warden_BD_FirearmFocusPassive());
-	Templates.AddItem(Warden_BD_MeleeFocusPassive());
-	Templates.AddItem(Warden_BD_OverwatchFocusPassive());
 	Templates.AddItem(Warden_BD_Fissure());
 	Templates.AddItem(Warden_BD_Tide());
 	Templates.AddItem(Warden_BD_Consume());
@@ -122,26 +127,26 @@ static final function X2AbilityTemplate Warden_BD_MeleeStance()
 	local X2Effect_SetUnitValue									SetUnitValueEffect;
 	local X2Effect_IncrementUnitValue							CounterEffect;
 	local X2Effect_ClearUnitValue								ClearUnitValueEffect, ClearUnitValueEffect2;
-	local X2Condition_WOTC_APA_Class_TargetRankRequirement		RankCondition1, RankCondition2, RankCondition3;
+	local X2Condition_WardenTargetRankRequirement				RankCondition1, RankCondition2, RankCondition3;
 	local X2Effect_PersistentStatChange							MobilityEffect1, MobilityEffect2, MobilityEffect3;						
 
 	`CREATE_X2ABILITY_TEMPLATE(Template, 'Warden_BD_MeleeStance');
 
 	// Create Ranks for Proficiency Effects
-	RankCondition1 = new class 'X2Condition_WOTC_APA_Class_TargetRankRequirement';
+	RankCondition1 = new class 'X2Condition_WardenTargetRankRequirement';
 	RankCondition1.iMinRank = -1;	// No minimum rank for level 1 bonuses
 	RankCondition1.iMaxRank = 2;	// Max rank is 1 below minimum rank for level 2 bonuses
 	RankCondition1.LogEffectName = "Melee Hit 1";	// EffectName to use in logs
 	RankCondition1.ExcludeProject = 'WOTC_Prof_Warden_BD_Unlock1';
 
-	RankCondition2 = new class 'X2Condition_WOTC_APA_Class_TargetRankRequirement';
+	RankCondition2 = new class 'X2Condition_WardenTargetRankRequirement';
 	RankCondition2.iMinRank = 3;
 	RankCondition2.iMaxRank = 5;
 	RankCondition2.LogEffectName = "Melee Hit 2";
 	RankCondition2.ExcludeProject = 'WOTC_Prof_Warden_BD_Unlock2';
 	RankCondition2.GiveProject = 'WOTC_Prof_Warden_BD_Unlock1';
 	
-	RankCondition3 = new class 'X2Condition_WOTC_APA_Class_TargetRankRequirement';
+	RankCondition3 = new class 'X2Condition_WardenTargetRankRequirement';
 	RankCondition3.iMinRank = 6;
 	RankCondition3.iMaxRank = -1;	// No max rank for level 3 bonuses
 	RankCondition3.LogEffectName = "Melee Hit 3";
@@ -233,26 +238,26 @@ static final function X2AbilityTemplate Warden_BD_RangedStance()
 	local X2Effect_SetUnitValue									SetUnitValueEffect;
 	local X2Effect_IncrementUnitValue							CounterEffect;
 	local X2Effect_ClearUnitValue								ClearUnitValueEffect, ClearUnitValueEffect2;
-	local X2Condition_WOTC_APA_Class_TargetRankRequirement		RankCondition1, RankCondition2, RankCondition3;
+	local X2Condition_WardenTargetRankRequirement		RankCondition1, RankCondition2, RankCondition3;
 	local X2Effect_WardenCounterDefense							IgnoreCoverEffect1, IgnoreCoverEffect2, IgnoreCoverEffect3;
 
 	`CREATE_X2ABILITY_TEMPLATE(Template, 'Warden_BD_RangedStance');
 	
 	//Create Ranks for Proficiency Effects
-	RankCondition1 = new class 'X2Condition_WOTC_APA_Class_TargetRankRequirement';
+	RankCondition1 = new class 'X2Condition_WardenTargetRankRequirement';
 	RankCondition1.iMinRank = -1;	// No minimum rank for level 1 bonuses
 	RankCondition1.iMaxRank = 2;	// Max rank is 1 below minimum rank for level 2 bonuses
 	RankCondition1.LogEffectName = "Ranged Hit 1";	// EffectName to use in logs
 	RankCondition1.ExcludeProject = 'WOTC_Prof_Warden_BD_Unlock1';
 
-	RankCondition2 = new class 'X2Condition_WOTC_APA_Class_TargetRankRequirement';
+	RankCondition2 = new class 'X2Condition_WardenTargetRankRequirement';
 	RankCondition2.iMinRank = 3;
 	RankCondition2.iMaxRank = 5;
 	RankCondition2.LogEffectName = "Melee Hit 2";
 	RankCondition2.ExcludeProject = 'WOTC_Prof_Warden_BD_Unlock2';
 	RankCondition2.GiveProject = 'WOTC_Prof_Warden_BD_Unlock1';
 	
-	RankCondition3 = new class 'X2Condition_WOTC_APA_Class_TargetRankRequirement';
+	RankCondition3 = new class 'X2Condition_WardenTargetRankRequirement';
 	RankCondition3.iMinRank = 6;
 	RankCondition3.iMaxRank = -1;	// No max rank for level 3 bonuses
 	RankCondition3.LogEffectName = "Ranged Hit 3";
@@ -386,9 +391,6 @@ static final function X2AbilityTemplate Warden_BD_EbbAndFlowManual()
 	// Grant charges to the ability
 	Charges = new class'X2AbilityCharges';
 	Charges.InitialCharges = default.FLOW_MASTERY_BASE_CHARGES;
-	Charges.AddBonusCharge('Warden_BD_FirearmFocusPassive',1);
-	Charges.AddBonusCharge('Warden_BD_MeleeFocusPassive',1);
-	Charges.AddBonusCharge('Warden_BD_OverwatchFocusPassive',1);
 	Template.AbilityCharges = Charges;
 	
 	ChargeCost = new class'X2AbilityCost_Charges';
@@ -541,7 +543,7 @@ static final function X2AbilityTemplate Warden_BD_EbbandFlow()
 	Template.AbilityToHitCalc = default.DeadEye;
 	Template.AbilityTargetStyle = default.SelfTarget;	
 	
-	//Ability Summary is the list in the armoury when you're looking at a soldier.
+	//Ability Summary is the list in the Armory when you're looking at a soldier.
 	Template.bDontDisplayInAbilitySummary = true;
 	Template.bHideOnClassUnlock = true;
 
@@ -608,8 +610,9 @@ static function X2AbilityTemplate Warden_BD_ProficiencyPassives()
 {
 	local X2AbilityTemplate										Template;
 	local X2Effect_ToHitModifier								HitModEffect;
-	local X2Effect_WOTC_APA_Class_AddAbilitiesToTarget			AddAbilityEffect;
-	local X2Condition_WOTC_APA_Class_TargetRankRequirement		RankCondition;
+	local X2Effect_WardenAddAbilitiesToTarget					AddAbilityEffect;
+	local X2Condition_WardenTargetRankRequirement				RankCondition1, RankCondition2;
+	local X2Effect_WardenModifyAbilityCharges					BonusCharges;
 	
 	// Icon Properties
 	`CREATE_X2ABILITY_TEMPLATE(Template, 'Warden_BD_ProficiencyPassives');
@@ -618,12 +621,19 @@ static function X2AbilityTemplate Warden_BD_ProficiencyPassives()
 	Template.eAbilityIconBehaviorHUD = EAbilityIconBehavior_NeverShow;
 	Template.Hostility = eHostility_Neutral;
 
-	//Create Ranks for Manual Ebb & Flow Effect (Sergeant)
-	RankCondition = new class 'X2Condition_WOTC_APA_Class_TargetRankRequirement';
-	RankCondition.iMinRank = 3;		// No minimum rank for level 1 bonuses
-	RankCondition.iMaxRank = -1;	// Max rank is 1 below minimum rank for level 2 bonuses
-	RankCondition.LogEffectName = "Grant stanceswitch ability";	// EffectName to use in logs
-	RankCondition.GiveProject = 'WOTC_Prof_Warden_BD_Unlock1';
+	//Create Ranks for Manual Ebb & Flow Effect (Corporal)
+	RankCondition1 = new class 'X2Condition_WardenTargetRankRequirement';
+	RankCondition1.iMinRank = 2;		// No minimum rank for level 1 bonuses
+	RankCondition1.iMaxRank = -1;	// Max rank is 1 below minimum rank for level 2 bonuses
+	RankCondition1.LogEffectName = "Grant stanceswitch ability";	// EffectName to use in logs
+	RankCondition1.GiveProject = 'WOTC_Prof_Warden_BD_Unlock1';
+
+	//Create Ranks for Manual Ebb & Flow Effect (Captain)
+	RankCondition2 = new class 'X2Condition_WardenTargetRankRequirement';
+	RankCondition2.iMinRank = 5;		// No minimum rank for level 1 bonuses
+	RankCondition2.iMaxRank = -1;	// Max rank is 1 below minimum rank for level 2 bonuses
+	RankCondition2.LogEffectName = "Grant stanceswitch ability";	// EffectName to use in logs
+	RankCondition2.GiveProject = 'WOTC_Prof_Warden_BD_Unlock1';
 
 	// Hide this ability altogether
 	Template.bDontDisplayInAbilitySummary = true;
@@ -632,36 +642,44 @@ static function X2AbilityTemplate Warden_BD_ProficiencyPassives()
 	Template.AbilityTargetStyle = default.SelfTarget;
 	Template.AbilityTriggers.AddItem(default.UnitPostBeginPlayTrigger);
 	
-	// Setup additional abilities to add at the relevant proficiency level
-	AddAbilityEffect = new class'X2Effect_WOTC_APA_Class_AddAbilitiesToTarget';
+	// Grant Flow Mastery, single charge at appropriate rank
+	AddAbilityEffect = new class'X2Effect_WardenAddAbilitiesToTarget';
 	AddAbilityEffect.AddAbilities.AddItem('Warden_BD_EbbAndFlowManual');
 	AddAbilityEffect.EffectName = 'ProficiencyEbbandFlow';
-	AddAbilityEffect.TargetConditions.AddItem(RankCondition);
+	AddAbilityEffect.TargetConditions.AddItem(RankCondition1);
 	Template.AddTargetEffect(AddAbilityEffect);
+
+	// Grant an additional charge at the appopriate rank
+	BonusCharges = new class 'X2Effect_WardenModifyAbilityCharges';
+	BonusCharges.AbilitiesToModify.AddItem('Warden_BD_EbbAndFlowManual');
+	BonusCharges.iChargeModifier = 1;
+	BonusCharges.BuildPersistentEffect (1, true, false, false);
+	BonusCharges.TargetConditions.AddItem(RankCondition2);
+	Template.AddTargetEffect(BonusCharges);
 
 	// Warden's sword default aim buff
 	HitModEffect = new class'X2Effect_ToHitModifier';
 	HitModEffect.AddEffectHitModifier(eHit_Success, default.WARDENSSWORD_AIM_BONUS, Template.LocFriendlyName, , true, false, true, true);
 	HitModEffect.BuildPersistentEffect(1, true, false, false);
 	HitModEffect.EffectName = 'WardensSwordAim';
-	Template.AddTargetEffect(HitModEffect);
-	
+	Template.AddTargetEffect(HitModEffect);	
 	Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
 
 	return Template;
 }
 
-// Kinetic Armour 
-static final function X2AbilityTemplate Warden_BD_KineticArmour()
+// Kinetic Armor 
+static final function X2AbilityTemplate Warden_BD_KineticArmor()
 {
 	local X2AbilityTemplate										Template;
 	local X2AbilityCooldown										Cooldown;
 	local X2AbilityCost_ActionPoints							ActionPointCost;
-	local X2Effect_WardenKineticArmour							KineticEffect;
+	local X2Effect_WardenKineticArmor							KineticEffect;
+	local X2Effect_WardenKineticArmorDamage						KineticDamageEffect;
 
-	`CREATE_X2ABILITY_TEMPLATE(Template, 'Warden_BD_KineticArmour');
+	`CREATE_X2ABILITY_TEMPLATE(Template, 'Warden_BD_KineticArmor');
 	Template.AbilitySourceName = 'eAbilitySource_Perk';
-	Template.IconImage = "img:///UILibrary_XPACK_Common.PerkIcons.UIPerk_divinearmor";
+	Template.IconImage = "img:///UILibrary_XPACK_Common.PerkIcons.UIPerk_divineArmor";
 	Template.ShotHUDPriority = class'UIUtilities_Tactical'.const.CLASS_CORPORAL_PRIORITY;
 	Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_AlwaysShow;
 	
@@ -718,12 +736,20 @@ static final function X2AbilityTemplate Warden_BD_KineticArmour()
 	// Ability trigger determines how it is activated. In this case - by the user manually.
 	Template.AbilityTriggers.AddItem(default.PlayerInputTrigger);
 	
-	// Set up persistent effect to create new armour
-	KineticEffect = new class'X2Effect_WardenKineticArmour';
-	KineticEffect.EffectName = default.KineticArmourEffectName;
-	KineticEffect.SetDisplayInfo(ePerkBuff_Bonus, Template.LocFriendlyName, Template.GetMyLongDescription(), Template.IconImage, true, "", Template.AbilitySourceName);	
+	// Set up effect to create new Armor
+	KineticEffect = new class'X2Effect_WardenKineticArmor';
+	KineticEffect.EffectName = default.KineticArmorEffectName;
+	KineticEffect.DuplicateResponse = eDupe_Ignore;
 	Template.AddTargetEffect(KineticEffect);
 
+	// Set up persistent effect for the additional damage
+	KineticDamageEffect = new class'X2Effect_WardenKineticArmorDamage';
+	KineticDamageEffect.EffectName = default.KineticArmorDamageEffectName;
+	KineticDamageEffect.DuplicateResponse = eDupe_Ignore;
+	KineticDamageEffect.BuildPersistentEffect(1, true, false);
+	KineticDamageEffect.SetDisplayInfo(ePerkBuff_Bonus, Template.LocFriendlyName, Template.GetMyLongDescription(), Template.IconImage, true, "", Template.AbilitySourceName);	
+	Template.AddTargetEffect(KineticDamageEffect);
+	
 	// TODO: Figure out better activation speech (limited to existing lines in XComCharacterVoiceBank.uc)
 	Template.ActivationSpeech = 'RunAndGun';
 
@@ -765,6 +791,7 @@ static function X2AbilityTemplate Warden_BD_Rewind()
 	`CREATE_X2ABILITY_TEMPLATE(Template, 'Warden_BD_Rewind');
 	Template.AbilitySourceName = 'eAbilitySource_Psionic';
 	Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_AlwaysShow;
+	Template.ShotHUDPriority = class'UIUtilities_Tactical'.const.CLASS_CORPORAL_PRIORITY;
 	Template.IconImage = "img:///Warden_BD_PerkIcons.UIPerk_WardenRewind";
 
 	// # Costs and Cooldowns
@@ -901,9 +928,8 @@ static final function X2AbilityTemplate Warden_BD_Mirror()
 	// Set up persistent effect to turn next two hits into grazes
 	MirrorEffect = new class'X2Effect_WardenMirror';
 	MirrorEffect.EffectName = default.MirrorEffectName;
-	MirrorEffect.BuildPersistentEffect(1, true, true, false, eGameRule_PlayerTurnEnd);
+	MirrorEffect.BuildPersistentEffect(1, true, false);
 	MirrorEffect.SetDisplayInfo(ePerkBuff_Bonus, Template.LocFriendlyName, Template.GetMyLongDescription(), Template.IconImage, true, "", Template.AbilitySourceName);	
-	MirrorEffect.RemoveAfterAttackCount = 2;	
 	Template.AddTargetEffect(MirrorEffect);
 	
 	// TODO: Figure out better activation speech (limited to existing lines in XComCharacterVoiceBank.uc)
@@ -933,7 +959,7 @@ static final function X2AbilityTemplate Warden_BD_Mirror()
 	// Since this is a niche ability that applies only to melee damage, best not to make it cross-class.
 	Template.bCrossClassEligible = false;
 	
-	Template.AdditionalAbilities.AddItem('Warden_BD_MirrorReturnFire');
+	//Template.AdditionalAbilities.AddItem('Warden_BD_MirrorReturnFire');
 		
 	return Template;
 }
@@ -1280,11 +1306,11 @@ static function X2AbilityTemplate Warden_BD_CombativesAttack()
 	NumberOfActivations.NewValueToSet = 1;
 	Template.AddShooterEffect(NumberOfActivations);
 
-	// Only set the counterattack unit value to zero once we've reached the appropriate number of activations
+	// Make a condition which checks that the number of times the abilty has been activated this turn is equal to the maximum allowed by config
 	CheckNumberOfActivations = new Class'X2Condition_Unitvalue';
 	CheckNumberOfActivations.AddCheckValue(default.NumberOfCounterAttacksValueName,default.MAX_COUNTERATTACKS_ALLOWED,eCheck_Exact);
 
-	// The Unit gets to counterattack once
+	// Only set the unitvalue to zero if the number of activations is right
 	SetUnitValEffect = new class'X2Effect_SetUnitValue';
 	SetUnitValEffect.UnitName = class'X2Ability'.default.CounterattackDodgeEffectName;
 	SetUnitValEffect.NewValueToSet = 0;
@@ -1294,7 +1320,7 @@ static function X2AbilityTemplate Warden_BD_CombativesAttack()
 	SetUnitValEffect.TargetConditions.AddItem(CheckNumberOfActivations);
 	Template.AddShooterEffect(SetUnitValEffect);
 		
-	// Remove the dodge increase once number of activations reaches the right value
+	// Same with the dodge increase
 	RemoveEffects = new class'X2Effect_RemoveEffects';
 	RemoveEffects.EffectNamesToRemove.AddItem(class'X2Ability'.default.CounterattackDodgeEffectName);
 	RemoveEffects.bApplyOnHit = true;
@@ -1324,7 +1350,7 @@ static function X2AbilityTemplate Warden_BD_CombativesPreparation()
 	local X2AbilityTrigger_EventListener	Trigger;
 	local X2Effect_ToHitModifier			DodgeEffect;
 	local X2Effect_SetUnitValue				SetUnitValEffect;
-//	local X2Condition_Unitvalue				CheckMeleeStance;
+	local X2Condition_Unitvalue				CheckMeleeStance;
 
 	`CREATE_X2ABILITY_TEMPLATE(Template, 'Warden_BD_CombativesPreparation');
 
@@ -1345,8 +1371,8 @@ static function X2AbilityTemplate Warden_BD_CombativesPreparation()
 	Template.AbilityTriggers.AddItem(new class'X2AbilityTrigger_UnitPostBeginPlay');
 
 	// Don't trigger if we're in ranged stance
-//CheckMeleeStance = new Class'X2Condition_Unitvalue';
-//	CheckMeleeStance.AddCheckValue(default.MeleeStanceValueName,1,eCheck_Exact);
+	CheckMeleeStance = new Class'X2Condition_Unitvalue';
+	CheckMeleeStance.AddCheckValue(default.MeleeStanceValueName,1,eCheck_Exact);
 
 	// During the Enemy player's turn, the Unit gets a dodge increase
 	DodgeEffect = new class'X2Effect_ToHitModifier';
@@ -1354,15 +1380,15 @@ static function X2AbilityTemplate Warden_BD_CombativesPreparation()
 	DodgeEffect.BuildPersistentEffect(1, false, false, false, eGameRule_PlayerTurnBegin);
 	DodgeEffect.AddEffectHitModifier(eHit_Graze, default.COUNTERATTACK_DODGE_AMOUNT, default.CounterattackDodgeName, class'X2AbilityToHitCalc_StandardMelee', true, false, true, true, , false);
 	DodgeEffect.bApplyAsTarget = true;
-//	DodgeEffect.TargetConditions.AddItem(CheckMeleeStance);
+	DodgeEffect.TargetConditions.AddItem(CheckMeleeStance);
 	Template.AddShooterEffect(DodgeEffect);
 
-	// The Unit gets to counterattack twice in melee stance (hopefully)
+	// The Unit only gets to counterattack in melee stance
 	SetUnitValEffect = new class'X2Effect_SetUnitValue';
 	SetUnitValEffect.UnitName = class'X2Ability'.default.CounterattackDodgeEffectName;
 	SetUnitValEffect.NewValueToSet = class'X2Ability'.default.CounterattackDodgeUnitValue;
 	SetUnitValEffect.CleanupType = eCleanup_BeginTurn;
-//	SetUnitValEffect.TargetConditions.AddItem(CheckMeleeStance);
+	SetUnitValEffect.TargetConditions.AddItem(CheckMeleeStance);
 	Template.AddTargetEffect(SetUnitValEffect);
 
 	Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
@@ -1413,6 +1439,7 @@ static function X2AbilityTemplate Warden_BD_FirearmFocusPassive()
 		
 	FireArmDamageFocusEffect = new class'X2Effect_WardenRangedDamageFocus';
 	FireArmDamageFocusEffect.BuildPersistentEffect(1, true, false);
+	FireArmDamageFocusEffect.SetDisplayInfo(ePerkBuff_Bonus, Template.LocFriendlyName, Template.GetMyLongDescription(), Template.IconImage, true, "", Template.AbilitySourceName);	
 	Template.AddTargetEffect(FireArmDamageFocusEffect);
 
 	return Template;
@@ -1430,16 +1457,17 @@ static function X2AbilityTemplate Warden_BD_MeleeFocusPassive()
 
 	MeleeDamageFocusEffect = new class'X2Effect_WardenMeleeDamageFocus';
 	MeleeDamageFocusEffect.BuildPersistentEffect(1, true, false);
+	MeleeDamageFocusEffect.SetDisplayInfo(ePerkBuff_Bonus, Template.LocFriendlyName, Template.GetMyLongDescription(), Template.IconImage, true, "", Template.AbilitySourceName);		
 	Template.AddTargetEffect(MeleeDamageFocusEffect);
 
 	return Template;
 }
 
-static function X2AbilityTemplate Warden_BD_OverwatchFocusPassive()
+static function X2AbilityTemplate Warden_BD_OverwatchNew()
 {
 	local X2AbilityTemplate						Template;
 
-	Template = CreatePassiveAbility('Warden_BD_OverwatchFocusPassive', "img:///UILibrary_PerkIcons.UIPerk_observer");
+	Template = CreatePassiveAbility('Warden_BD_OverwatchNew', "img:///UILibrary_PerkIcons.UIPerk_observer");
 	Template.bCrossClassEligible = false;
 	Template.AbilitySourceName = 'eAbilitySource_psionic';
 	
@@ -2105,7 +2133,7 @@ static function SetHidden(out X2AbilityTemplate Template)
 {
 	Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_NeverShow;
 	
-	//TacticalText is for mainly for item-granted abilities (e.g. to hide the ability that gives the armour stats)
+	//TacticalText is for mainly for item-granted abilities (e.g. to hide the ability that gives the Armor stats)
 	Template.bDisplayInUITacticalText = false;
 	
 	//	bDisplayInUITooltip isn't actually used in the base game, it should be for whether to show it in the enemy tooltip, 
@@ -2114,7 +2142,7 @@ static function SetHidden(out X2AbilityTemplate Template)
 	//	Anyway, the most sane setting for it is to match 'bDisplayInUITacticalText'. (c) MrNice
 	Template.bDisplayInUITooltip = false;
 	
-	//Ability Summary is the list in the armoury when you're looking at a soldier.
+	//Ability Summary is the list in the Armory when you're looking at a soldier.
 	Template.bDontDisplayInAbilitySummary = true;
 	Template.bHideOnClassUnlock = true;
 }
@@ -2350,11 +2378,14 @@ defaultproperties
 	GunFocusCounterValueName = "BD_GunFocusCounter_Value"
 	MeleeFocusCounterValueName = "BD_MeleeFocusCounter_Value"
 	NumberOfCounterAttacksValueName = "BD_NumberOfCounterAttacks_Value"
+	KineticArmorExpendedShields = "BD_KineticArmor_Value"
+	KineticArmorBonusDamageValue = "BD_KineticArmorBonusDamage_Value"
 
 	//Effect Names
 	MeleeStanceMobilityEffectName = "BD_MeleeStanceMobilityEffect"	
 	RangedStanceCdefEffectName = "BD_RangedStanceEffect"		
-	KineticArmourEffectName = "BD_KineticArmourEffect"
+	KineticArmorEffectName = "BD_KineticArmorEffect"
+	KineticArmorDamageEffectName = "BD_KineticArmorDamageEffect"
 	MirrorEffectName = "BD_MirrorEffect"
 	MirrorReturnFireEffectName = "BD_MirrorReturnFireEffect"
 	DefenderImmunityEffectName = "BD_DefenderImmunityEffect"

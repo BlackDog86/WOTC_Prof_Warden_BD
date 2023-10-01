@@ -1,11 +1,11 @@
-class X2Effect_WardenMirror extends X2Effect_DamageImmunity config(WardenSkills);
+class X2Effect_WardenMirror extends X2Effect_Persistent config(WardenSkills);
 
 function bool ChangeHitResultForTarget(XComGameState_Effect EffectState, XComGameState_Unit Attacker, XComGameState_Unit TargetUnit, XComGameState_Ability AbilityState, bool bIsPrimaryTarget, const EAbilityHitResult CurrentResult, out EAbilityHitResult NewHitResult)
 { 
 	local X2AbilityToHitCalc_StandardAim	Aim;
 
 		Aim = X2AbilityToHitCalc_StandardAim( AbilityState.GetMyTemplate().AbilityToHitCalc);
-	If ( Aim == none || Aim.bReactionFire == false ) { return false;}
+		If ( Aim == none || Aim.bReactionFire == false ) { return false;}
 
 		switch (CurrentResult)
 		{

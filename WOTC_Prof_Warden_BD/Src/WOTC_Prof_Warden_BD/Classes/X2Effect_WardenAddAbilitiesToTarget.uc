@@ -1,5 +1,5 @@
 
-class X2Effect_WOTC_APA_Class_AddAbilitiesToTarget extends X2Effect_Persistent;
+class X2Effect_WardenAddAbilitiesToTarget extends X2Effect_Persistent;
 
 // Variables to pass into the effect:
 var array<name>		AddAbilities; //»» List of Abilities to add to Target

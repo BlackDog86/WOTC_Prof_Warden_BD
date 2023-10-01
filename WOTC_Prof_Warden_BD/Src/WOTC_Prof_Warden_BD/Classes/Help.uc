@@ -136,7 +136,7 @@ if (class'X2TacticalVisibilityHelpers'.static.CanUnitSeeLocation(UnitState.Objec
 
 ### Modnames of commonly required mods
 
-PrototypeArmoury
+PrototypeArmory
 CovertInfiltration
 LongWarOfTheChosen
 XCOM2RPGOverhaul
@@ -768,8 +768,8 @@ static final function bool IsAbilityAffectedByTotalCombat(const X2AbilityTemplat
     // If at this point bAffectedByTotalCombat is true, then all of this ability's action costs are effected by Total Comba
 
 
-	// Kinetic Armour EventListener
-static final function EventListenerReturn KineticArmourReturnFireListener(Object EventData, Object EventSource, XComGameState GameState, Name EventID, Object CallbackData)
+	// Kinetic Armor EventListener
+static final function EventListenerReturn KineticArmorReturnFireListener(Object EventData, Object EventSource, XComGameState GameState, Name EventID, Object CallbackData)
 {
 	//local XComGameState_Unit				DamagedUnit;
 	local XComGameState_Unit				DamageSourceUnit;
@@ -782,8 +782,8 @@ static final function EventListenerReturn KineticArmourReturnFireListener(Object
 	AbilityContext = XComGameStateContext_Ability(GameState.GetContext());
 	AbilityState = XComGameState_Ability(CallbackData);
 	
-	`LOG("Kinetic Armour Listener Fired - Ability Context is " @ AbilityContext.name);
-	`LOG("Kinetic Armour Listener Fired - Ability Object ID is " @ AbilityState.ObjectID);
+	`LOG("Kinetic Armor Listener Fired - Ability Context is " @ AbilityContext.name);
+	`LOG("Kinetic Armor Listener Fired - Ability Object ID is " @ AbilityState.ObjectID);
 	if (AbilityContext != none)
 	{		
 		//DamagedUnit = XComGameState_Unit(EventSource);
@@ -793,7 +793,7 @@ static final function EventListenerReturn KineticArmourReturnFireListener(Object
 		{
 			DamageSourceUnit = XComGameState_Unit(History.GetGameStateForObjectID(AbilityContext.InputContext.SourceObject.ObjectID));
 		}		
-		`Log("Kinetic Armour Listener Source Unit is " @ DamageSourceUnit.name);
+		`Log("Kinetic Armor Listener Source Unit is " @ DamageSourceUnit.name);
 		AbilityState.AbilityTriggerAgainstSingleTarget(DamageSourceUnit.GetReference(), false);
 	}
 	return ELR_NoInterrupt;	

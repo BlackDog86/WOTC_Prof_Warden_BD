@@ -19,14 +19,14 @@ function int GetAttackingDamageModifier(XComGameState_Effect EffectState, XComGa
 				`log("Unit is using sword from melee stance - grant bonus damage:");
 				// Fetch the sword focus counter from the unit
 				Attacker.GetUnitValue(class'X2Ability_Warden'.default.MeleeFocusCounterValueName, UV);
-				`log("Current value of Melee Stance Counter is: " @UV.fValue);			
 				BonusDamage = int(UV.fValue);
-			
+				`log("Current value of Melee Stance Counter is: " @UV.fValue);			
 				// Cap the maximum damage to 3
 				if (BonusDamage > 3)
 					{
 					BonusDamage = 3;
 					}
+				`log("Adding bonus damage of: " @BonusDamage);
 				//	no game state means it's for damage preview
 				if (NewGameState == none)
 					{				
