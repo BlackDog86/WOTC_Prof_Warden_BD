@@ -57,28 +57,28 @@ LocFlyOverText="Enemy defense from cover is reduced in ranged stance by <Ability
 [Warden_BD_EbbAndFlow X2AbilityTemplate]
 LocFriendlyName="Ebb & Flow - Hidden"
 LocLongDescription="Hidden ability which actually does the stance switching"
-LocHelpText="Ebb & Flow"
+LocHelpText="Hidden ability which actually does the stance switching"
 LocPromotionPopupText="<Bullet/> No cooldown."
 LocFlyOverText="Ebb & Flow - Hidden"
 
 [Warden_BD_EbbAndFlowDummy X2AbilityTemplate]
 LocFriendlyName="Ebb & Flow"
 LocLongDescription="Switch stance at the start of the next turn"
-LocHelpText="Ebb & Flow"
+LocHelpText="Switch stance at the start of the next turn"
 LocPromotionPopupText="<Bullet/> No cooldown."
 LocFlyOverText="Switch stance at the start of the next turn"
 
 [Warden_BD_EbbAndFlowManual X2AbilityTemplate]
 LocFriendlyName="Flow Mastery"
 LocLongDescription="Switch stance Immediately - No action point cost (Cannot be activated with flow action points)"
-LocHelpText="Flow Mastery"
+LocHelpText="Switch stance Immediately - No action point cost (Cannot be activated with flow action points)"
 LocPromotionPopupText="<Bullet/> No cooldown."
 LocFlyOverText="Switch stance Immediately - No action point cost (Cannot be activated with flow action points)"
 
 [Warden_BD_ProficiencyPassives X2AbilityTemplate]
 LocFriendlyName="Proficiency Bonuses - Warden"
 LocLongDescription="Hidden ability which grants charges to Flow Mastery & sets up the default +5 aim for the warden's sword"
-LocHelpText="Proficiency Bonuses - Warden"
+LocHelpText="Hidden ability which grants charges to Flow Mastery & sets up the default +5 aim for the warden's sword"
 LocPromotionPopupText="<Bullet/> No cooldown."
 LocFlyOverText="Proficiency Bonuses - Warden"
 
@@ -92,7 +92,7 @@ LocFlyOverText="Teleport back to the turn-start location"
 [Warden_BD_Mirror X2AbilityTemplate]
 LocFriendlyName="Mirror"
 LocLongDescription="The next two attacks against you will automatically graze. Any damage received is returned psionically to the attacker."
-LocHelpText="Mirror"
+LocHelpText="The next two attacks against you will automatically graze. Any damage received is returned psionically to the attacker."
 LocPromotionPopupText="<Bullet/> No cooldown."
 LocFlyOverText="The next two attacks against you will automatically graze. Any damage received is returned psionically to the attacker."
 
@@ -101,7 +101,7 @@ LocFriendlyName="Mirror - Return Fire"
 LocLongDescription="Hidden ability which handles returning psi damage."
 LocHelpText="Mirror - Return Fire"
 LocPromotionPopupText="<Bullet/> No cooldown."
-LocFlyOverText="Hidden ability which handles returning psi damage.
+LocFlyOverText="Mirror - Return Fire"
 
 [Warden_BD_KineticArmor X2AbilityTemplate]
 LocFriendlyName="Kinetic Armor"
@@ -120,44 +120,44 @@ LocFlyOverText="Defender"
 [Warden_BD_DefenderHunker X2AbilityTemplate]
 LocFriendlyName="Defender - Hunker"
 LocLongDescription="Hidden ability which grants immunity to mental status effects (Panic, disorient, stun, unconscious) while hunkered"
-LocHelpText="Defender - Hunker"
+LocHelpText="Hidden ability which grants immunity to mental status effects (Panic, disorient, stun, unconscious) while hunkered"
 LocPromotionPopupText="<Bullet/> No cooldown."
-LocFlyOverText="Hidden ability which grants immunity to mental status effects (Panic, disorient, stun, unconscious) while hunkered"
+LocFlyOverText="Defender - Hunker"
 
 [Warden_BD_CrusaderPassive X2AbilityTemplate]
 LocFriendlyName="Crusader"
-LocLongDescription="Reload from flow APs - sword has +5 aim"
-LocHelpText="Crusader"
+LocLongDescription="Reload can be activated from flow Action Points - Warden's Sword has +5 aim & crit"
+LocHelpText="Reload can be activated from flow Action Points - Warden's Sword has +5 aim & crit"
 LocPromotionPopupText="<Bullet/> No cooldown."
-LocFlyOverText="Reload from flow APs - sword has +5 aim and +5 crit"
+LocFlyOverText="Crusader"
 
 [Warden_BD_WatcherPassive X2AbilityTemplate]
 LocFriendlyName="Watcher"
 LocLongDescription="Overwatch can be used from flow APs, Aim penalty removed"
-LocHelpText="Watcher"
+LocHelpText="Overwatch can be used from flow APs, Aim penalty remove"
 LocPromotionPopupText="<Bullet/> No cooldown."
-LocFlyOverText="Overwatch can be used from flow APs, Aim penalty removed"
+LocFlyOverText="Watcher"
 
 [Warden_BD_ImbueAmmo X2AbilityTemplate]
 LocFriendlyName="Imbue Ammo"
 LocLongDescription="Channel psionic energy into your ammo, converting its damage type to psionic & ignoring Armor & shields."
-LocHelpText="Imbue Ammo"
+LocHelpText="Channel psionic energy into your ammo, converting its damage type to psionic & ignoring Armor & shields."
 LocPromotionPopupText="<Bullet/> No cooldown."
 LocFlyOverText="Imbue Ammo"
 
 [Warden_BD_SoulBlade X2AbilityTemplate]
 LocFriendlyName="Soul-Blade"
 LocLongDescription="Channel psionic energy into your sword, converting its damage type to psionic & ignoring Armor & shields."
-LocHelpText="Soul-Blade"
+LocHelpText="Channel psionic energy into your sword, converting its damage type to psionic & ignoring Armor & shields."
 LocPromotionPopupText="<Bullet/> No cooldown."
 LocFlyOverText="Channel psionic energy into your sword, converting its damage type to psionic & ignoring Armor & shields."
 
 [Warden_BD_OverwatchNew X2AbilityTemplate]
 LocFriendlyName="Overwatch Focus"
 LocLongDescription="Placeholder for active OW ability"
-LocHelpText="Overwatch Focus"
+LocHelpText="Placeholder for active OW ability"
 LocPromotionPopupText="<Bullet/> No cooldown."
-LocFlyOverText="Placeholder for active OW ability"
+LocFlyOverText="Overwatch Focus"
 
 [Warden_BD_FirearmFocusPassive X2AbilityTemplate]
 LocFriendlyName="Firearm Focus"
@@ -175,8 +175,8 @@ LocFlyOverText="Blade Focus"
 
 [Warden_BD_Combatives X2AbilityTemplate]
 LocFriendlyName="Counter"
-LocLongDescription="Attack the nearest enemee that comes into melee range with your sword"
-LocHelpText="Intercept"
+LocLongDescription="Perform a counter-attack against up to three enemies attacking you at melee range per turn"
+LocHelpText="Perform a counter-attack against up to three enemies attacking you at melee range per turn"
 LocPromotionPopupText="<Bullet/> No cooldown."
 LocFlyOverText="Counter"
 
@@ -203,15 +203,15 @@ LocFlyOverText="Consume"
 
 [Warden_BD_RagePassive X2AbilityTemplate]
 LocFriendlyName="Warden's Rage"
-LocLongDescription="Standard shot can be activated from flow APs"
-LocHelpText="Switch stance, then take a follow-up shot with your bullpup against any psionic enemy in range."
+LocLongDescription="Standard shot can be activated from flow action points, allowing two shots or slash / shot in a single turn"
+LocHelpText="Standard shot can be activated from flow action points, allowing two shots or slash / shot in a single turn"
 LocPromotionPopupText="<Bullet/> No cooldown."
 LocFlyOverText="Warden's Rage"
 
 [Warden_BD_ChargePassive X2AbilityTemplate]
 LocFriendlyName="Warden's Charge"
-LocLongDescription="Sword slash can be used from flow APs"
-LocHelpText="Sword slash can be used from flow APs"
+LocLongDescription="Sword slash can be activated from flow Action Points"
+LocHelpText="Sword slash can be activated from flow Action Points"
 LocPromotionPopupText="<Bullet/> No cooldown."
 LocFlyOverText="Warden's Charge"
 
@@ -222,19 +222,12 @@ LocHelpText="Completely reflect all attacks back at the attacker on the next ene
 LocPromotionPopupText="<Bullet/> No cooldown."
 LocFlyOverText="Warden's Retribution"
 
-[Warden_BD_Pillar X2AbilityTemplate]
-LocFriendlyName="Pillar"
-LocLongDescription="Create a destructible obelisk at the target location. Switch Stance."
-LocHelpText="Create a destructible obelisk at the target location. Switch Stance."
+[Warden_BD_Breacher X2AbilityTemplate]
+LocFriendlyName="Breacher"
+LocLongDescription="Gain a Grenade pocket"
+LocHelpText="Gain a Grenade pocket"
 LocPromotionPopupText="<Bullet/> No cooldown."
-LocFlyOverText="Pillar"
-
-[Warden_BD_Fuse X2AbilityTemplate]
-LocFriendlyName="Fuse"
-LocLongDescription="Activate to detonate an enemy's explosive. Triggers Melee Stance."
-LocHelpText="This ability has not been defined yet"
-LocPromotionPopupText="<Bullet/> No cooldown."
-LocFlyOverText="Fuse"
+LocFlyOverText="Breacher"
 
 [Warden_BD_Brand X2AbilityTemplate]
 LocFriendlyName="Brand"
@@ -243,10 +236,30 @@ LocHelpText=""Mark target with hex increasing change to hit, blah"
 LocPromotionPopupText="<Bullet/> No cooldown."
 LocFlyOverText="Brand"
 
-[Warden_BD_StunStrike X2AbilityTemplate]
-LocFriendlyName="Stun Strike"
-LocLongDescription="Stun & knock back a nearby enemy"
-LocHelpText="Stun & knock back a nearby enemy"
+[Warden_BD_Pillar X2AbilityTemplate]
+LocFriendlyName="Pillar"
+LocLongDescription="Create a large obelisk at the target location, granting high cover"
+LocHelpText="Create a large obelisk at the target location, granting high cover"
 LocPromotionPopupText="<Bullet/> No cooldown."
-LocFlyOverText="Stun Strike"
+LocFlyOverText="Pillar"
 
+[Warden_BD_Ammobelt X2AbilityTemplate]
+LocFriendlyName="Ammo Belt"
+LocLongDescription="Gain an additional Ammo Inventory Slot"
+LocHelpText="Gain an additional Ammo Inventory Slot"
+LocPromotionPopupText="<Bullet/> No cooldown."
+LocFlyOverText="Pillar"
+
+[Warden_BD_TotalCombat X2AbilityTemplate]
+LocFriendlyName="Explosive Flow"
+LocLongDescription="Throwing grenades grants flow action points"
+LocHelpText="Throwing grenades grants flow action points"
+LocPromotionPopupText="<Bullet/> No cooldown."
+LocFlyOverText="Explosive Flow"
+
+[Warden_BD_Fuse X2AbilityTemplate]
+LocFriendlyName="Fuse"
+LocLongDescription="Detonates explosives in the enemy's inventory or on their corpse"
+LocHelpText="Detonates explosives in the enemy's inventory or on their corpse"
+LocPromotionPopupText="<Bullet/> No cooldown."
+LocFlyOverText="Fuse"

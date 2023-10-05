@@ -738,32 +738,7 @@ static function X2AbilityTemplate Warden_BD_MindWard()
 
 
 // Total Combat Check Function
-static final function bool IsAbilityAffectedByTotalCombat(const X2AbilityTemplate Template)
-{
-    local X2AbilityCost                    Cost;
-    local X2AbilityCost_ActionPoints    ActionCost;
-    local bool                            bAffectedByTotalCombat;
-    
-    foreach Template.AbilityCosts(Cost)
-    {
-        ActionCost = X2AbilityCost_ActionPoints(Cost);
-        if (ActionCost == none || ActionCost.bFreeCost || !ActionCost.bConsumeAllPoints)
-            continue;
 
-        // An ability might have several Action Costs, so we must iterate over all of them.
-        // If we're here, then this is a non-free action cost that normally ends turn.
-
-        if (ActionCost.DoNotConsumeAllSoldierAbilities.Find('TotalCombat') == INDEX_NONE)
-        {
-            // Set this flag to record that this ability has in fact an action cost affected by Total Combat
-            bAffectedByTotalCombat = true;
-        }
-        else
-        {
-            // But return false if at lest one of the action costs isn't affected by it.
-            return false;
-        }
-    }
 
     // If at this point bAffectedByTotalCombat is true, then all of this ability's action costs are effected by Total Comba
 

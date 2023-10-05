@@ -72,6 +72,7 @@ var config int	PILLAR_DURATION;
 var config int	COUNTERATTACK_DODGE_AMOUNT;
 var config int	MAX_COUNTERATTACKS_ALLOWED;
 var config int	KINETIC_ARMOR_SHIELD_HP_PERCENTAGE;
+var config int	MIRROR_NUMBER_OF_ATTACKS;
 
 var localized string CounterattackDodgeName;
 
@@ -110,14 +111,15 @@ static function array<X2DataTemplate> CreateTemplates()
 	Templates.AddItem(Warden_BD_RagePassive());	
 	Templates.AddItem(Warden_BD_ChargePassive());
 	Templates.AddItem(Warden_BD_RetributionPassive());
+	Templates.AddItem(Warden_BD_Breacher());
+	Templates.AddItem(Warden_BD_Brand());
 	Templates.AddItem(Warden_BD_Pillar());
-//	Templates.AddItem(Warden_BD_Fuse());
-//	Templates.AddItem(Warden_BD_Brand());
-//	Templates.AddItem(Warden_BD_PsiStrike());
-	Templates.AddItem(WOTC_Prof_Warden_BD_AcademyAbility());
-	
-	return Templates;
+	Templates.AddItem(Warden_BD_Ammobelt());
+	Templates.AddItem(Warden_BD_TotalCombat());
+	Templates.AddItem(Warden_BD_Fuse());
+		return Templates;
 }
+//	Templates.AddItem(WOTC_Prof_Warden_BD_AcademyAbility());
 
 // Melee Stance - Change speech lines, Add custom anim
 static final function X2AbilityTemplate Warden_BD_MeleeStance()
@@ -928,7 +930,8 @@ static final function X2AbilityTemplate Warden_BD_Mirror()
 	// Set up persistent effect to turn next two hits into grazes
 	MirrorEffect = new class'X2Effect_WardenMirror';
 	MirrorEffect.EffectName = default.MirrorEffectName;
-	MirrorEffect.BuildPersistentEffect(1, true, false);
+	// This effect does not tick normally & needs to be manually advanced in the effect
+	MirrorEffect.BuildPersistentEffect(default.MIRROR_NUMBER_OF_ATTACKS, false, true, false, eGameRule_PlayerTurnEnd);
 	MirrorEffect.SetDisplayInfo(ePerkBuff_Bonus, Template.LocFriendlyName, Template.GetMyLongDescription(), Template.IconImage, true, "", Template.AbilitySourceName);	
 	Template.AddTargetEffect(MirrorEffect);
 	
@@ -959,7 +962,7 @@ static final function X2AbilityTemplate Warden_BD_Mirror()
 	// Since this is a niche ability that applies only to melee damage, best not to make it cross-class.
 	Template.bCrossClassEligible = false;
 	
-	//Template.AdditionalAbilities.AddItem('Warden_BD_MirrorReturnFire');
+	Template.AdditionalAbilities.AddItem('Warden_BD_MirrorReturnFire');
 		
 	return Template;
 }
@@ -1540,6 +1543,30 @@ static function X2AbilityTemplate Warden_BD_RetributionPassive()
 
 	return Template;
 }
+// |---------------------|
+// | Random Ability Deck |
+// |---------------------|
+
+//Breacher
+static function X2AbilityTemplate Warden_BD_Breacher()
+{
+
+	local X2AbilityTemplate										Template;
+
+	Template = CreatePassiveAbility('Warden_BD_Breacher', "img:///UILibrary_PerkIcons.UIPerk_ace_hole");
+	
+	return Template;
+}
+
+static function X2AbilityTemplate Warden_BD_Brand()
+{
+
+	local X2AbilityTemplate										Template;
+
+	Template = CreatePassiveAbility('Warden_BD_Brand', "img:///UILibrary_PerkIcons.UIPerk_xenobiology_overlays");
+	
+	return Template;
+}
 
 // Pillar
 static final function X2AbilityTemplate Warden_BD_Pillar()
@@ -1631,6 +1658,38 @@ static final function X2AbilityTemplate Warden_BD_Pillar()
 	return Template;
 }
 
+static function X2AbilityTemplate Warden_BD_Ammobelt()
+{
+
+	local X2AbilityTemplate										Template;
+
+	Template = CreatePassiveAbility('Warden_BD_Ammobelt', "img:///UILibrary_PerkIcons.UIPerk_wholenineyards");
+	
+	return Template;
+}
+
+static function X2AbilityTemplate Warden_BD_TotalCombat()
+{
+
+	local X2AbilityTemplate										Template;
+
+	Template = CreatePassiveAbility('Warden_BD_TotalCombat', "img:///UILibrary_PerkIcons.UIPerk_grenadecook");
+	
+	return Template;
+}
+
+static function X2AbilityTemplate Warden_BD_Fuse()
+{
+	local X2AbilityTemplate						Template;
+
+	Template = CreatePassiveAbility('Warden_BD_Fuse', "img:///UILibrary_PerkIcons.UIPerk_fuse");
+	Template.bCrossClassEligible = false;
+	Template.AbilitySourceName = 'eAbilitySource_psionic';
+
+	return Template;
+}
+
+
 //	========================================
 //				Event Listeners
 //	========================================
@@ -1643,7 +1702,8 @@ static final function EventListenerReturn SpecialAPTrigger_EventListenerFn(Objec
     local XComGameState_Unit            SourceUnit; 
 	local XComGameState_Item            SourceWeapon;
 	local UnitValue						UV;   
-    local XComGameStateContext_Ability  AbilityContext; 
+    local XComGameStateContext_Ability  AbilityContext;
+	local bool							bIsAffectedByTotalCombat;
 		    
     AbilityContext = XComGameStateContext_Ability(GameState.GetContext());
     if(AbilityContext == none || AbilityContext.InterruptionStatus == eInterruptionStatus_Interrupt)
@@ -1652,42 +1712,54 @@ static final function EventListenerReturn SpecialAPTrigger_EventListenerFn(Objec
 	// This is the ability state of the ability that triggered the 'AbilityActivated' event.
     // When that event is triggered, you get the ability state object as EventData.
     ActivatedAbilityState = XComGameState_Ability(EventData);
-
-    // Check ability exists and is not triggered at the start of the mission
+    
+	// Check ability exists and is not triggered at the start of the mission
     if (ActivatedAbilityState == none)
         return ELR_NoInterrupt;  		
 
     // Fallback if there is no unit
     SourceUnit = XComGameState_Unit(EventSource);
-    if (SourceUnit == none)     
-        return ELR_NoInterrupt; 
-   
+	if (SourceUnit == none)     
+        return ELR_NoInterrupt;  
+
 	// Fallback if no template
-    AbilityTemplate = ActivatedAbilityState.GetMyTemplate();
+    AbilityTemplate = ActivatedAbilityState.GetMyTemplate();	
+   `log("SpeialAPTrigger Eventlistener triggered with: " @ActivatedAbilityState.GetMyTemplateName());
     if (AbilityTemplate == none)
         return ELR_NoInterrupt;
 	
-	// fallback if it's not offensive
-    if (AbilityTemplate.Hostility != eHostility_Offensive)
-        return ELR_NoInterrupt;        
+	// If the ability is affected by total combat & the warden has the correct passive
+	If (SourceUnit.HasSoldierAbility('Warden_BD_TotalCombat') && IsAbilityAffectedByTotalCombat(AbilityTemplate))
+	{
+	bIsAffectedByTotalCombat = true;
+	}
+
+	If (!bIsAffectedByTotalCombat)
+	{
+		// fallback if it's not offensive (skip totalcombat)
+		 `log("SpeialAPTrigger Hostility: " @AbilityTemplate.Hostility);
+		if (AbilityTemplate.Hostility != eHostility_Offensive)  
+			return ELR_NoInterrupt;        
     
-	// Fallback if no weapon
-	SourceWeapon = ActivatedAbilityState.GetSourceWeapon();
-    if (SourceWeapon == none)
-        return ELR_NoInterrupt; 
+		// Fallback if no weapon (skip totalcombat)
+		SourceWeapon = ActivatedAbilityState.GetSourceWeapon();
+		`log("SpeialAPTrigger Weapon: " @SourceWeapon);
+		if (SourceWeapon == none)
+			return ELR_NoInterrupt; 
 		
-	// fallback if it does no damage
-     if (!AbilityTemplate.TargetEffectsDealDamage(SourceWeapon, ActivatedAbilityState))
-        return ELR_NoInterrupt; 
-		
+		// fallback if it does no damage (skip totalcombat)
+		`log("SpecialAPTrigger Ability Deals Damage: " @ AbilityTemplate.TargetEffectsDealDamage(SourceWeapon, ActivatedAbilityState));    
+		if (!AbilityTemplate.TargetEffectsDealDamage(SourceWeapon, ActivatedAbilityState))
+	         return ELR_NoInterrupt; 
+	}	
 	// Fallback if any of these APs have been granted already
 	If (SourceUnit.GetUnitValue(default.FlowAPGrantedValueName, UV))
 		return ELR_NoInterrupt;
 		
-	// Grant APs if turn ending attack in correct stance
-    if ((SourceUnit.GetUnitValue(default.MeleeStanceValueName, UV) && SourceWeapon.InventorySlot == eInvSlot_SecondaryWeapon && SourceUnit.NumAllActionPoints() == 0) || (SourceUnit.GetUnitValue(default.RangedStanceValueName, UV) && SourceWeapon.InventorySlot == eInvSlot_PrimaryWeapon && SourceUnit.NumAllActionPoints() == 0))
+	// Grant APs if turn ending attack in correct stance  
+	if ((SourceUnit.GetUnitValue(default.MeleeStanceValueName, UV) && SourceWeapon.InventorySlot == eInvSlot_SecondaryWeapon && SourceUnit.NumAllActionPoints() == 0) || (SourceUnit.GetUnitValue(default.RangedStanceValueName, UV) && SourceWeapon.InventorySlot == eInvSlot_PrimaryWeapon && SourceUnit.NumAllActionPoints() == 0) || bIsAffectedByTotalCombat)
     {
-    `LOG("The ability which activated this listener is:" @ ActivatedAbilityState.GetMyTemplateName());
+    `LOG("SpecialAPTrigger Passed - Granting Flow APs");
 		//Assign one of the several million combinations of action point types based on the various passive abilities which are active at any given moment
 		If (SourceUnit.HasSoldierAbility('Warden_BD_DefenderPassive') && SourceUnit.HasSoldierAbility('Warden_BD_CrusaderPassive') && SourceUnit.HasSoldierAbility('Warden_BD_WatcherPassive') && SourceUnit.HasSoldierAbility('Warden_BD_RagePassive') && SourceUnit.HasSoldierAbility('Warden_BD_ChargePassive'))
 				{
@@ -1874,35 +1946,7 @@ static private function EventListenerReturn OnHunkerDown_TriggerEventListener(Ob
 }
 
 // Mirror EventListener
-static final function EventListenerReturn MirrorReturnFireListener(Object EventData, Object EventSource, XComGameState GameState, Name EventID, Object CallbackData)
-{
-	//local XComGameState_Unit				DamagedUnit;
-	local XComGameState_Unit				DamageSourceUnit;
-	local XComGameState_Ability				AbilityState;
-	local XComGameStateContext_Ability		AbilityContext;
-	local XComGameStateHistory				History;
-
-	History = `XCOMHISTORY;
 	
-	AbilityContext = XComGameStateContext_Ability(GameState.GetContext());
-	AbilityState = XComGameState_Ability(CallbackData);
-	
-	`LOG("Mirror Listener Fired - Ability Context is " @ AbilityContext.name);
-	`LOG("Mirror Listener Fired - Ability Object ID is " @ AbilityState.ObjectID);
-	if (AbilityContext != none)
-	{		
-		//DamagedUnit = XComGameState_Unit(EventSource);
-		DamageSourceUnit = XComGameState_Unit(GameState.GetGameStateForObjectID(AbilityContext.InputContext.SourceObject.ObjectID));	
-		// Not sure why the codex ability checks the gamestate history if the unit is empty but OK...
-		if( DamageSourceUnit == none )
-		{
-			DamageSourceUnit = XComGameState_Unit(History.GetGameStateForObjectID(AbilityContext.InputContext.SourceObject.ObjectID));
-		}		
-		`Log("Mirror Source Unit is " @ DamageSourceUnit.name);
-		AbilityState.AbilityTriggerAgainstSingleTarget(DamageSourceUnit.GetReference(), false);
-	}
-	return ELR_NoInterrupt;	
-}		
 
 //	========================================
 //				Visualisation Functions
@@ -2128,6 +2172,45 @@ static simulated function Rewind_ModifyActivatedAbilityContext(XComGameStateCont
 	InputData.MovingUnitRef = UnitState.GetReference();
 	AbilityContext.InputContext.MovementPaths.AddItem(InputData);
 }
+
+// Total combat helper
+static final function bool IsAbilityAffectedByTotalCombat(const X2AbilityTemplate Template)
+{
+    local X2AbilityCost						Cost;
+    local X2AbilityCost_ActionPoints		ActionCost;
+    local bool								bAffectedByTotalCombat;
+
+    `log("TotalCombatCheck: Checking if affected by total combat on: " @ Template.LocFriendlyName);
+    foreach Template.AbilityCosts(Cost)    
+	{
+        `log("Cost Name:" @ Cost.Name @ "Cost Class: " @ Cost.Class);
+		ActionCost = X2AbilityCost_ActionPoints(Cost);
+			if (ActionCost == none || ActionCost.bFreeCost || !ActionCost.bConsumeAllPoints)           
+			{
+			 `log("TotalCombatCheck: bFreeCost: " @ActionCost.bFreeCost@ "ConsumeAllPoints: " @ ActionCost.bConsumeAllPoints);
+			continue;
+			}	
+       
+	    // An ability might have several Action Costs, so we must iterate over all of them.
+        // If we're here, then this is a non-free action cost that normally ends turn.
+        if (ActionCost.DoNotConsumeAllSoldierAbilities.Find('TotalCombat') != INDEX_NONE)
+        {
+            // If Totalcombat is in the array, set bAffected to true
+            `log("TotalCombatCheck: Found an instance of ability cost affected by total combat");
+			bAffectedByTotalCombat = true;
+		}
+        else
+        {
+            // But return false if at lest one of the action costs isn't affected by it.
+            `log("TotalCombatCheck: Another ability cost on the same ability isn't affected by total combat - returning false");
+			return false;
+        }
+    }
+	// If at this point bAffectedByTotalCombat is true, then all of this ability's action costs are effected by Total Combat.
+    `log("TotalCombatCheck:" @ Template.LocFriendlyName @ " Affected by total combat status returning: " @ bAffectedByTotalCombat);
+	return bAffectedByTotalCombat;
+}
+
 // SetHidden
 static function SetHidden(out X2AbilityTemplate Template)
 {
@@ -2168,7 +2251,7 @@ static function X2AbilityTemplate CreatePassiveAbility(name AbilityName, optiona
 	// Dummy effect to show a passive icon in the tactical UI for the SourceUnit
 	IconEffect = new class'X2Effect_Persistent';
 	IconEffect.BuildPersistentEffect(1, true, false);
-	IconEffect.SetDisplayInfo(ePerkBuff_Passive, Template.LocFriendlyName, Template.LocHelpText, Template.IconImage, bDisplayIcon,, Template.AbilitySourceName);
+	IconEffect.SetDisplayInfo(ePerkBuff_Passive, Template.LocFriendlyName, Template.GetMyLongDescription(), Template.IconImage, bDisplayIcon,, Template.AbilitySourceName);
 	IconEffect.EffectName = IconEffectName;
 	Template.AddTargetEffect(IconEffect);
 
