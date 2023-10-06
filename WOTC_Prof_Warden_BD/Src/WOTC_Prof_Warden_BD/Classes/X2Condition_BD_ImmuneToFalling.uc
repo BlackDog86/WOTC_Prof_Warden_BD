@@ -1,4 +1,4 @@
-class BD_Condition_ImmuneToFalling extends X2Condition;
+class X2Condition_BD_ImmuneToFalling extends X2Condition;
 
 event name CallMeetsCondition(XComGameState_BaseObject kTarget)
 { 

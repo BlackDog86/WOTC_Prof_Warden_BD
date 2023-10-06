@@ -57,7 +57,8 @@ function int GetDefendingDamageModifier(XComGameState_Effect EffectState, XComGa
 						
 			`log("NewExpendedShieldHP: " @NewExpendedShieldHP);
 			`log("NewBonusDamageValue: " @CurrentBonusDamageValue);		
-							
+			
+			// Set the appropriate unitvalues				
 			if (NewGameState != none)
 			{
 			NewTargetUnit = XComGameState_Unit(NewGameState.GetGameStateForObjectID(TargetUnit.ObjectID));
@@ -65,10 +66,11 @@ function int GetDefendingDamageModifier(XComGameState_Effect EffectState, XComGa
 			NewTargetUnit.SetUnitFloatValue(class'X2Ability_Warden'.default.KineticArmorBonusDamageValue, CurrentBonusDamageValue, eCleanup_BeginTactical);
 			}
 		}
-		// We don't actually need to modify incoming damage, just set the appropriate values
+		// We don't actually need to modify incoming damage
 		return 0;
 	}
 
+//Event to Remove the persistent effect once the shields are gone
 function RegisterForEvents(XComGameState_Effect EffectGameState)
 {
 	local X2EventManager EventMgr;

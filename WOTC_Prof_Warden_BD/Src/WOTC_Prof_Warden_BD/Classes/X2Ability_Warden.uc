@@ -10,6 +10,7 @@ var const name	MeleeFocusCounterValueName;
 var const name	NumberOfCounterAttacksValueName;
 var const name	KineticArmorExpendedShields;
 var const name	KineticArmorBonusDamageValue;
+var const name	ConsumeBonusDamageValue;
 
 //Effect Names
 var const name	MeleeStanceHitEffectName;
@@ -19,6 +20,7 @@ var const name	MirrorEffectName;
 var const name	MirrorReturnFireEffectName;
 var const name	KineticArmorEffectName;
 var const name	KineticArmorDamageEffectName;
+var const name	ConsumeDamageEffectName;
 var const name	DefenderImmunityEffectName;
 
 //AP Types
@@ -66,26 +68,23 @@ var config int	WARDENSSWORD_AIM_BONUS;
 var config int	CRUSADER_AIM_BONUS;
 var config int	CRUSADER_CRIT_BONUS;
 
-var config int	PILLAR_COOLDOWN;
-var config int	PILLAR_DURATION;
-
 var config int	KINETIC_ARMOR_SHIELD_HP_PERCENTAGE;
+var config int	KINETIC_ARMOR_COOLDOWN;
+
+var config int	MIRROR_NUMBER_OF_ATTACKS;
+var config int	MIRROR_COOLDOWN;
+
+var config int	REWIND_COOLDOWN;
+
+var config int	SOULBLADE_COOLDOWN;
 
 var config int	COUNTERATTACK_DODGE_AMOUNT;
 var config int	MAX_COUNTERATTACKS_ALLOWED;
-
-var config int	MIRROR_NUMBER_OF_ATTACKS;
-
-var config int	BRAND_OFFENSE_STAT_BONUS;
-var config int	BRAND_DAMAGE_BONUS;
-var config int	BRAND_CRIT_DAMAGE_BONUS;
-var config int	BRAND_COOLDOWN;
 
 var config int	FISSURE_RADIUS;
 var config int	FISSURE_RANGE;
 var config int	FISSURE_AMOUNT;
 var config int	FISSURE_COOLDOWN;
-
 
 var config int	TIDE_COOLDOWN;
 var config int	TIDE_RADIUS;
@@ -94,6 +93,20 @@ var config int	TIDE_DAMAGE_PLUSONE;
 var config int	TIDE_ENVDAMAGE;
 var config int	TIDE_STUN_TURNS;
 var config int	TIDE_KNOCKBACK_DISTANCE;
+
+var config int	CONSUME_COOLDOWN;
+var config int	CONSUME_RADIUS;
+var config int	CONSUME_RANGE;
+
+var config int	BRAND_OFFENSE_STAT_BONUS;
+var config int	BRAND_DAMAGE_BONUS;
+var config int	BRAND_CRIT_DAMAGE_BONUS;
+var config int	BRAND_COOLDOWN;
+
+var config int	PILLAR_COOLDOWN;
+var config int	PILLAR_DURATION;
+
+var config int	FUSE_COOLDOWN;
 
 var localized string CounterattackDodgeName;
 
@@ -129,6 +142,7 @@ static function array<X2DataTemplate> CreateTemplates()
 	Templates.AddItem(Warden_BD_Fissure());
 	Templates.AddItem(Warden_BD_Tide());
 	Templates.AddItem(Warden_BD_Consume());
+	Templates.AddItem(Warden_BD_ConsumeAdditionalDamage());
 	Templates.AddItem(Warden_BD_RagePassive());	
 	Templates.AddItem(Warden_BD_ChargePassive());
 	Templates.AddItem(Warden_BD_RetributionPassive());
@@ -138,9 +152,8 @@ static function array<X2DataTemplate> CreateTemplates()
 	Templates.AddItem(Warden_BD_Ammobelt());
 	Templates.AddItem(Warden_BD_TotalCombat());
 	Templates.AddItem(Warden_BD_Fuse());
-		return Templates;
+	return Templates;
 }
-//	Templates.AddItem(WOTC_Prof_Warden_BD_AcademyAbility());
 
 // Melee Stance - Change speech lines, Add custom anim
 static final function X2AbilityTemplate Warden_BD_MeleeStance()
@@ -539,6 +552,9 @@ static final function X2AbilityTemplate Warden_BD_EbbAndFlowDummy()
 	Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
 	Template.BuildVisualizationFn = TypicalAbility_BuildVisualization;
 	
+	Template.AdditionalAbilities.Additem('Warden_BD_ProficiencyPassives');
+	Template.AdditionalAbilities.Additem('Warden_BD_EbbandFlow');
+	
 	return Template;
 }
 
@@ -708,7 +724,7 @@ static final function X2AbilityTemplate Warden_BD_KineticArmor()
 	
 	// # Costs and Cooldowns
 	Cooldown = new class'X2AbilityCooldown';
-	Cooldown.iNumTurns = 3;
+	Cooldown.iNumTurns = default.KINETIC_ARMOR_COOLDOWN;
 	Template.AbilityCooldown = Cooldown;
 
 	// Action cost for this ability.
@@ -819,7 +835,7 @@ static function X2AbilityTemplate Warden_BD_Rewind()
 
 	// # Costs and Cooldowns
 	Cooldown = new class'X2AbilityCooldown';
-	Cooldown.iNumTurns = 3;
+	Cooldown.iNumTurns = default.REWIND_COOLDOWN;
 	Template.AbilityCooldown = Cooldown;
 
 	ActionPointCost = new class'X2AbilityCost_ActionPoints';
@@ -897,7 +913,7 @@ static final function X2AbilityTemplate Warden_BD_Mirror()
 	
 	// # Costs and Cooldowns
 	Cooldown = new class'X2AbilityCooldown';
-	Cooldown.iNumTurns = 3;
+	Cooldown.iNumTurns = default.MIRROR_COOLDOWN;
 	Template.AbilityCooldown = Cooldown;
 
 	// Action cost for this ability.
@@ -1147,12 +1163,12 @@ static final function X2AbilityTemplate Warden_BD_SoulBlade()
 	`CREATE_X2ABILITY_TEMPLATE(Template, 'Warden_BD_SoulBlade');
 	Template.AbilitySourceName = 'eAbilitySource_Psionic';
 	Template.IconImage = "img:///UILibrary_XPACK_Common.PerkIcons.UIPerk_ceramicblade";
-	Template.ShotHUDPriority = class'UIUtilities_Tactical'.const.CLASS_SERGEANT_PRIORITY;
+	Template.ShotHUDPriority = class'UIUtilities_Tactical'.const.CLASS_LIEUTENANT_PRIORITY;
 	Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_AlwaysShow;
 		
 	// # Costs and Cooldowns
 	Cooldown = new class'X2AbilityCooldown';
-	Cooldown.iNumTurns = 2;
+	Cooldown.iNumTurns = default.SOULBLADE_COOLDOWN;
 	Template.AbilityCooldown = Cooldown;
 
 	// Action cost for this ability.
@@ -1509,6 +1525,7 @@ static function X2AbilityTemplate Warden_BD_Fissure()
 
 	`CREATE_X2ABILITY_TEMPLATE(Template, 'Warden_BD_Fissure');
 	Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_psibomb";
+	Template.ShotHUDPriority = class'UIUtilities_Tactical'.const.CLASS_MAJOR_PRIORITY;
 
 	Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_AlwaysShow;
 	Template.AbilitySourceName = 'eAbilitySource_Psionic';
@@ -1603,10 +1620,11 @@ static function X2DataTemplate Warden_BD_Tide()
 	local X2Effect_Stunned						StunnedEffect;
 	local X2Effect_Knockback					KnockbackEffect;
 	local X2Effect_ApplyWeaponDamage			DamageEffect;
-	local BD_Condition_ImmuneToFalling			ImmuneToFallingCondition;
+	local X2Condition_BD_ImmuneToFalling		ImmuneToFallingCondition;
 	
 	`CREATE_X2ABILITY_TEMPLATE(Template, 'Warden_BD_Tide');
 	Template.IconImage = "img:///UILibrary_XPACK_Common.PerkIcons.UIPerk_arcwave";
+	Template.ShotHUDPriority = class'UIUtilities_Tactical'.const.CLASS_MAJOR_PRIORITY;
 
 	Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_AlwaysShow;
 	Template.AbilitySourceName = 'eAbilitySource_Psionic';
@@ -1680,7 +1698,7 @@ static function X2DataTemplate Warden_BD_Tide()
 	UnitPropertyCondition.FailOnNonUnits = true;
 	Template.AbilityMultiTargetConditions.AddItem(UnitPropertyCondition);
 
-	ImmuneToFallingCondition = new class 'BD_Condition_ImmuneToFalling';
+	ImmuneToFallingCondition = new class 'X2Condition_BD_ImmuneToFalling';
 
 	// Damage, stun & knockback all in AOE, don't damage or knockback flying units
 	DamageEffect = new class'X2Effect_ApplyWeaponDamage';
@@ -1700,26 +1718,199 @@ static function X2DataTemplate Warden_BD_Tide()
 	KnockbackEffect.KnockbackDistance = default.TIDE_KNOCKBACK_DISTANCE;
 	KnockbackEffect.TargetConditions.AddItem(ImmuneToFallingCondition);
 	Template.AddMultiTargetEffect(KnockbackEffect);
-
+	
+	Template.ActivationSpeech = 'NullLance';
+	Template.CustomFireAnim = 'HL_WardenPush';
+	Template.bShowActivation = true;
+	
 	Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
 	Template.BuildVisualizationFn = TypicalAbility_BuildVisualization;
 	Template.CinescriptCameraType = "AdvShieldBearer_EnergyShieldArmor";
 
+	Template.SuperConcealmentLoss = class'X2AbilityTemplateManager'.default.SuperConcealmentStandardShotLoss;
+	Template.ChosenActivationIncreasePerUse = class'X2AbilityTemplateManager'.default.StandardShotChosenActivationIncreasePerUse;
 	Template.LostSpawnIncreasePerUse = class'X2AbilityTemplateManager'.default.StandardShotLostSpawnIncreasePerUse;
 	
 	return Template;
 }
 
-static function X2AbilityTemplate Warden_BD_Consume()
+static function X2DataTemplate Warden_BD_Consume()
 {
-	local X2AbilityTemplate						Template;
+	local X2AbilityTemplate							Template;
+	local X2AbilityCost_ActionPoints				ActionPointCost;
+	local X2AbilityCooldown							Cooldown;
+	local X2Condition_UnitProperty					UnitPropertyCondition;
+	local X2AbilityMultiTarget_Radius				RadiusMultiTarget;
+	local X2Effect_RemoveEffectsByDamageType		RemoveEffects;
+	local X2Effect_WardenStatusEffectCounter		StatusEffectCounter;
+	local name										HealType;
+	local X2AbilityTarget_Cursor					CursorTarget;
+	local X2Effect_TriggerEvent						TriggerDamageEffect;
 
-	Template = CreatePassiveAbility('Warden_BD_Consume', "img:///UILibrary_PerkIcons.UIPerk_item_neuraldampingmodule");
-	Template.bCrossClassEligible = false;
-	Template.AbilitySourceName = 'eAbilitySource_psionic';
+	`CREATE_X2ABILITY_TEMPLATE(Template, 'Warden_BD_Consume');
+	Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_item_neuraldampingmodule";
+
+	Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_AlwaysShow;
+	Template.AbilitySourceName = 'eAbilitySource_Psionic';
+	Template.Hostility = eHostility_Neutral;
+
+	// Action cost for this ability.
+	ActionPointCost = new class'X2AbilityCost_ActionPoints';
+	ActionPointCost.iNumPoints = 1; 
+	ActionPointCost.bConsumeAllPoints = true;
+	ActionPointCost.AllowedTypes.Length = 0;
+	// Points Ahoy!
+	ActionPointCost.AllowedTypes.AddItem(default.SpecialMomentumAP);
+	ActionPointCost.AllowedTypes.AddItem(default.DefenderAP);
+	ActionPointCost.AllowedTypes.AddItem(default.CrusaderAP);
+	ActionPointCost.AllowedTypes.AddItem(default.WatcherAP);
+	ActionPointCost.AllowedTypes.AddItem(default.RageAP);
+	ActionPointCost.AllowedTypes.AddItem(default.ChargeAP);
+	ActionPointCost.AllowedTypes.AddItem(default.DefenderCrusaderAP);
+	ActionPointCost.AllowedTypes.AddItem(default.DefenderWatcherAP);
+	ActionPointCost.AllowedTypes.AddItem(default.DefenderRageAP);
+	ActionPointCost.AllowedTypes.AddItem(default.DefenderChargeAP);
+	ActionPointCost.AllowedTypes.AddItem(default.CrusaderWatcherAP);
+	ActionPointCost.AllowedTypes.AddItem(default.CrusaderRageAP);
+	ActionPointCost.AllowedTypes.AddItem(default.CrusaderChargeAP);
+	ActionPointCost.AllowedTypes.AddItem(default.WatcherRageAP);
+	ActionPointCost.AllowedTypes.AddItem(default.WatcherChargeAP);
+	ActionPointCost.AllowedTypes.AddItem(default.RageChargeAP);
+	ActionPointCost.AllowedTypes.AddItem(default.DefenderCrusaderWatcherAP);
+	ActionPointCost.AllowedTypes.AddItem(default.DefenderCrusaderRageAP);
+	ActionPointCost.AllowedTypes.AddItem(default.DefenderCrusaderChargeAP);
+	ActionPointCost.AllowedTypes.AddItem(default.DefenderWatcherRageAP);
+	ActionPointCost.AllowedTypes.AddItem(default.DefenderWatcherChargeAP);
+	ActionPointCost.AllowedTypes.AddItem(default.DefenderRageChargeAP);
+	ActionPointCost.AllowedTypes.AddItem(default.CrusaderWatcherRageAP);
+	ActionPointCost.AllowedTypes.AddItem(default.CrusaderWatcherChargeAP);
+	ActionPointCost.AllowedTypes.AddItem(default.CrusaderRageChargeAP);
+	ActionPointCost.AllowedTypes.AddItem(default.WatcherRageChargeAP);
+	ActionPointCost.AllowedTypes.AddItem(default.DefenderCrusaderWatcherRageAP);
+	ActionPointCost.AllowedTypes.AddItem(default.DefenderCrusaderWatcherChargeAP);
+	ActionPointCost.AllowedTypes.AddItem(default.DefenderCrusaderRageChargeAP);
+	ActionPointCost.AllowedTypes.AddItem(default.CrusaderWatcherRageChargeAP);
+	ActionPointCost.AllowedTypes.AddItem(default.DefenderCrusaderWatcherRageChargeAP);
+	Template.AbilityCosts.AddItem(ActionPointCost);	
+	
+	Cooldown = new class'X2AbilityCooldown';
+	Cooldown.iNumTurns = default.CONSUME_COOLDOWN;
+	Template.AbilityCooldown = Cooldown;
+
+	//Can't use while dead
+	Template.AbilityShooterConditions.AddItem(default.LivingShooterProperty);
+
+	Template.AbilityToHitCalc = default.DeadEye;
+	Template.AbilityShooterConditions.AddItem(default.LivingShooterProperty);
+	Template.AddShooterEffectExclusions();
+
+	RadiusMultiTarget = new class'X2AbilityMultiTarget_Radius';
+	RadiusMultiTarget.fTargetRadius = default.CONSUME_RADIUS;
+	RadiusMultiTarget.bIgnoreBlockingCover = true;
+	Template.AbilityMultiTargetStyle = RadiusMultiTarget;
+	
+	CursorTarget = new class'X2AbilityTarget_Cursor';
+	CursorTarget.bRestrictToSquadsightRange = true;
+	CursorTarget.FixedAbilityRange = default.CONSUME_RANGE;
+	Template.AbilityTargetStyle = CursorTarget;
+
+	Template.AbilityTriggers.AddItem(default.PlayerInputTrigger);
+	Template.TargetingMethod = class'X2TargetingMethod_VoidRift';
+
+	// The Targets must be within the AOE, LOS & Friendly
+	UnitPropertyCondition = new class'X2Condition_UnitProperty';
+	UnitPropertyCondition.ExcludeDead = true;
+	UnitPropertyCondition.ExcludeFriendlyToSource = false;
+	UnitPropertyCondition.ExcludeHostileToSource = true;
+	UnitPropertyCondition.ExcludeCivilian = true;
+	UnitPropertyCondition.FailOnNonUnits = true;
+	Template.AbilityMultiTargetConditions.AddItem(UnitPropertyCondition);
+
+	// Count the number of status effects removed in the AOE and assign it to a unitvar
+	StatusEffectCounter = new class'X2Effect_WardenStatusEffectCounter';
+	Template.AddMultiTargetEffect(StatusEffectCounter);
+
+	RemoveEffects = new class'X2Effect_RemoveEffectsByDamageType';
+	RemoveEffects.EffectNamesToRemove.AddItem(class'X2AbilityTemplateManager'.default.DisorientedName);
+	RemoveEffects.EffectNamesToRemove.AddItem(class'X2AbilityTemplateManager'.default.PanickedName);
+	RemoveEffects.EffectNamesToRemove.AddItem(class'X2StatusEffects'.default.UnconsciousName);
+	RemoveEffects.EffectNamesToRemove.AddItem(class'X2Effect_ParthenogenicPoison'.default.EffectName);
+	RemoveEffects.EffectNamesToRemove.AddItem(class'X2AbilityTemplateManager'.default.DazedName);
+	RemoveEffects.EffectNamesToRemove.AddItem(class'X2AbilityTemplateManager'.default.ObsessedName);
+	RemoveEffects.EffectNamesToRemove.AddItem(class'X2AbilityTemplateManager'.default.BerserkName);
+	RemoveEffects.EffectNamesToRemove.AddItem(class'X2AbilityTemplateManager'.default.ShatteredName);
+	RemoveEffects.EffectNamesToRemove.AddItem(class'X2AbilityTemplateManager'.default.StunnedName);
+	foreach class'X2Ability_DefaultAbilitySet'.default.MedikitHealEffectTypes(HealType)
+		{
+			RemoveEffects.DamageTypesToRemove.AddItem(HealType);
+		}
+	Template.AddMultiTargetEffect(RemoveEffects);
+	
+	TriggerDamageEffect = new Class'X2Effect_TriggerEvent';
+	TriggerDamageEffect.TriggerEventName = 'ConsumeTrigger';	
+	Template.AddShooterEffect(TriggerDamageEffect);
+		
+	Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
+	Template.BuildVisualizationFn = TypicalAbility_BuildVisualization;
+	Template.CinescriptCameraType = "AdvShieldBearer_EnergyShieldArmor";	
+	
+	Template.AdditionalAbilities.AddItem('Warden_BD_ConsumeAdditionalDamage');
 
 	return Template;
 }
+
+static final function X2AbilityTemplate Warden_BD_ConsumeAdditionalDamage()
+{
+	local X2AbilityTemplate										Template;
+	local X2AbilityCost_ActionPoints							ActionPointCost;
+	local X2Effect_WardenConsumeDamage							ConsumeDamageEffect;
+	local X2AbilityTrigger_EventListener						ConsumeTrigger;
+
+	`CREATE_X2ABILITY_TEMPLATE(Template, 'Warden_BD_ConsumeAdditionalDamage');
+	Template.AbilitySourceName = 'eAbilitySource_Perk';
+	Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_item_neuraldampingmodule";
+	Template.ShotHUDPriority = class'UIUtilities_Tactical'.const.CLASS_MAJOR_PRIORITY;
+	Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_NeverShow;
+
+	// Free action triggered by consume main ability
+	ActionPointCost = new class'X2AbilityCost_ActionPoints';
+	ActionPointCost.iNumPoints = 0; 
+	Template.AbilityCosts.AddItem(ActionPointCost);
+
+	// # Targeting and Triggering
+	Template.AbilityToHitCalc = default.DeadEye;
+	Template.AbilityTargetStyle = default.SelfTarget;	
+		
+	ConsumeTrigger = new class'X2AbilityTrigger_EventListener';
+	ConsumeTrigger.ListenerData.EventID = 'ConsumeTrigger';
+	ConsumeTrigger.ListenerData.Deferral = ELD_OnStateSubmitted;
+	ConsumeTrigger.ListenerData.Filter = eFilter_Unit;
+	ConsumeTrigger.ListenerData.Priority = 50;
+	ConsumeTrigger.ListenerData.EventFn = class'XComGameState_Ability'.static.AbilityTriggerEventListener_Self;
+	Template.AbilityTriggers.AddItem(ConsumeTrigger);
+
+	// Set up persistent effect for the additional damage
+	ConsumeDamageEffect = new class'X2Effect_WardenConsumeDamage';
+	ConsumeDamageEffect.EffectName = default.ConsumeDamageEffectName;
+	ConsumeDamageEffect.DuplicateResponse = eDupe_Ignore;
+	ConsumeDamageEffect.BuildPersistentEffect(1, true, false);
+	ConsumeDamageEffect.SetDisplayInfo(ePerkBuff_Bonus, Template.LocFriendlyName, Template.GetMyLongDescription(), Template.IconImage, true, "", Template.AbilitySourceName);	
+	Template.AddTargetEffect(ConsumeDamageEffect);
+	
+	Template.Hostility = eHostility_Neutral;
+
+	Template.bShowActivation = false;
+	Template.bSkipFireAction = true;
+
+	Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
+	Template.BuildVisualizationFn = TypicalAbility_BuildVisualization;
+	Template.CustomSelfFireAnim = 'HL_IdleA';
+	Template.bCrossClassEligible = false;
+		
+	return Template;
+}
+
+
 
 static function X2AbilityTemplate Warden_BD_RagePassive()
 {
@@ -1778,7 +1969,7 @@ static function X2AbilityTemplate Warden_BD_Brand()
 	local X2Effect_WardenBrandDamage							DamageEffect;
 
 	Template = CreateSingleTargetAbility('Warden_BD_Brand', "img:///UILibrary_PerkIcons.UIPerk_xenobiology_overlays");
-	Template.ShotHUDPriority = class'UIUtilities_Tactical'.const.CLASS_SQUADDIE_PRIORITY + 1;
+	Template.ShotHUDPriority = class'UIUtilities_Tactical'.const.CLASS_SERGEANT_PRIORITY;
 	Template.DefaultSourceItemSlot = eInvSlot_PrimaryWeapon;
 	Template.AbilitySourceName = 'eAbilitySource_Psionic';
 	Template.Hostility = eHostility_Offensive;
@@ -1845,7 +2036,7 @@ static function X2AbilityTemplate Warden_BD_Brand()
 	HitModEffect.DuplicateResponse = eDupe_Ignore;
 	Template.AddTargetEffect(HitModEffect);
 
-	// Apply Damage-modifying effect if Empowered
+	// Apply Damage-modifying effect
 	DamageEffect = new class'X2Effect_WardenBrandDamage';
 	DamageEffect.EffectName = 'WOTC_APA_BrandDamageEffect';
 	DamageEffect.BonusDmg = default.BRAND_DAMAGE_BONUS;
@@ -1874,6 +2065,7 @@ static final function X2AbilityTemplate Warden_BD_Pillar()
 	`CREATE_X2ABILITY_TEMPLATE(Template, 'Warden_BD_Pillar');
 
 	Template.AbilityToHitCalc = default.DeadEye;
+	Template.ShotHUDPriority = class'UIUtilities_Tactical'.const.CLASS_SERGEANT_PRIORITY;	
 	Template.AbilityTriggers.AddItem(default.PlayerInputTrigger);
 	Template.TargetingMethod = class'X2TargetingMethod_Pillar';
 
@@ -1975,15 +2167,21 @@ static function X2AbilityTemplate Warden_BD_Fuse()
 {
 	local X2AbilityTemplate             Template;
 	local X2AbilityCost_ActionPoints    ActionPointCost;
+	local X2AbilityCooldown				Cooldown;
 
 	`CREATE_X2ABILITY_TEMPLATE(Template, 'Warden_BD_Fuse');
 
 	Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_fuse";
 	Template.AbilitySourceName = 'eAbilitySource_Psionic';
-	Template.ShotHUDPriority = class'UIUtilities_Tactical'.const.CLASS_MAJOR_PRIORITY;
+	Template.ShotHUDPriority = class'UIUtilities_Tactical'.const.CLASS_SERGEANT_PRIORITY;
 	Template.Hostility = eHostility_Offensive;
 	Template.bLimitTargetIcons = true;
 
+	// Set ability costs, cooldowns, and restrictions
+	Cooldown = new class'X2AbilityCooldown';
+	Cooldown.iNumTurns = default.FUSE_COOLDOWN;
+	Template.AbilityCooldown = Cooldown;
+	
 	ActionPointCost = new class'X2AbilityCost_ActionPoints';
 	ActionPointCost.iNumPoints = 1;
 	ActionPointCost.bConsumeAllPoints = true;
@@ -2524,21 +2722,8 @@ function Pillar_BuildVisualization(XComGameState VisualizeGameState)
 	class'X2Action_ShowSpawnedDestructible'.static.AddToVisualizationTree(BuildTrack, VisualizeGameState.GetContext());
 }
 
-// GTS Dummy Ability
-static function X2AbilityTemplate WOTC_Prof_Warden_BD_AcademyAbility()
-{
-	local X2AbilityTemplate				Template;
-
-	Template = Class'X2Ability_Warden'.static.CreatePassiveAbility('WOTC_Prof_Warden_BD_AcademyAbility',,,false);
-	Template.bDisplayInUITooltip = false;
-	Template.bDisplayInUITacticalText = false;
-	Template.bDontDisplayInAbilitySummary = true;
-
-	return Template;
-}
-
 //	========================================
-//				Active Helper Functions 
+//				Helper Functions 
 //	========================================
 
 // Rewind Helper
@@ -2629,7 +2814,7 @@ static function X2AbilityTemplate CreateSingleTargetAbility(name AbilityName, op
 	local X2AbilityTemplate					Template;
 	
 
-	`CREATE_X2ABILITY_TEMPLATE (Template, AbilityName);
+	`CREATE_X2ABILITY_TEMPLATE(Template, AbilityName);
 	Template.IconImage = IconString;
 	Template.AbilitySourceName = 'eAbilitySource_Perk';
 	Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_AlwaysShow;
@@ -2657,8 +2842,8 @@ static function X2AbilityTemplate CreateSingleTargetAbility(name AbilityName, op
 	return Template;
 }
 
-// SetHidden
-static function SetHidden(out X2AbilityTemplate Template)
+// SetVeryHidden
+static function SetVeryHidden(out X2AbilityTemplate Template)
 {
 	Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_NeverShow;
 	
@@ -2675,6 +2860,24 @@ static function SetHidden(out X2AbilityTemplate Template)
 	Template.bDontDisplayInAbilitySummary = true;
 	Template.bHideOnClassUnlock = true;
 }
+
+static function SetHidden(out X2AbilityTemplate Template)
+{
+	Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_NeverShow;
+	
+	//TacticalText is for mainly for item-granted abilities (e.g. to hide the ability that gives the Armor stats)
+	Template.bDisplayInUITacticalText = false;
+	
+	//	bDisplayInUITooltip isn't actually used in the base game, it should be for whether to show it in the enemy tooltip, 
+	//	but showing enemy abilities didn't make it into the final game. Extended Information resurrected the feature  in its enhanced enemy tooltip, 
+	//	and uses that flag as part of it's heuristic for what abilities to show, but doesn't rely solely on it since it's not set consistently even on base game abilities. 
+	//	Anyway, the most sane setting for it is to match 'bDisplayInUITacticalText'. (c) MrNice
+	Template.bDisplayInUITooltip = false;
+	
+	//Ability Summary is the list in the Armory when you're looking at a soldier.
+	Template.bDontDisplayInAbilitySummary = false;
+	Template.bHideOnClassUnlock = false;
+}
 //Createpassive
 static function X2AbilityTemplate CreatePassiveAbility(name AbilityName, optional string IconString, optional name IconEffectName = AbilityName, optional bool bDisplayIcon = true)
 {
@@ -2682,7 +2885,7 @@ static function X2AbilityTemplate CreatePassiveAbility(name AbilityName, optiona
 	local X2AbilityTemplate					Template;
 	local X2Effect_Persistent				IconEffect;
 	
-	`CREATE_X2ABILITY_TEMPLATE (Template, AbilityName);
+	`CREATE_X2ABILITY_TEMPLATE(Template, AbilityName);
 	Template.IconImage = IconString;
 	Template.AbilitySourceName = 'eAbilitySource_Perk';
 	Template.eAbilityIconBehaviorHUD = EAbilityIconBehavior_NeverShow;
@@ -2704,11 +2907,6 @@ static function X2AbilityTemplate CreatePassiveAbility(name AbilityName, optiona
 	Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
 	return Template;
 }
-
-
-//	========================================
-//				Misc Helper Functions
-//	========================================
 
 // SetPassive
 static function SetPassive(out X2AbilityTemplate Template)
@@ -2909,12 +3107,14 @@ defaultproperties
 	NumberOfCounterAttacksValueName = "BD_NumberOfCounterAttacks_Value"
 	KineticArmorExpendedShields = "BD_KineticArmor_Value"
 	KineticArmorBonusDamageValue = "BD_KineticArmorBonusDamage_Value"
+	ConsumeBonusDamageValue = "BD_ConsumeBonusDamageValue"
 
 	//Effect Names
 	MeleeStanceMobilityEffectName = "BD_MeleeStanceMobilityEffect"	
 	RangedStanceCdefEffectName = "BD_RangedStanceEffect"		
 	KineticArmorEffectName = "BD_KineticArmorEffect"
 	KineticArmorDamageEffectName = "BD_KineticArmorDamageEffect"
+	ConsumeDamageEffectName = "BD_ConsumeDamageEffect"
 	MirrorEffectName = "BD_MirrorEffect"
 	MirrorReturnFireEffectName = "BD_MirrorReturnFireEffect"
 	DefenderImmunityEffectName = "BD_DefenderImmunityEffect"

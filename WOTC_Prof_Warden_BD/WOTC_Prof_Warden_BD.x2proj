@@ -25,6 +25,9 @@
     <Content Include="Config\XComGameData.ini">
       <SubType>Content</SubType>
     </Content>
+    <Content Include="Config\XComPromotionUIMod.ini">
+      <SubType>Content</SubType>
+    </Content>
     <Content Include="Config\XComWardenSkills.ini">
       <SubType>Content</SubType>
     </Content>
@@ -66,7 +69,10 @@
     <Content Include="Localization\XComGame.int" />
     <Content Include="Localization\WOTC_Prof_Warden_BD.int" />
     <Content Include="Src\extra_globals.uci" />
-    <Content Include="Src\WOTC_Prof_Warden_BD\Classes\BD_Condition_ImmuneToFalling.uc">
+    <Content Include="Src\WOTC_Prof_Warden_BD\Classes\X2Ability_Warden_Utilities.uc">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Src\WOTC_Prof_Warden_BD\Classes\X2Condition_BD_ImmuneToFalling.uc">
       <SubType>Content</SubType>
     </Content>
     <Content Include="Src\WOTC_Prof_Warden_BD\Classes\X2Effect_WardenBrandDamage.uc">
@@ -93,7 +99,7 @@
     <Content Include="Src\WOTC_Prof_Warden_BD\Classes\X2Effect_ClearUnitValue.uc">
       <SubType>Content</SubType>
     </Content>
-    <Content Include="Src\WOTC_Prof_Warden_BD\Classes\X2Effect_WardenConsume.uc">
+    <Content Include="Src\WOTC_Prof_Warden_BD\Classes\X2Effect_WardenConsumeDamage.uc">
       <SubType>Content</SubType>
     </Content>
     <Content Include="Src\WOTC_Prof_Warden_BD\Classes\X2Effect_WardenKineticArmorDamage.uc">
@@ -126,10 +132,7 @@
     <Content Include="Src\WOTC_Prof_Warden_BD\Classes\X2Effect_WardenRangedDamageFocus.uc">
       <SubType>Content</SubType>
     </Content>
-    <Content Include="Src\WOTC_Prof_Warden_BD\Classes\X2Effect_WardenShred.uc">
-      <SubType>Content</SubType>
-    </Content>
-    <Content Include="Src\WOTC_Prof_Warden_BD\Classes\X2Effect_WardenSwordDamage.uc">
+    <Content Include="Src\WOTC_Prof_Warden_BD\Classes\X2Effect_WardenStatusEffectCounter.uc">
       <SubType>Content</SubType>
     </Content>
   </ItemGroup>
