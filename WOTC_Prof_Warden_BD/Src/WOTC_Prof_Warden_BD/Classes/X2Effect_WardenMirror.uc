@@ -39,14 +39,15 @@ function int GetDefendingDamageModifier(XComGameState_Effect EffectState, XComGa
 		Player = XComGameState_Player(`XCOMHISTORY.GetGameStateForObjectID(EffectState.ApplyEffectParameters.PlayerStateObjectRef.ObjectID));
 		Aim = X2AbilityToHitCalc_StandardAim(AbilityState.GetMyTemplate().AbilityToHitCalc);
 		
-		// Do not trigger the event for reaction fire, explosive damage or stuff that doesn't actually do any damage in the first place
-		If (UnitState == none || Player == none || Aim == none || Aim.bReactionFire || WeaponDamageEffect.bExplosiveDamage || CurrentDamage == 0)
+		// Do not trigger the event for damage preview, reaction fire, explosive damage or stuff that doesn't actually do any damage in the first place
+		If (UnitState == none || Player == none || Aim == none || Aim.bReactionFire || WeaponDamageEffect.bExplosiveDamage || CurrentDamage == 0 || NewGameState == none)
 		{
 		Return 0;
 		`log("One of the states in Mirror GetDefendingDamageModifier was None - not triggereing the tick event");
 		}
 		Else
-		{		
+		{	
+		`XEVENTMGR.TriggerEvent('MirrorReturnFire', Player, UnitState, NewGameState);	
 		`XEVENTMGR.TriggerEvent('MirrorManualTick', Player, UnitState, NewGameState);
 		 `log("Triggering mirror tick event");
 		 return 0; 
@@ -56,18 +57,16 @@ function int GetDefendingDamageModifier(XComGameState_Effect EffectState, XComGa
 function RegisterForEvents(XComGameState_Effect EffectGameState)
 {
 	local X2EventManager		EventMgr;
-	local XComGameState_Player	PlayerState;
 	local Object				EffectObj;
 	
 	EventMgr = `XEVENTMGR;
 
 	EffectObj = EffectGameState;
-	PlayerState = XComGameState_Player(`XCOMHISTORY.GetGameStateForObjectID(EffectGameState.ApplyEffectParameters.PlayerStateObjectRef.ObjectID));
 
 	//	Unregister from this event so that the effect does not get removed based on turns.
 	EventMgr.UnRegisterFromEvent(EffectObj, 'PlayerTurnEnded');
 
-	//	Instead, subscribe to the event that we trigger manually when this effect's bonus damage is used by an ability.
+	//	Instead, subscribe an event that we trigger manually 
 	EventMgr.RegisterForEvent(EffectObj, 'MirrorManualTick', OnPlayerTurnTickedWrapper, ELD_OnStateSubmitted,,,, EffectGameState);
 }
 

@@ -69,10 +69,31 @@ var config int	CRUSADER_CRIT_BONUS;
 var config int	PILLAR_COOLDOWN;
 var config int	PILLAR_DURATION;
 
+var config int	KINETIC_ARMOR_SHIELD_HP_PERCENTAGE;
+
 var config int	COUNTERATTACK_DODGE_AMOUNT;
 var config int	MAX_COUNTERATTACKS_ALLOWED;
-var config int	KINETIC_ARMOR_SHIELD_HP_PERCENTAGE;
+
 var config int	MIRROR_NUMBER_OF_ATTACKS;
+
+var config int	BRAND_OFFENSE_STAT_BONUS;
+var config int	BRAND_DAMAGE_BONUS;
+var config int	BRAND_CRIT_DAMAGE_BONUS;
+var config int	BRAND_COOLDOWN;
+
+var config int	FISSURE_RADIUS;
+var config int	FISSURE_RANGE;
+var config int	FISSURE_AMOUNT;
+var config int	FISSURE_COOLDOWN;
+
+
+var config int	TIDE_COOLDOWN;
+var config int	TIDE_RADIUS;
+var config int	TIDE_DAMAGE_AMOUNT;
+var config int	TIDE_DAMAGE_PLUSONE;
+var config int	TIDE_ENVDAMAGE;
+var config int	TIDE_STUN_TURNS;
+var config int	TIDE_KNOCKBACK_DISTANCE;
 
 var localized string CounterattackDodgeName;
 
@@ -987,7 +1008,7 @@ Static final function X2AbilityTemplate Warden_BD_MirrorReturnFire()
 
 	Trigger = new class'X2AbilityTrigger_EventListener';
     Trigger.ListenerData.Deferral = ELD_OnStateSubmitted;
-    Trigger.ListenerData.EventID = 'UnitTakeEffectDamage';
+    Trigger.ListenerData.EventID = 'MirrorReturnFire';
     Trigger.ListenerData.Filter = eFilter_Unit;
 	Trigger.ListenerData.EventFn = MirrorReturnFireListener;
 	Template.AbilityTriggers.AddItem(Trigger);
@@ -1107,7 +1128,7 @@ static function X2AbilityTemplate Warden_BD_ImbueAmmo()
 {
 	local X2AbilityTemplate						Template;
 
-	Template = CreatePassiveAbility('Warden_BD_ImbueAmmo', "img:///UILibrary_XPACK_Common.PerkIcons.UIPerk_chimeraxws");
+	Template = CreatePassiveAbility('Warden_BD_ImbueAmmo', "img:///UILibrary_PerkIcons.UIPerk_tracerbeams");
 	
 	Template.bCrossClassEligible = false;
 	Template.AbilitySourceName = 'eAbilitySource_psionic';
@@ -1436,7 +1457,7 @@ static function X2AbilityTemplate Warden_BD_FirearmFocusPassive()
 	local X2AbilityTemplate						Template;
 	local X2Effect_WardenRangedDamageFocus		FireArmDamageFocusEffect;
 
-	Template = CreatePassiveAbility('Warden_BD_FirearmFocusPassive', "img:///UILibrary_PerkIcons.UIPerk_one_for_all");
+	Template = CreatePassiveAbility('Warden_BD_FirearmFocusPassive', "img:///UILibrary_XPACK_Common.PerkIcons.UIPerk_improvisedsilencer");
 	Template.bCrossClassEligible = false;
 	Template.AbilitySourceName = 'eAbilitySource_psionic';
 		
@@ -1453,7 +1474,7 @@ static function X2AbilityTemplate Warden_BD_MeleeFocusPassive()
 	local X2AbilityTemplate						Template;
 	local X2Effect_WardenMeleeDamageFocus		MeleeDamageFocusEffect;
 
-	Template = CreatePassiveAbility('Warden_BD_MeleeFocusPassive', "img:///UILibrary_XPACK_Common.PerkIcons.UIPerk_chimeraxws");
+	Template = CreatePassiveAbility('Warden_BD_MeleeFocusPassive', "img:///UILibrary_XPACK_Common.PerkIcons.UIPerk_partingsilk");
 	
 	Template.bCrossClassEligible = false;
 	Template.AbilitySourceName = 'eAbilitySource_psionic';
@@ -1479,23 +1500,212 @@ static function X2AbilityTemplate Warden_BD_OverwatchNew()
 
 static function X2AbilityTemplate Warden_BD_Fissure()
 {
-	local X2AbilityTemplate						Template;
+	local X2AbilityTemplate Template;
+	local X2AbilityCost_ActionPoints		ActionPointCost;
+	local X2AbilityCooldown					Cooldown;
+	local X2AbilityMultiTarget_Radius		RadiusMultiTarget;
+	local X2AbilityTarget_Cursor			CursorTarget;
+	local X2Effect_ApplyWeaponDamage		RuptureEffect;
 
-	Template = CreatePassiveAbility('Warden_BD_Fissure', "img:///UILibrary_XPACK_Common.PerkIcons.UIPerk_chimeraxws");
+	`CREATE_X2ABILITY_TEMPLATE(Template, 'Warden_BD_Fissure');
+	Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_psibomb";
+
+	Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_AlwaysShow;
+	Template.AbilitySourceName = 'eAbilitySource_Psionic';
+	Template.bShowActivation = true;
+	Template.Hostility = eHostility_Offensive;
+
+	// Action cost for this ability.
+	ActionPointCost = new class'X2AbilityCost_ActionPoints';
+	ActionPointCost.iNumPoints = 1; 
+	ActionPointCost.bConsumeAllPoints = true;
+	ActionPointCost.AllowedTypes.Length = 0;
+	// Sooooooo many poooooiiiinnnnttttssss!
+	ActionPointCost.AllowedTypes.AddItem(default.SpecialMomentumAP);
+	ActionPointCost.AllowedTypes.AddItem(default.DefenderAP);
+	ActionPointCost.AllowedTypes.AddItem(default.CrusaderAP);
+	ActionPointCost.AllowedTypes.AddItem(default.WatcherAP);
+	ActionPointCost.AllowedTypes.AddItem(default.RageAP);
+	ActionPointCost.AllowedTypes.AddItem(default.ChargeAP);
+	ActionPointCost.AllowedTypes.AddItem(default.DefenderCrusaderAP);
+	ActionPointCost.AllowedTypes.AddItem(default.DefenderWatcherAP);
+	ActionPointCost.AllowedTypes.AddItem(default.DefenderRageAP);
+	ActionPointCost.AllowedTypes.AddItem(default.DefenderChargeAP);
+	ActionPointCost.AllowedTypes.AddItem(default.CrusaderWatcherAP);
+	ActionPointCost.AllowedTypes.AddItem(default.CrusaderRageAP);
+	ActionPointCost.AllowedTypes.AddItem(default.CrusaderChargeAP);
+	ActionPointCost.AllowedTypes.AddItem(default.WatcherRageAP);
+	ActionPointCost.AllowedTypes.AddItem(default.WatcherChargeAP);
+	ActionPointCost.AllowedTypes.AddItem(default.RageChargeAP);
+	ActionPointCost.AllowedTypes.AddItem(default.DefenderCrusaderWatcherAP);
+	ActionPointCost.AllowedTypes.AddItem(default.DefenderCrusaderRageAP);
+	ActionPointCost.AllowedTypes.AddItem(default.DefenderCrusaderChargeAP);
+	ActionPointCost.AllowedTypes.AddItem(default.DefenderWatcherRageAP);
+	ActionPointCost.AllowedTypes.AddItem(default.DefenderWatcherChargeAP);
+	ActionPointCost.AllowedTypes.AddItem(default.DefenderRageChargeAP);
+	ActionPointCost.AllowedTypes.AddItem(default.CrusaderWatcherRageAP);
+	ActionPointCost.AllowedTypes.AddItem(default.CrusaderWatcherChargeAP);
+	ActionPointCost.AllowedTypes.AddItem(default.CrusaderRageChargeAP);
+	ActionPointCost.AllowedTypes.AddItem(default.WatcherRageChargeAP);
+	ActionPointCost.AllowedTypes.AddItem(default.DefenderCrusaderWatcherRageAP);
+	ActionPointCost.AllowedTypes.AddItem(default.DefenderCrusaderWatcherChargeAP);
+	ActionPointCost.AllowedTypes.AddItem(default.DefenderCrusaderRageChargeAP);
+	ActionPointCost.AllowedTypes.AddItem(default.CrusaderWatcherRageChargeAP);
+	ActionPointCost.AllowedTypes.AddItem(default.DefenderCrusaderWatcherRageChargeAP);
+	Template.AbilityCosts.AddItem(ActionPointCost);	
+
+	Cooldown = new class'X2AbilityCooldown';
+	Cooldown.iNumTurns = default.FISSURE_COOLDOWN;
+	Template.AbilityCooldown = Cooldown;
 	
-	Template.bCrossClassEligible = false;
-	Template.AbilitySourceName = 'eAbilitySource_psionic';
+	Template.AbilityToHitCalc = default.DeadEye;
+	Template.AbilityShooterConditions.AddItem(default.LivingShooterProperty);
+	Template.AddShooterEffectExclusions();
+
+	RadiusMultiTarget = new class'X2AbilityMultiTarget_Radius';
+	RadiusMultiTarget.fTargetRadius = default.FISSURE_RADIUS;
+	RadiusMultiTarget.bIgnoreBlockingCover = true;
+	Template.AbilityMultiTargetStyle = RadiusMultiTarget;
+	
+	CursorTarget = new class'X2AbilityTarget_Cursor';
+	CursorTarget.bRestrictToSquadsightRange = true;
+	CursorTarget.FixedAbilityRange = default.FISSURE_RANGE;
+	Template.AbilityTargetStyle = CursorTarget;
+
+	Template.AbilityTriggers.AddItem(default.PlayerInputTrigger);
+
+	RuptureEffect = new class'X2Effect_ApplyWeaponDamage';
+	RuptureEffect.EffectDamageValue.Rupture = default.FISSURE_AMOUNT;
+	Template.AddMultiTargetEffect(RuptureEffect);
+
+	Template.TargetingMethod = class'X2TargetingMethod_VoidRift';
+
+	Template.CustomFireAnim = 'HL_Malfunction';
+	Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
+	Template.BuildInterruptGameStateFn = TypicalAbility_BuildInterruptGameState;
+	Template.BuildVisualizationFn = TypicalAbility_BuildVisualization;
+	//Template.BuildAffectedVisualizationSyncFn = PsiBombStage1_BuildAffectedVisualization;
+	Template.CinescriptCameraType = "Codex_PsiBomb_Stage1";
+//	Template.DamagePreviewFn = PsiBombDamagePreview;
+	Template.bFrameEvenWhenUnitIsHidden = true;
 
 	return Template;
 }
 
-static function X2AbilityTemplate Warden_BD_Tide()
+static function X2DataTemplate Warden_BD_Tide()
 {
 	local X2AbilityTemplate						Template;
+	local X2AbilityCost_ActionPoints			ActionPointCost;
+	local X2AbilityCooldown						Cooldown;
+	local X2Condition_UnitProperty				UnitPropertyCondition;
+	local X2AbilityTrigger_PlayerInput			InputTrigger;
+	local X2AbilityMultiTarget_Radius			MultiTarget;
+	local X2Effect_Stunned						StunnedEffect;
+	local X2Effect_Knockback					KnockbackEffect;
+	local X2Effect_ApplyWeaponDamage			DamageEffect;
+	local BD_Condition_ImmuneToFalling			ImmuneToFallingCondition;
+	
+	`CREATE_X2ABILITY_TEMPLATE(Template, 'Warden_BD_Tide');
+	Template.IconImage = "img:///UILibrary_XPACK_Common.PerkIcons.UIPerk_arcwave";
 
-	Template = CreatePassiveAbility('Warden_BD_Tide', "img:///UILibrary_PerkIcons.UIPerk_observer");
-	Template.bCrossClassEligible = false;
-	Template.AbilitySourceName = 'eAbilitySource_psionic';
+	Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_AlwaysShow;
+	Template.AbilitySourceName = 'eAbilitySource_Psionic';
+	Template.Hostility = eHostility_Offensive;
+
+	// Action cost for this ability.
+	ActionPointCost = new class'X2AbilityCost_ActionPoints';
+	ActionPointCost.iNumPoints = 1; 
+	ActionPointCost.bConsumeAllPoints = true;
+	ActionPointCost.AllowedTypes.Length = 0;
+	// Points Ahoy!
+	ActionPointCost.AllowedTypes.AddItem(default.SpecialMomentumAP);
+	ActionPointCost.AllowedTypes.AddItem(default.DefenderAP);
+	ActionPointCost.AllowedTypes.AddItem(default.CrusaderAP);
+	ActionPointCost.AllowedTypes.AddItem(default.WatcherAP);
+	ActionPointCost.AllowedTypes.AddItem(default.RageAP);
+	ActionPointCost.AllowedTypes.AddItem(default.ChargeAP);
+	ActionPointCost.AllowedTypes.AddItem(default.DefenderCrusaderAP);
+	ActionPointCost.AllowedTypes.AddItem(default.DefenderWatcherAP);
+	ActionPointCost.AllowedTypes.AddItem(default.DefenderRageAP);
+	ActionPointCost.AllowedTypes.AddItem(default.DefenderChargeAP);
+	ActionPointCost.AllowedTypes.AddItem(default.CrusaderWatcherAP);
+	ActionPointCost.AllowedTypes.AddItem(default.CrusaderRageAP);
+	ActionPointCost.AllowedTypes.AddItem(default.CrusaderChargeAP);
+	ActionPointCost.AllowedTypes.AddItem(default.WatcherRageAP);
+	ActionPointCost.AllowedTypes.AddItem(default.WatcherChargeAP);
+	ActionPointCost.AllowedTypes.AddItem(default.RageChargeAP);
+	ActionPointCost.AllowedTypes.AddItem(default.DefenderCrusaderWatcherAP);
+	ActionPointCost.AllowedTypes.AddItem(default.DefenderCrusaderRageAP);
+	ActionPointCost.AllowedTypes.AddItem(default.DefenderCrusaderChargeAP);
+	ActionPointCost.AllowedTypes.AddItem(default.DefenderWatcherRageAP);
+	ActionPointCost.AllowedTypes.AddItem(default.DefenderWatcherChargeAP);
+	ActionPointCost.AllowedTypes.AddItem(default.DefenderRageChargeAP);
+	ActionPointCost.AllowedTypes.AddItem(default.CrusaderWatcherRageAP);
+	ActionPointCost.AllowedTypes.AddItem(default.CrusaderWatcherChargeAP);
+	ActionPointCost.AllowedTypes.AddItem(default.CrusaderRageChargeAP);
+	ActionPointCost.AllowedTypes.AddItem(default.WatcherRageChargeAP);
+	ActionPointCost.AllowedTypes.AddItem(default.DefenderCrusaderWatcherRageAP);
+	ActionPointCost.AllowedTypes.AddItem(default.DefenderCrusaderWatcherChargeAP);
+	ActionPointCost.AllowedTypes.AddItem(default.DefenderCrusaderRageChargeAP);
+	ActionPointCost.AllowedTypes.AddItem(default.CrusaderWatcherRageChargeAP);
+	ActionPointCost.AllowedTypes.AddItem(default.DefenderCrusaderWatcherRageChargeAP);
+	Template.AbilityCosts.AddItem(ActionPointCost);	
+	
+	Cooldown = new class'X2AbilityCooldown';
+	Cooldown.iNumTurns = default.TIDE_COOLDOWN;
+	Template.AbilityCooldown = Cooldown;
+
+	//Can't use while dead
+	Template.AbilityShooterConditions.AddItem(default.LivingShooterProperty);
+
+	// Add dead eye to guarantee
+	Template.AbilityToHitCalc = default.DeadEye;
+	Template.AbilityTargetStyle = default.SelfTarget;
+
+	// Multi target
+	MultiTarget = new class'X2AbilityMultiTarget_Radius';
+	MultiTarget.fTargetRadius = default.TIDE_RADIUS;
+	MultiTarget.bIgnoreBlockingCover = true;
+	Template.AbilityMultiTargetStyle = MultiTarget;
+
+	InputTrigger = new class'X2AbilityTrigger_PlayerInput';
+	Template.AbilityTriggers.AddItem(InputTrigger);
+
+	// The Targets must be within the AOE & LOS
+	UnitPropertyCondition = new class'X2Condition_UnitProperty';
+	UnitPropertyCondition.ExcludeDead = true;
+	UnitPropertyCondition.ExcludeFriendlyToSource = false;
+	UnitPropertyCondition.ExcludeHostileToSource = false;
+	UnitPropertyCondition.ExcludeCivilian = true;
+	UnitPropertyCondition.FailOnNonUnits = true;
+	Template.AbilityMultiTargetConditions.AddItem(UnitPropertyCondition);
+
+	ImmuneToFallingCondition = new class 'BD_Condition_ImmuneToFalling';
+
+	// Damage, stun & knockback all in AOE, don't damage or knockback flying units
+	DamageEffect = new class'X2Effect_ApplyWeaponDamage';
+	DamageEffect.bIgnoreArmor = true;
+	DamageEffect.bBypassShields = true;
+	DamageEffect.EffectDamageValue.Damage = default.TIDE_DAMAGE_AMOUNT;
+	DamageEffect.EffectDamageValue.PlusOne = default.TIDE_DAMAGE_PLUSONE;
+	DamageEffect.EnvironmentalDamageAmount = default.TIDE_ENVDAMAGE;
+	DamageEffect.TargetConditions.AddItem(ImmuneToFallingCondition);
+	Template.AddMultiTargetEffect(DamageEffect);
+	
+	StunnedEffect = class'X2StatusEffects'.static.CreateStunnedStatusEffect(default.TIDE_STUN_TURNS, 100, false);
+	StunnedEffect.bRemoveWhenSourceDies = false;
+	Template.AddMultiTargetEffect(StunnedEffect); 
+
+	KnockbackEffect = new class'X2Effect_Knockback';
+	KnockbackEffect.KnockbackDistance = default.TIDE_KNOCKBACK_DISTANCE;
+	KnockbackEffect.TargetConditions.AddItem(ImmuneToFallingCondition);
+	Template.AddMultiTargetEffect(KnockbackEffect);
+
+	Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
+	Template.BuildVisualizationFn = TypicalAbility_BuildVisualization;
+	Template.CinescriptCameraType = "AdvShieldBearer_EnergyShieldArmor";
+
+	Template.LostSpawnIncreasePerUse = class'X2AbilityTemplateManager'.default.StandardShotLostSpawnIncreasePerUse;
 	
 	return Template;
 }
@@ -1504,7 +1714,7 @@ static function X2AbilityTemplate Warden_BD_Consume()
 {
 	local X2AbilityTemplate						Template;
 
-	Template = CreatePassiveAbility('Warden_BD_Consume', "img:///UILibrary_PerkIcons.UIPerk_one_for_all");
+	Template = CreatePassiveAbility('Warden_BD_Consume', "img:///UILibrary_PerkIcons.UIPerk_item_neuraldampingmodule");
 	Template.bCrossClassEligible = false;
 	Template.AbilitySourceName = 'eAbilitySource_psionic';
 
@@ -1537,7 +1747,7 @@ static function X2AbilityTemplate Warden_BD_RetributionPassive()
 {
 	local X2AbilityTemplate						Template;
 
-	Template = CreatePassiveAbility('Warden_BD_RetributionPassive', "img:///UILibrary_PerkIcons.UIPerk_charge");
+	Template = CreatePassiveAbility('Warden_BD_RetributionPassive', "img:///UILibrary_PerkIcons.UIPerk_rapidreaction");
 	Template.bCrossClassEligible = false;
 	Template.AbilitySourceName = 'eAbilitySource_psionic';
 
@@ -1562,9 +1772,92 @@ static function X2AbilityTemplate Warden_BD_Brand()
 {
 
 	local X2AbilityTemplate										Template;
+	local X2AbilityCooldown										Cooldown;
+	local X2AbilityCost_ActionPoints							ActionPointCost;
+	local X2Effect_ToHitModifier								HitModEffect;
+	local X2Effect_WardenBrandDamage							DamageEffect;
 
-	Template = CreatePassiveAbility('Warden_BD_Brand', "img:///UILibrary_PerkIcons.UIPerk_xenobiology_overlays");
+	Template = CreateSingleTargetAbility('Warden_BD_Brand', "img:///UILibrary_PerkIcons.UIPerk_xenobiology_overlays");
+	Template.ShotHUDPriority = class'UIUtilities_Tactical'.const.CLASS_SQUADDIE_PRIORITY + 1;
+	Template.DefaultSourceItemSlot = eInvSlot_PrimaryWeapon;
+	Template.AbilitySourceName = 'eAbilitySource_Psionic';
+	Template.Hostility = eHostility_Offensive;
+	Template.bFrameEvenWhenUnitIsHidden = true;
+	Template.ActivationSpeech = 'Amplify';
+	Template.CustomFireAnim = 'HL_SignalPointAttackA';
+		
+	// Set ability costs, cooldowns, and restrictions
+	Cooldown = new class'X2AbilityCooldown';
+	Cooldown.iNumTurns = default.BRAND_COOLDOWN;
+	Template.AbilityCooldown = Cooldown;
+
+	ActionPointCost = new class'X2AbilityCost_ActionPoints';
+	ActionPointCost.iNumPoints = 1;
+	ActionPointCost.bConsumeAllPoints = true;
+	ActionPointCost.AllowedTypes.Length = 0;
+	ActionPointCost.AllowedTypes.AddItem(default.SpecialMomentumAP);
+	ActionPointCost.AllowedTypes.AddItem(default.DefenderAP);
+	ActionPointCost.AllowedTypes.AddItem(default.CrusaderAP);
+	ActionPointCost.AllowedTypes.AddItem(default.WatcherAP);
+	ActionPointCost.AllowedTypes.AddItem(default.RageAP);
+	ActionPointCost.AllowedTypes.AddItem(default.ChargeAP);
+	ActionPointCost.AllowedTypes.AddItem(default.DefenderCrusaderAP);
+	ActionPointCost.AllowedTypes.AddItem(default.DefenderWatcherAP);
+	ActionPointCost.AllowedTypes.AddItem(default.DefenderRageAP);
+	ActionPointCost.AllowedTypes.AddItem(default.DefenderChargeAP);
+	ActionPointCost.AllowedTypes.AddItem(default.CrusaderWatcherAP);
+	ActionPointCost.AllowedTypes.AddItem(default.CrusaderRageAP);
+	ActionPointCost.AllowedTypes.AddItem(default.CrusaderChargeAP);
+	ActionPointCost.AllowedTypes.AddItem(default.WatcherRageAP);
+	ActionPointCost.AllowedTypes.AddItem(default.WatcherChargeAP);
+	ActionPointCost.AllowedTypes.AddItem(default.RageChargeAP);
+	ActionPointCost.AllowedTypes.AddItem(default.DefenderCrusaderWatcherAP);
+	ActionPointCost.AllowedTypes.AddItem(default.DefenderCrusaderRageAP);
+	ActionPointCost.AllowedTypes.AddItem(default.DefenderCrusaderChargeAP);
+	ActionPointCost.AllowedTypes.AddItem(default.DefenderWatcherRageAP);
+	ActionPointCost.AllowedTypes.AddItem(default.DefenderWatcherChargeAP);
+	ActionPointCost.AllowedTypes.AddItem(default.DefenderRageChargeAP);
+	ActionPointCost.AllowedTypes.AddItem(default.CrusaderWatcherRageAP);
+	ActionPointCost.AllowedTypes.AddItem(default.CrusaderWatcherChargeAP);
+	ActionPointCost.AllowedTypes.AddItem(default.CrusaderRageChargeAP);
+	ActionPointCost.AllowedTypes.AddItem(default.WatcherRageChargeAP);
+	ActionPointCost.AllowedTypes.AddItem(default.DefenderCrusaderWatcherRageAP);
+	ActionPointCost.AllowedTypes.AddItem(default.DefenderCrusaderWatcherChargeAP);
+	ActionPointCost.AllowedTypes.AddItem(default.DefenderCrusaderRageChargeAP);
+	ActionPointCost.AllowedTypes.AddItem(default.CrusaderWatcherRageChargeAP);
+	ActionPointCost.AllowedTypes.AddItem(default.DefenderCrusaderWatcherRageChargeAP);
+	Template.AbilityCosts.AddItem(ActionPointCost);
+
+	Template.AbilityTargetConditions.AddItem(default.LivingHostileUnitOnlyProperty);
+	Template.AbilityTargetConditions.AddItem(default.GameplayVisibilityCondition);
+	Template.AbilityShooterConditions.AddItem(default.LivingShooterProperty);
+	Template.AddShooterEffectExclusions();
+
+	// Apply ToHit modifying effect
+	HitModEffect = new class'X2Effect_ToHitModifier';
+	HitModEffect.EffectName = 'WOTC_APA_BrandHitEffect';
+	HitModEffect.bApplyAsTarget = true;
+	HitModEffect.bRemoveWhenTargetDies = true;
+	HitModEffect.AddEffectHitModifier(eHit_Success, default.BRAND_OFFENSE_STAT_BONUS, Template.LocFriendlyName);
+	HitModEffect.AddEffectHitModifier(eHit_Crit, default.BRAND_OFFENSE_STAT_BONUS, Template.LocFriendlyName);
+	HitModEffect.SetDisplayInfo(ePerkBuff_Penalty, Template.LocFriendlyName, "Branded", Template.IconImage);
+	HitModEffect.BuildPersistentEffect(1, true, true);
+	HitModEffect.DuplicateResponse = eDupe_Ignore;
+	Template.AddTargetEffect(HitModEffect);
+
+	// Apply Damage-modifying effect if Empowered
+	DamageEffect = new class'X2Effect_WardenBrandDamage';
+	DamageEffect.EffectName = 'WOTC_APA_BrandDamageEffect';
+	DamageEffect.BonusDmg = default.BRAND_DAMAGE_BONUS;
+	DamageEffect.BonusCritDmg = default.BRAND_CRIT_DAMAGE_BONUS;	
+	DamageEffect.BuildPersistentEffect(1, true, true);
+	DamageEffect.SetDisplayInfo(ePerkBuff_Penalty, Template.LocFriendlyName, "Branded", Template.IconImage);
+	DamageEffect.DuplicateResponse = eDupe_Ignore;
+	Template.AddTargetEffect(DamageEffect);
 	
+	Template.ChosenActivationIncreasePerUse = class'X2AbilityTemplateManager'.default.StandardShotChosenActivationIncreasePerUse;
+	Template.LostSpawnIncreasePerUse = class'X2AbilityTemplateManager'.default.StandardShotLostSpawnIncreasePerUse;
+
 	return Template;
 }
 
@@ -1680,16 +1973,109 @@ static function X2AbilityTemplate Warden_BD_TotalCombat()
 
 static function X2AbilityTemplate Warden_BD_Fuse()
 {
-	local X2AbilityTemplate						Template;
+	local X2AbilityTemplate             Template;
+	local X2AbilityCost_ActionPoints    ActionPointCost;
 
-	Template = CreatePassiveAbility('Warden_BD_Fuse', "img:///UILibrary_PerkIcons.UIPerk_fuse");
-	Template.bCrossClassEligible = false;
-	Template.AbilitySourceName = 'eAbilitySource_psionic';
+	`CREATE_X2ABILITY_TEMPLATE(Template, 'Warden_BD_Fuse');
+
+	Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_fuse";
+	Template.AbilitySourceName = 'eAbilitySource_Psionic';
+	Template.ShotHUDPriority = class'UIUtilities_Tactical'.const.CLASS_MAJOR_PRIORITY;
+	Template.Hostility = eHostility_Offensive;
+	Template.bLimitTargetIcons = true;
+
+	ActionPointCost = new class'X2AbilityCost_ActionPoints';
+	ActionPointCost.iNumPoints = 1;
+	ActionPointCost.bConsumeAllPoints = true;
+	ActionPointCost.AllowedTypes.Length = 0;
+	ActionPointCost.AllowedTypes.AddItem(default.SpecialMomentumAP);
+	ActionPointCost.AllowedTypes.AddItem(default.DefenderAP);
+	ActionPointCost.AllowedTypes.AddItem(default.CrusaderAP);
+	ActionPointCost.AllowedTypes.AddItem(default.WatcherAP);
+	ActionPointCost.AllowedTypes.AddItem(default.RageAP);
+	ActionPointCost.AllowedTypes.AddItem(default.ChargeAP);
+	ActionPointCost.AllowedTypes.AddItem(default.DefenderCrusaderAP);
+	ActionPointCost.AllowedTypes.AddItem(default.DefenderWatcherAP);
+	ActionPointCost.AllowedTypes.AddItem(default.DefenderRageAP);
+	ActionPointCost.AllowedTypes.AddItem(default.DefenderChargeAP);
+	ActionPointCost.AllowedTypes.AddItem(default.CrusaderWatcherAP);
+	ActionPointCost.AllowedTypes.AddItem(default.CrusaderRageAP);
+	ActionPointCost.AllowedTypes.AddItem(default.CrusaderChargeAP);
+	ActionPointCost.AllowedTypes.AddItem(default.WatcherRageAP);
+	ActionPointCost.AllowedTypes.AddItem(default.WatcherChargeAP);
+	ActionPointCost.AllowedTypes.AddItem(default.RageChargeAP);
+	ActionPointCost.AllowedTypes.AddItem(default.DefenderCrusaderWatcherAP);
+	ActionPointCost.AllowedTypes.AddItem(default.DefenderCrusaderRageAP);
+	ActionPointCost.AllowedTypes.AddItem(default.DefenderCrusaderChargeAP);
+	ActionPointCost.AllowedTypes.AddItem(default.DefenderWatcherRageAP);
+	ActionPointCost.AllowedTypes.AddItem(default.DefenderWatcherChargeAP);
+	ActionPointCost.AllowedTypes.AddItem(default.DefenderRageChargeAP);
+	ActionPointCost.AllowedTypes.AddItem(default.CrusaderWatcherRageAP);
+	ActionPointCost.AllowedTypes.AddItem(default.CrusaderWatcherChargeAP);
+	ActionPointCost.AllowedTypes.AddItem(default.CrusaderRageChargeAP);
+	ActionPointCost.AllowedTypes.AddItem(default.WatcherRageChargeAP);
+	ActionPointCost.AllowedTypes.AddItem(default.DefenderCrusaderWatcherRageAP);
+	ActionPointCost.AllowedTypes.AddItem(default.DefenderCrusaderWatcherChargeAP);
+	ActionPointCost.AllowedTypes.AddItem(default.DefenderCrusaderRageChargeAP);
+	ActionPointCost.AllowedTypes.AddItem(default.CrusaderWatcherRageChargeAP);
+	ActionPointCost.AllowedTypes.AddItem(default.DefenderCrusaderWatcherRageChargeAP);
+	Template.AbilityCosts.AddItem(ActionPointCost);
+
+	Template.AbilityTriggers.AddItem(default.PlayerInputTrigger);
+	Template.AbilityTargetStyle = default.SimpleSingleTarget;
+	Template.AbilityToHitCalc = default.DeadEye;
+
+	Template.AbilityShooterConditions.AddItem(default.LivingShooterProperty);	
+	Template.AbilityTargetConditions.AddItem(default.GameplayVisibilityCondition);
+	Template.AbilityTargetConditions.AddItem(new class'X2Condition_FuseTarget');	
+	Template.AddShooterEffectExclusions();
+
+	Template.PostActivationEvents.AddItem(class'X2Ability_PsiOperativeAbilitySet'.default.FuseEventName);
+	Template.PostActivationEvents.AddItem(class'X2Ability_PsiOperativeAbilitySet'.default.FusePostEventName);
+
+	Template.bShowActivation = true;
+	Template.CustomFireAnim = 'HL_SignalPointAttackA';
+	Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
+	Template.BuildVisualizationFn = TypicalAbility_BuildVisualization;
+	Template.TargetingMethod = class'X2TargetingMethod_Fuse';
+	Template.CinescriptCameraType = "Psionic_FireAtUnit";
+	Template.DamagePreviewFn = WardenFuseDamagePreview;
+
+	//Retain concealment when activating Fuse - then break it after the explosions have occurred.
+	Template.ConcealmentRule = eConceal_Always;
+	Template.AdditionalAbilities.AddItem('FusePostActivationConcealmentBreaker');
+	//BEGIN AUTOGENERATED CODE: Template Overrides 'Fuse'
+	Template.bFrameEvenWhenUnitIsHidden = true;
+	Template.AbilityConfirmSound = "TacticalUI_ActivateAbility";
+	//END AUTOGENERATED CODE: Template Overrides 'Fuse'
 
 	return Template;
 }
 
+function bool WardenFuseDamagePreview(XComGameState_Ability AbilityState, StateObjectReference TargetRef, out WeaponDamageValue MinDamagePreview, out WeaponDamageValue MaxDamagePreview, out int AllowsShield)
+{
+	local XComGameStateHistory History;
+	local XComGameState_Ability FuseTargetAbility;
+	local XComGameState_Unit TargetUnit;
+	local StateObjectReference EmptyRef, FuseRef;
 
+	History = `XCOMHISTORY;
+	TargetUnit = XComGameState_Unit(History.GetGameStateForObjectID(TargetRef.ObjectID));
+	if (TargetUnit != none)
+	{
+		if (class'X2Condition_FuseTarget'.static.GetAvailableFuse(TargetUnit, FuseRef))
+		{
+			FuseTargetAbility = XComGameState_Ability(History.GetGameStateForObjectID(FuseRef.ObjectID));
+			if (FuseTargetAbility != None)
+			{
+				//  pass an empty ref because we assume the ability will use multi target effects.
+				FuseTargetAbility.GetDamagePreview(EmptyRef, MinDamagePreview, MaxDamagePreview, AllowsShield);
+				return true;
+			}
+		}
+	}
+	return false;
+}
 //	========================================
 //				Event Listeners
 //	========================================
@@ -1946,8 +2332,33 @@ static private function EventListenerReturn OnHunkerDown_TriggerEventListener(Ob
 }
 
 // Mirror EventListener
-	
+static final function EventListenerReturn MirrorReturnFireListener(Object EventData, Object EventSource, XComGameState GameState, Name EventID, Object CallbackData)
+{
+	local XComGameState_Unit				DamageSourceUnit;
+	local XComGameState_Ability				AbilityState;
+	local XComGameStateContext_Ability		AbilityContext;
+	local XComGameStateHistory				History;
 
+	History = `XCOMHISTORY;
+	
+	AbilityContext = XComGameStateContext_Ability(GameState.GetContext());
+	AbilityState = XComGameState_Ability(CallbackData);
+	
+	`LOG("Mirror Listener Fired - Ability Context is " @ AbilityContext.name);
+	`LOG("Mirror Listener Fired - Ability Object ID is " @ AbilityState.ObjectID);
+	if (AbilityContext != none)
+	{		
+		DamageSourceUnit = XComGameState_Unit(GameState.GetGameStateForObjectID(AbilityContext.InputContext.SourceObject.ObjectID));	
+			if( DamageSourceUnit == none )
+			{
+			DamageSourceUnit = XComGameState_Unit(History.GetGameStateForObjectID(AbilityContext.InputContext.SourceObject.ObjectID));
+			}		
+			`Log("Mirror Source Unit is " @ DamageSourceUnit.name);
+		
+		AbilityState.AbilityTriggerAgainstSingleTarget(DamageSourceUnit.GetReference(), false);
+	}
+	return ELR_NoInterrupt;	
+}	
 //	========================================
 //				Visualisation Functions
 //	========================================
@@ -2209,6 +2620,41 @@ static final function bool IsAbilityAffectedByTotalCombat(const X2AbilityTemplat
 	// If at this point bAffectedByTotalCombat is true, then all of this ability's action costs are effected by Total Combat.
     `log("TotalCombatCheck:" @ Template.LocFriendlyName @ " Affected by total combat status returning: " @ bAffectedByTotalCombat);
 	return bAffectedByTotalCombat;
+}
+
+// Single target helper from prof
+static function X2AbilityTemplate CreateSingleTargetAbility(name AbilityName, optional string IconString, optional bool bLimitWhenImpaired = true, optional array<name> SkipExclusions)
+{
+	
+	local X2AbilityTemplate					Template;
+	
+
+	`CREATE_X2ABILITY_TEMPLATE (Template, AbilityName);
+	Template.IconImage = IconString;
+	Template.AbilitySourceName = 'eAbilitySource_Perk';
+	Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_AlwaysShow;
+	Template.Hostility = eHostility_Neutral;
+	Template.AbilityToHitCalc = default.DeadEye;
+	Template.AbilityTargetStyle = default.SimpleSingleTarget;
+	Template.AbilityTriggers.AddItem(default.PlayerInputTrigger);
+	Template.AbilityShooterConditions.AddItem(default.LivingShooterProperty);
+	Template.AbilityConfirmSound = "TacticalUI_ActivateAbility";
+	Template.DisplayTargetHitChance = false;
+	Template.bLimitTargetIcons = true;
+	Template.bShowActivation = true;
+	Template.bCrossClassEligible = false;
+	Template.bUniqueSource = true;
+
+
+	// Unit cannot be disoriented, confused, dazed, stunned, burning, bound, or carrying a unit
+	if (bLimitWhenImpaired)
+	{
+		Template.AddShooterEffectExclusions(SkipExclusions);
+	}
+
+	Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
+	Template.BuildVisualizationFn = TypicalAbility_BuildVisualization;
+	return Template;
 }
 
 // SetHidden
