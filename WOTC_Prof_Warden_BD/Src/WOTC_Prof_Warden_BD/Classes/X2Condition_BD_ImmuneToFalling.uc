@@ -6,7 +6,7 @@ event name CallMeetsCondition(XComGameState_BaseObject kTarget)
 
 	TargetUnit = XComGameState_Unit(kTarget);
 
-	if ( !TargetUnit.GetMyTemplate().bImmueToFalling )
+	if ( !TargetUnit.GetMyTemplate().bImmueToFalling)
 	{
 		return 'AA_Success';
 	}

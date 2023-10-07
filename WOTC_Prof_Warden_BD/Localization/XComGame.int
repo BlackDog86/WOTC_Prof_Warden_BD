@@ -4,7 +4,7 @@
 
 [WOTC_Prof_Warden_BD X2SoldierClassTemplate]
 DisplayName="Warden"
-ClassSummary="Wardens represent a special military wing of the Templar order. Recruits who prove themselves worthy to the templar cause but are sliughtly lacking in psionic potenital may be drafted into the Wardens instead. Wardens are highly capable soldiers who excel in using the Ebb and Flow of psionic energy on the battlefield to support their skills. Wardens are granted access to ranged and melee stances which boost capabilities with each weapon when in the correct stance. Carrying out successful attacks from the correct stance will also grant the Warden access to additional abilities that can change the course of a battle."
+ClassSummary="Wardens represent a special military wing of the Templar order.They are highly capable soldiers who excel in using the Ebb and Flow of psionic energy on the battlefield to their advantage. Wardens are granted access to stances which boost capabilities with their weapons & successful attacks from the correct stance will grant them access to additional abilities that can change the course of a battle."
 AbilityTreeTitles[0]="Bushido"
 AbilityTreeTitles[1]="Kendo"
 AbilityTreeTitles[2]="Aikido"
@@ -91,11 +91,11 @@ LocPromotionPopupText="<Bullet/> No cooldown."
 LocFlyOverText="Teleport back to the turn-start location"
 
 [Warden_BD_Mirror X2AbilityTemplate]
-LocFriendlyName="Mirror"
-LocLongDescription="The next two attacks against you will automatically graze. Any damage received is returned psionically to the attacker."
-LocHelpText="The next two attacks against you will automatically graze. Any damage received is returned psionically to the attacker."
+LocFriendlyName="Barrier"
+LocLongDescription="Create an elemental barrier which degrades the next two incoming hits to grazes. Damage taken through the barrier is also returned back psionically to the attacker."
+LocHelpText="Create an elemental barrier which degrades the next two incoming hits to grazes. Damage taken through the barrier is also returned back psionically to the attacker."
 LocPromotionPopupText="<Bullet/> No cooldown."
-LocFlyOverText="The next two attacks against you will automatically graze. Any damage received is returned psionically to the attacker."
+LocFlyOverText="Create an elemental barrier which degrades the next two incoming hits to grazes. Damage taken through the barrier is also returned back psionically to the attacker."
 
 [Warden_BD_MirrorReturnFire X2AbilityTemplate]
 LocFriendlyName="Mirror - Return Fire"
@@ -112,30 +112,23 @@ LocPromotionPopupText="<Bullet/> No cooldown."
 LocFlyOverText="Kinetic Armor"
 
 [Warden_BD_DefenderPassive X2AbilityTemplate]
-LocFriendlyName="Defender"
-LocLongDescription="Use Hunker with Flow APs - Immunity to mental impairments"
-LocHelpText="Hunker down may be used with Flow Action Points - Using hunker grants immunity to mental impairments & psionic damage"
+LocFriendlyName="Guardsman"
+LocLongDescription="Throwing grenades & using items grants Flow Action Points. Hunker can be used from Flow Action points"
+LocHelpText="Throwing grenades & using items grants Flow Action Points. Hunker can be used from Flow Action points"
 LocPromotionPopupText="<Bullet/> No cooldown."
-LocFlyOverText="Defender"
-
-[Warden_BD_DefenderHunker X2AbilityTemplate]
-LocFriendlyName="Defender - Hunker"
-LocLongDescription="Hidden ability which grants immunity to mental status effects (Panic, disorient, stun, unconscious) while hunkered"
-LocHelpText="Hidden ability which grants immunity to mental status effects (Panic, disorient, stun, unconscious) while hunkered"
-LocPromotionPopupText="<Bullet/> No cooldown."
-LocFlyOverText="Defender - Hunker"
+LocFlyOverText="Guardsman"
 
 [Warden_BD_CrusaderPassive X2AbilityTemplate]
 LocFriendlyName="Crusader"
-LocLongDescription="Reload can be activated from flow Action Points - Warden's Sword has +5 aim & crit"
-LocHelpText="Reload can be activated from flow Action Points - Warden's Sword has +5 aim & crit"
+LocLongDescription="Reload can be activated from flow Action Points - Warden's Sword has +5 aim & +10 crit"
+LocHelpText="Reload can be activated from flow Action Points - Warden's Sword has +5 aim & +10 crit"
 LocPromotionPopupText="<Bullet/> No cooldown."
 LocFlyOverText="Crusader"
 
 [Warden_BD_WatcherPassive X2AbilityTemplate]
 LocFriendlyName="Watcher"
-LocLongDescription="Overwatch can be used from flow APs, Aim penalty removed"
-LocHelpText="Overwatch can be used from flow APs, Aim penalty remove"
+LocLongDescription="Overwatch can be used from flow APs & the aim penalty is removed"
+LocHelpText="Overwatch can be used from flow APs & the aim penalty is removed"
 LocPromotionPopupText="<Bullet/> No cooldown."
 LocFlyOverText="Watcher"
 
@@ -153,12 +146,12 @@ LocHelpText="Channel psionic energy into your sword, converting its damage type 
 LocPromotionPopupText="<Bullet/> No cooldown."
 LocFlyOverText="Channel psionic energy into your sword, converting its damage type to psionic & ignoring Armor & shields."
 
-[Warden_BD_OverwatchNew X2AbilityTemplate]
-LocFriendlyName="Overwatch Focus"
-LocLongDescription="Placeholder for active OW ability"
-LocHelpText="Placeholder for active OW ability"
+[Warden_BD_DefensiveWard X2AbilityTemplate]
+LocFriendlyName="Seal of Destruction"
+LocLongDescription="Place a psionic seal on the ground. Any enemy units still standing in the seal's area of effect at the beginning of the next turn will be dealt psionic damage."
+LocHelpText="PPlace a psionic seal on the ground. Any enemy units still standing in the seal's area of effect at the beginning of the next turn will be dealt psionic damage."
 LocPromotionPopupText="<Bullet/> No cooldown."
-LocFlyOverText="Overwatch Focus"
+LocFlyOverText="Seal of Psionics"
 
 [Warden_BD_FirearmFocusPassive X2AbilityTemplate]
 LocFriendlyName="Firearm Focus"
@@ -175,16 +168,16 @@ LocPromotionPopupText="<Bullet/> No cooldown."
 LocFlyOverText="Blade Focus"
 
 [Warden_BD_Combatives X2AbilityTemplate]
-LocFriendlyName="Counter"
+LocFriendlyName="Riposte"
 LocLongDescription="Perform a counter-attack against up to three enemies attacking you at melee range per turn"
 LocHelpText="Perform a counter-attack against up to three enemies attacking you at melee range per turn"
 LocPromotionPopupText="<Bullet/> No cooldown."
-LocFlyOverText="Counter"
+LocFlyOverText="Riposte"
 
 [Warden_BD_Fissure X2AbilityTemplate]
-LocFriendlyName="Fissure"
-LocLongDescription="Mark an area, at the end of the next turn, all units inside the fissure are ruptured. Switch Stance."
-LocHelpText="Mark an area, at the end of the next turn, all units inside the fissure are ruptured. Switch Stance."
+LocFriendlyName="Seal of Rupturing"
+LocLongDescription="Place a seal on the ground, at the start of the next turn, any units remaining inside the seal will be ruptured."
+LocHelpText="Place a seal on the ground, at the start of the next turn, any units remaining inside the seal will be ruptured."
 LocPromotionPopupText="<Bullet/> No cooldown."
 LocFlyOverText="Fissure"
 
@@ -222,12 +215,12 @@ LocHelpText="Sword slash can be activated from flow Action Points"
 LocPromotionPopupText="<Bullet/> No cooldown."
 LocFlyOverText="Warden's Charge"
 
-[Warden_BD_RetributionPassive X2AbilityTemplate]
-LocFriendlyName="Warden's Retribution"
-LocLongDescription="Completely reflect all attacks back at the attacker on the next enemy turn."
-LocHelpText="Completely reflect all attacks back at the attacker on the next enemy turn."
+[Warden_BD_Retribution X2AbilityTemplate]
+LocFriendlyName="Seal of Retribution"
+LocLongDescription="All units standing in the seal's area of Effect at the end of the turn will be granted a free overwatch shot."
+LocHelpText="All units standing in the seal's area of Effect at the end of the turn will be granted a free overwatch shot."
 LocPromotionPopupText="<Bullet/> No cooldown."
-LocFlyOverText="Warden's Retribution"
+LocFlyOverText="Seal of Retribution"
 
 [Warden_BD_Breacher X2AbilityTemplate]
 LocFriendlyName="Breacher"
@@ -249,19 +242,12 @@ LocHelpText="Create a large obelisk at the target location, granting high cover"
 LocPromotionPopupText="<Bullet/> No cooldown."
 LocFlyOverText="Pillar"
 
-[Warden_BD_Ammobelt X2AbilityTemplate]
-LocFriendlyName="Ammo Belt"
-LocLongDescription="Gain an additional Ammo Inventory Slot"
-LocHelpText="Gain an additional Ammo Inventory Slot"
+[Warden_BD_Inspire X2AbilityTemplate]
+LocFriendlyName="Wardens Inspiration"
+LocLongDescription="Grant a standard action point to an ally - uses Flow action points to activate"
+LocHelpText="Grant a standard action point to an ally - uses Flow action points to activate"
 LocPromotionPopupText="<Bullet/> No cooldown."
-LocFlyOverText="Pillar"
-
-[Warden_BD_TotalCombat X2AbilityTemplate]
-LocFriendlyName="Explosive Flow"
-LocLongDescription="Throwing grenades grants flow action points"
-LocHelpText="Throwing grenades grants flow action points"
-LocPromotionPopupText="<Bullet/> No cooldown."
-LocFlyOverText="Explosive Flow"
+LocFlyOverText="Warden's Inspiration"
 
 [Warden_BD_Fuse X2AbilityTemplate]
 LocFriendlyName="Fuse"
@@ -278,9 +264,9 @@ LocPromotionPopupText="Prof GTS Unlocks"
 LocFlyOverText="Prof GTS Unlocks"
 
 [WOTC_Prof_Warden_BD_Unlock1 X2SoldierAbilityUnlockTemplate]
-DisplayName = "Assault Infantry: CQB Assault Drills I"
-Summary = "All Assault Infantry soldiers' CQB Dominance proficiency will now start at level 2, regardless of rank."
+DisplayName = "Warden: Warden's Concentration I"
+Summary = "All Warden Proficiency abilities will now start at level 2, regardless of rank."
 
 [WOTC_Prof_Warden_BD_Unlock2 X2SoldierAbilityUnlockTemplate]
-DisplayName = "Assault Infantry: CQB Assault Drills I"
-Summary = "All Assault Infantry soldiers' CQB Dominance proficiency will now start at level 2, regardless of rank."
+DisplayName = "Warden: Warden's Concentration II"
+Summary = "All Warden Proficiency abilities will now start at level 3, regardless of rank."

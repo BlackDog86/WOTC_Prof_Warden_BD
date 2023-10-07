@@ -75,6 +75,9 @@
     <Content Include="Src\WOTC_Prof_Warden_BD\Classes\X2Condition_BD_ImmuneToFalling.uc">
       <SubType>Content</SubType>
     </Content>
+    <Content Include="Src\WOTC_Prof_Warden_BD\Classes\X2Effect_WardenAddOverwatchActionPoints.uc">
+      <SubType>Content</SubType>
+    </Content>
     <Content Include="Src\WOTC_Prof_Warden_BD\Classes\X2Effect_WardenBrandDamage.uc">
       <SubType>Content</SubType>
     </Content>
@@ -133,6 +136,9 @@
       <SubType>Content</SubType>
     </Content>
     <Content Include="Src\WOTC_Prof_Warden_BD\Classes\X2Effect_WardenStatusEffectCounter.uc">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Src\WOTC_Prof_Warden_BD\Classes\X2TargetingMethod_WardenMine.uc">
       <SubType>Content</SubType>
     </Content>
   </ItemGroup>

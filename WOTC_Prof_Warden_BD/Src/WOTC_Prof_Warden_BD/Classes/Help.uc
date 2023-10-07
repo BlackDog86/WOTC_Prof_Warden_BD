@@ -492,6 +492,97 @@ static final function bool IsItemUniqueEquipInSlot(X2ItemTemplateManager ItemMgr
 
 /* Junked Abils for reference
 
+static function X2AbilityTemplate Warden_BD_DefenderHunker()
+{
+	local X2AbilityTemplate					Template;
+	local X2AbilityTrigger_EventListener	Trigger;
+	local X2Effect_DamageImmunity			ImmunityEffect;
+
+	`CREATE_X2ABILITY_TEMPLATE(Template, 'Warden_BD_DefenderHunker');
+
+	// Icon Setup
+	Template.AbilitySourceName = 'eAbilitySource_Perk';
+	Template.Hostility = eHostility_Neutral;
+	Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_observer";
+	Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_NeverShow;
+
+	// Targeting and Triggering
+	Template.AbilityToHitCalc = default.DeadEye;
+	Template.AbilityTargetStyle = default.SelfTarget;
+
+	// Trigger when using Hunker Down
+	Trigger = new class'X2AbilityTrigger_EventListener';	
+	Trigger.ListenerData.EventID = 'AbilityActivated';
+	Trigger.ListenerData.Deferral = ELD_OnStateSubmitted;
+	Trigger.ListenerData.Filter = eFilter_Unit;
+	Trigger.ListenerData.Priority = 50;
+	Trigger.ListenerData.EventFn = OnHunkerDown_TriggerEventListener;
+	Template.AbilityTriggers.AddItem(Trigger);
+		
+	// Shooter Conditions
+	Template.AbilityTargetConditions.AddItem(default.LivingShooterProperty);
+
+	// Create a persistent effect which grants immunity to mental status effects & psi damage
+	ImmunityEffect = new class'X2Effect_DamageImmunity';
+	ImmunityEffect.ImmuneTypes.AddItem('Mental');
+	ImmunityEffect.ImmuneTypes.AddItem(class'X2Item_DefaultDamageTypes'.default.DisorientDamageType);
+	ImmunityEffect.ImmuneTypes.AddItem('stun');
+    ImmunityEffect.ImmuneTypes.AddItem('Unconscious');
+	ImmunityEffect.EffectName = default.DefenderImmunityEffectName;
+	ImmunityEffect.BuildPersistentEffect(1, false, false, false, eGameRule_PlayerTurnBegin);
+	ImmunityEffect.SetDisplayInfo(ePerkBuff_Bonus, Template.LocFriendlyName, Template.GetMyLongDescription(), Template.IconImage, false, "", Template.AbilitySourceName);	
+	Template.AddTargetEffect(ImmunityEffect);
+
+	Template.bShowActivation = true;
+	Template.bSkipFireAction = true;
+	Template.Hostility = eHostility_Neutral;
+	Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
+	Template.BuildVisualizationFn = TypicalAbility_BuildVisualization;
+
+	return Template;
+}
+*/
+
+/*
+static private function EventListenerReturn OnHunkerDown_TriggerEventListener(Object EventData, Object EventSource, XComGameState GameState, Name EventID, Object CallbackData)
+{
+	local XComGameState_Unit	UnitState;
+	local XComGameState_Unit	NewUnitState;
+	local XComGameState_Unit	OldUnitState;
+    local XComGameState_Ability	AbilityState;
+
+	if (GameState.GetContext() == none || GameState.GetContext().InterruptionStatus == eInterruptionStatus_Interrupt)
+		return ELR_NoInterrupt;
+
+	UnitState = XComGameState_Unit(EventSource);
+	if (UnitState == none)
+		return ELR_NoInterrupt;
+
+	NewUnitState = XComGameState_Unit(GameState.GetGameStateForObjectID(UnitState.ObjectID));
+	if (NewUnitState == none)
+		return ELR_NoInterrupt;
+
+	OldUnitState = XComGameState_Unit(`XCOMHISTORY.GetGameStateForObjectID(UnitState.ObjectID,, GameState.HistoryIndex - 1));
+	if (OldUnitState == none)
+		return ELR_NoInterrupt;
+
+	`AMLOG(UnitState.GetFullName() @ "was hunkered:" @ OldUnitState.IsHunkeredDown() @ "is hunkered:" @ NewUnitState.IsHunkeredDown());
+
+	if (!OldUnitState.IsHunkeredDown() && NewUnitState.IsHunkeredDown())
+	{
+		AbilityState = XComGameState_Ability(CallbackData);
+		if (AbilityState != none)
+		{
+			`AMLOG("Triggering");
+			AbilityState.AbilityTriggerAgainstSingleTarget(UnitState.GetReference(), false);
+		}
+	}
+
+	return ELR_NoInterrupt;
+}
+
+
+
 class X2Effect_WardenSwordDamage extends X2Effect_ApplyWeaponDamage config(WardenSkills);
 
 function WeaponDamageValue GetBonusEffectDamageValue(XComGameState_Ability AbilityState, XComGameState_Unit SourceUnit, XComGameState_Item SourceWeapon, StateObjectReference TargetRef) 
@@ -997,5 +1088,147 @@ static function X2AbilityTemplate Warden_BD_ApplyAdditionalDamage()
 
 	return Template;
 }
+
+
+// Melee-Stance Additional Damage Build Visualisation
+final static function ApplyAdditionalDamage_BuildVisualization(XComGameState VisualizeGameState)
+{	
+	local XComGameStateVisualizationMgr					VisMgr;
+	local XComGameStateContext_Ability					AbilityContext;
+	local array<X2Action>								FindActions;
+	local X2Action										FindAction;
+	local X2Action										ChildAction;
+	local X2Action_MarkerNamed							EmptyAction;
+	local X2Action_ApplyWeaponDamageToTerrain			DamageTerrainAction;
+	local VisualizationActionMetadata					ActionMetadataTest;
+
+	TypicalAbility_BuildVisualization(VisualizeGameState);
+
+	VisMgr = `XCOMVISUALIZATIONMGR;
+	AbilityContext = XComGameStateContext_Ability(VisualizeGameState.GetContext());
+
+	VisMgr.GetNodesOfType(VisMgr.BuildVisTree, class'X2Action_ApplyWeaponDamageToTerrain', FindActions);
+
+	foreach FindActions(FindAction)
+	{
+		DamageTerrainAction = X2Action_ApplyWeaponDamageToTerrain(FindAction);
+		ActionMetadataTest = DamageTerrainAction.Metadata;
+
+		foreach DamageTerrainAction.ChildActions(ChildAction)
+		{
+			VisMgr.ConnectAction(ChildAction, VisMgr.BuildVisTree, false);
+		}
+		// Nuke the original action out of the tree.
+		EmptyAction = X2Action_MarkerNamed(class'X2Action'.static.CreateVisualizationActionClass(class'X2Action_MarkerNamed', AbilityContext));
+		EmptyAction.SetName("ReplaceDamageTerrainAction");
+		VisMgr.ReplaceNode(EmptyAction, DamageTerrainAction);
+	}
+}
+// Melee-Stance Additional Damage Merge Visualisation
+final static function ApplyAdditionalDamage_MergeVisualization(X2Action BuildTree, out X2Action VisualizationTree)
+{
+	local XComGameStateVisualizationMgr		VisMgr;
+	local array<X2Action>					FindActions;
+	local X2Action							FindAction;
+	local X2Action							FireAction;
+	local X2Action_MarkerTreeInsertBegin	MarkerStart;
+	local X2Action_MarkerTreeInsertEnd		MarkerEnd;
+	local X2Action							WaitAction;
+	local X2Action							ChildAction;
+	local X2Action_MarkerNamed				MarkerAction;
+	local array<X2Action>					MarkerActions;
+	local array<X2Action>					DamageUnitActions;
+	local array<X2Action>					DamageTerrainActions;
+	local XComGameStateContext_Ability		AbilityContext;
+	local VisualizationActionMetadata		ActionMetadata;
+	local bool								bFoundHistoryIndex;
+
+	VisMgr = `XCOMVISUALIZATIONMGR;
+	AbilityContext = XComGameStateContext_Ability(BuildTree.StateChangeContext);
+	
+	//	Find all Fire Actions in the triggering ability's Vis Tree performed by the unit that used the FollowUpShot.
+	VisMgr.GetNodesOfType(VisualizationTree, class'X2Action_Fire', FindActions,, AbilityContext.InputContext.SourceObject.ObjectID);
+	
+	// Find all Damage Unit / Damage Terrain actions in the triggering ability visualization tree that are playing on the primary target of the follow up shot.
+	// Damage Terrain actions play the damage flyover for damageable non-unit objects, like Alien Relay.
+	VisMgr.GetNodesOfType(VisualizationTree, class'X2Action_ApplyWeaponDamageToUnit', DamageUnitActions,, AbilityContext.InputContext.PrimaryTarget.ObjectID);
+	VisMgr.GetNodesOfType(VisualizationTree, class'X2Action_ApplyWeaponDamageToTerrain', DamageTerrainActions,, AbilityContext.InputContext.PrimaryTarget.ObjectID);
+
+	// If there are several Fire Actions in the triggering ability tree (e.g. Faceoff), we need to find the right Fire Action that fires at the same target this instance of Follow Up Shot was fired at.
+	// This info is not stored in the Fire Action itself, so we find the needed Fire Action by looking at its children Damage Unit / Damage Terrain actions,
+	// as well as the visualization index recorded in FollowUpShot's context by its ability trigger.
+	foreach FindActions(FireAction)
+	{
+		if (FireAction.StateChangeContext.AssociatedState.HistoryIndex == AbilityContext.DesiredVisualizationBlockIndex)
+		{	
+			foreach FireAction.ChildActions(ChildAction)
+			{
+				if (DamageTerrainActions.Find(ChildAction) != INDEX_NONE)
+				{
+					bFoundHistoryIndex = true;
+					break;
+				}
+				if (DamageUnitActions.Find(ChildAction) != INDEX_NONE)
+				{
+					bFoundHistoryIndex = true;
+					break;
+				}
+			}
+		}
+
+		if (bFoundHistoryIndex)
+				break;
+	}
+
+	// If we didn't find the correct Fire Action, we call the failsafe Merge Vis Function,
+	// which will make both Singe's Target Effects apply seperately after the triggering ability's visualization finishes.
+	if (!bFoundHistoryIndex)
+	{
+		`LOG("WARNING ::" @ GetFuncName() @ "Failed to find the correct Fire Action, using a failsafe.",, 'WOTCIridarPerkPack');
+		AbilityContext.SuperMergeIntoVisualizationTree(BuildTree, VisualizationTree);
+		return;
+	}
+
+	// Find the start and end of the FollowUpShot's Vis Tree
+	MarkerStart = X2Action_MarkerTreeInsertBegin(VisMgr.GetNodeOfType(BuildTree, class'X2Action_MarkerTreeInsertBegin'));
+	MarkerEnd = X2Action_MarkerTreeInsertEnd(VisMgr.GetNodeOfType(BuildTree, class'X2Action_MarkerTreeInsertEnd'));
+
+	// Will need these later to tie the shoelaces.
+	VisMgr.GetNodesOfType(VisualizationTree, class'X2Action_MarkerNamed', MarkerActions);
+
+	//	Add a Wait For Effect Action after the triggering ability's Fire Action. This will allow Singe's Effects to visualize the moment the triggering ability connects with the target.
+	ActionMetaData = FireAction.Metadata;
+	WaitAction = class'X2Action_WaitForAbilityEffect'.static.AddToVisualizationTree(ActionMetaData, AbilityContext, false, FireAction);
+
+	//	Insert the Singe's Vis Tree right after the Wait For Effect Action
+	VisMgr.ConnectAction(MarkerStart, VisualizationTree, false, WaitAction);
+
+	// Main part of Merge Vis is done, now we just tidy up the ending part. 
+	// As I understood from MrNice, this is necessary to make sure Vis will look fine if Fire Action ends before Singe finishes visualizing
+	// Cycle through Marker Actions we got earlier and find the 'Join' Marker that comes after the Triggering Shot's Fire Action.
+	foreach MarkerActions(FindAction)
+	{
+		MarkerAction = X2Action_MarkerNamed(FindAction);
+
+		if (MarkerAction.MarkerName == 'Join' && MarkerAction.StateChangeContext.AssociatedState.HistoryIndex == AbilityContext.DesiredVisualizationBlockIndex)
+		{
+			//	TBH can't imagine circumstances where MarkerEnd wouldn't exist, but okay
+			if (MarkerEnd != none)
+			{
+				//	"tie the shoelaces". Vis Tree won't move forward until both Singe Vis Tree and Triggering Shot's Fire action are fully visualized.
+				VisMgr.ConnectAction(MarkerEnd, VisualizationTree,,, MarkerAction.ParentActions);
+				VisMgr.ConnectAction(MarkerAction, BuildTree,, MarkerEnd);
+			}
+			else
+			{
+				VisMgr.GetAllLeafNodes(BuildTree, FindActions);
+				VisMgr.ConnectAction(MarkerAction, BuildTree,,, FindActions);
+			}
+			break;
+		}
+	}
+}
+
+
 */
 
