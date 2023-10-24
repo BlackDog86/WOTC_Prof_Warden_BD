@@ -52,7 +52,7 @@
     <Content Include="Content\Perk_Warden_BD_Ranged.upk">
       <SubType>Content</SubType>
     </Content>
-    <Content Include="Content\Perk_Warden_BD_SwordSlice.upk">
+    <Content Include="Content\Perk_Warden_BD_SoulBlade.upk">
       <SubType>Content</SubType>
     </Content>
     <Content Include="Content\Warden_BD_PerkIcons.upk">

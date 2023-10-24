@@ -12,10 +12,10 @@ static event OnPostTemplatesCreated()
 
 static function bool AbilityTagExpandHandler_CH(string InString, out string OutString, Object ParseObj, Object StrategyParseObj, XComGameState GameState)
 {
-	local XComGameState_Ability AbilityState;
-	local XComGameState_Effect EffectState;
-	local X2AbilityTemplate AbilityTemplate;
-	local X2ItemTemplate ItemTemplate;
+	//local XComGameState_Ability AbilityState;
+	//local XComGameState_Effect EffectState;
+	//local X2AbilityTemplate AbilityTemplate;
+	//local X2ItemTemplate ItemTemplate;
 	local name Type;
 	
     Type = name(InString);

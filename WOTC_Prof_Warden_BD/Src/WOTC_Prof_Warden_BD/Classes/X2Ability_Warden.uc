@@ -404,7 +404,7 @@ static final function X2AbilityTemplate Warden_BD_RangedStance()
 	// # State and Visualization
 	Template.Hostility = eHostility_Neutral;
 	Template.bShowActivation = true;
-	Template.bSkipFireAction = false;
+	Template.bSkipFireAction = true;
 	Template.CustomSelfFireAnim = 'HL_IdleA';
 	Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
 	Template.BuildVisualizationFn = TypicalAbility_BuildVisualization;
@@ -497,10 +497,10 @@ static final function X2AbilityTemplate Warden_BD_EbbAndFlowManual()
 	// TODO: Figure out more fitting confirm sound or use standard.
 	Template.Hostility = eHostility_Neutral;
 	Template.bShowActivation = false;
-	Template.bSkipFireAction = true;
 	Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
-	Template.BuildVisualizationFn = TypicalAbility_BuildVisualization;
-	
+	Template.BuildVisualizationFn = TypicalAbility_BuildVisualization;	
+	// Works :)
+	Template.CustomSelfFireAnim = 'HL_Revive';
 	return Template;
 }
 
@@ -746,7 +746,7 @@ static final function X2AbilityTemplate Warden_BD_KineticArmor()
 	local X2Effect_WardenKineticArmorDamage						KineticDamageEffect;
 
 	`CREATE_X2ABILITY_TEMPLATE(Template, 'Warden_BD_KineticArmor');
-	Template.AbilitySourceName = 'eAbilitySource_Perk';
+	Template.AbilitySourceName = 'eAbilitySource_Psionic';
 	Template.IconImage = "img:///UILibrary_XPACK_Common.PerkIcons.UIPerk_divineArmor";
 	Template.ShotHUDPriority = class'UIUtilities_Tactical'.const.CLASS_CORPORAL_PRIORITY;
 	Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_AlwaysShow;
@@ -922,7 +922,8 @@ static function X2AbilityTemplate Warden_BD_Rewind()
 	Template.BuildNewGameStateFn = class'X2Ability_Cyberus'.static.Teleport_BuildGameState;
 	Template.BuildVisualizationFn = class'X2Ability_Cyberus'.static.Teleport_BuildVisualization;
 	Template.CinescriptCameraType = "Avatar_TriggerDamagedTeleport";
-	
+	// Redscreen not on unit?
+	Template.CustomSelfFireAnim = 'HL_Vanish_StartA';
 	return template;
 }
 
@@ -935,7 +936,7 @@ static final function X2AbilityTemplate Warden_BD_Mirror()
 	local X2Effect_WardenMirror									MirrorEffect;
 
 	`CREATE_X2ABILITY_TEMPLATE(Template, 'Warden_BD_Mirror');
-	Template.AbilitySourceName = 'eAbilitySource_Perk';
+	Template.AbilitySourceName = 'eAbilitySource_Psionic';
 	Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_willtosurvive";
 	Template.ShotHUDPriority = class'UIUtilities_Tactical'.const.CLASS_CORPORAL_PRIORITY;
 	Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_AlwaysShow;
@@ -1022,7 +1023,8 @@ static final function X2AbilityTemplate Warden_BD_Mirror()
 
 	// This function will visualize the ability (change the visual representation of the world caused by this ability). Use standard.
 	Template.BuildVisualizationFn = TypicalAbility_BuildVisualization;
-	Template.CustomSelfFireAnim = 'HL_IdleA';
+	// Works :)
+	Template.CustomSelfFireAnim = 'HL_CallGremlinA';
 	// # Other properties
 	// This will determine whether this ability can appear in randomly generated XCOM rows of other soldier classes.
 	// Since this is a niche ability that applies only to melee damage, best not to make it cross-class.
@@ -1066,10 +1068,11 @@ Static final function X2AbilityTemplate Warden_BD_MirrorReturnFire()
 	DamageEffect.bBypassShields = true;
 	DamageEffect.bIgnoreArmor = true;
 	Template.AddTargetEffect(DamageEffect);
-
+	//Works :) Probably needs some PFX
+	Template.CustomFireAnim = 'HL_SignalPointFlankedA';
 	Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
 	Template.BuildVisualizationFn = TypicalAbility_BuildVisualization;
-	Template.bSkipFireAction = true;
+	Template.bSkipFireAction = false;
 
 	return Template;
 }
@@ -1216,6 +1219,8 @@ static function X2AbilityTemplate Warden_BD_GrantImbueAmmoCharges()
 	Template.bSkipFireAction = false;
 	Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
 	Template.BuildVisualizationFn = TypicalAbility_BuildVisualization;
+	// Doesn't work - dude wiggles gun about
+	Template.CustomSelfFireAnim = 'HL_Psi_SelfCast';
 
 	Template.AdditionalAbilities.AddItem('Warden_BD_ImbueAmmo');
 
@@ -1444,7 +1449,8 @@ static function X2AbilityTemplate Warden_BD_GrantSoulBladeCharges()
 	Template.AddTargetEffect(BonusCharges);
 		
 	// # State and Visualization	
-	Template.CustomSelfFireAnim = 'HL_IdleA';
+	// Doesn't work - dude wiggles gun about
+	Template.CustomSelfFireAnim = 'HL_Psi_SelfCast';
 	Template.Hostility = eHostility_Neutral;
 	Template.bShowActivation = true;
 	Template.bSkipFireAction = false;
@@ -1659,8 +1665,9 @@ static function X2AbilityTemplate Warden_BD_DefensiveWard()
 	Template.AddShooterEffect(DelayedDamageEffect);
 	
 	Template.TargetingMethod = class'X2TargetingMethod_VoidRift';
-
-	Template.CustomFireAnim = 'HL_Malfunction';
+	// Doesn't work - dude wiggles gun about
+	Template.CustomFireAnim = 'HL_Psi_ProjectileMediumA';
+	
 	Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
 	Template.BuildInterruptGameStateFn = TypicalAbility_BuildInterruptGameState;
 	Template.BuildVisualizationFn = TypicalAbility_BuildVisualization;
@@ -2080,8 +2087,9 @@ static function X2AbilityTemplate Warden_BD_Fissure()
 	Template.AddShooterEffect(DelayedRuptureEffect);
 	
 	Template.TargetingMethod = class'X2TargetingMethod_VoidRift';
-
-	Template.CustomFireAnim = 'HL_Malfunction';
+	
+	// Doesn't work - dude wiggles gun about
+	Template.CustomFireAnim = 'HL_Psi_ProjectileMediumA';
 	Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
 	Template.BuildInterruptGameStateFn = TypicalAbility_BuildInterruptGameState;
 	Template.BuildVisualizationFn = TypicalAbility_BuildVisualization;
@@ -2272,7 +2280,8 @@ static function X2DataTemplate Warden_BD_Tide()
 	Template.AddMultiTargetEffect(KnockbackEffect);
 	
 	Template.ActivationSpeech = 'NullLance';
-	Template.CustomFireAnim = 'HL_WardenPush';
+	// Doesn't work - need to put animset on the unit
+	Template.CustomFireAnim = 'HL_WardenTide';
 	Template.bShowActivation = true;
 	
 	Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
@@ -2407,7 +2416,8 @@ static function X2DataTemplate Warden_BD_Consume()
 	Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
 	Template.BuildVisualizationFn = TypicalAbility_BuildVisualization;
 	Template.CinescriptCameraType = "AdvShieldBearer_EnergyShieldArmor";	
-	
+	// Doesn't work - try without self-fire
+	Template.CustomFireAnim = 'HL_SignalHaltA';
 	Template.AdditionalAbilities.AddItem('Warden_BD_ConsumeAdditionalDamage');
 
 	return Template;
@@ -2468,9 +2478,10 @@ static function X2AbilityTemplate Warden_BD_RagePassive()
 {
 	local X2AbilityTemplate						Template;
 
-	Template = CreatePassiveAbility('Warden_BD_RagePassive', "img:////UILibrary_PerkIcons.UIPerk_rapidfire");
+	Template = CreatePassiveAbility('Warden_BD_RagePassive', "img:///UILibrary_PerkIcons.UIPerk_rapidfire");
 	Template.bCrossClassEligible = false;
 	Template.AbilitySourceName = 'eAbilitySource_psionic';
+
 
 	return Template;
 }
@@ -2564,14 +2575,15 @@ static function X2AbilityTemplate Warden_BD_Charge()
 	Template.bShowActivation = true;
 
 	// This will tell TypicalAbility_BuildVisualization to not play an activation animation for this ability. To be changed once we have an animation.
-	Template.bSkipFireAction = true;
+	Template.bSkipFireAction = false;
 
 	// This function will apply game state changes caused by this ability. Use standard here.
 	Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
 
 	// This function will visualize the ability (change the visual representation of the world caused by this ability). Use standard.
 	Template.BuildVisualizationFn = TypicalAbility_BuildVisualization;
-
+	// Works, not terribly inspiring - maybe more of a 'hold sword in the air anim' would be better?
+	Template.CustomFireAnim = 'HL_SignalAngryA';	
 	// # Other properties
 	// This will determine whether this ability can appear in randomly generated XCOM rows of other soldier classes.
 	// Since this is a niche ability that applies only to melee damage, best not to make it cross-class.
@@ -2674,8 +2686,8 @@ static function X2AbilityTemplate Warden_BD_Retribution()
 	Template.AddShooterEffect(DelayedRuptureEffect);
 	
 	Template.TargetingMethod = class'X2TargetingMethod_VoidRift';
-
-	Template.CustomFireAnim = 'HL_Malfunction';
+	// Doesn't work - gun wiggle again
+	Template.CustomFireAnim = 'HL_Psi_ProjectileMediumA';
 	Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
 	Template.BuildInterruptGameStateFn = TypicalAbility_BuildInterruptGameState;
 	Template.BuildVisualizationFn = TypicalAbility_BuildVisualization;
@@ -2768,6 +2780,7 @@ static function X2AbilityTemplate Warden_BD_Brand()
 	Template.Hostility = eHostility_Offensive;
 	Template.bFrameEvenWhenUnitIsHidden = true;
 	Template.ActivationSpeech = 'Amplify';
+	// Works :)
 	Template.CustomFireAnim = 'HL_SignalPointAttackA';
 		
 	// Set ability costs, cooldowns, and restrictions
@@ -2912,6 +2925,7 @@ static final function X2AbilityTemplate Warden_BD_Pillar()
 	Template.AbilityCooldown = Cooldown;
 	
 	Template.AbilitySourceName = 'eAbilitySource_Psionic';
+	// Works :)
 	Template.CustomFireAnim = 'HL_SignalPointAttackA';
 	Template.ActivationSpeech = 'RunandGun';
 
@@ -3033,6 +3047,7 @@ static function X2AbilityTemplate Warden_BD_Inspire()
 	Template.ActivationSpeech = 'Inspire';
 
 	Template.bShowActivation = true;
+	// Doesn't work - gun wiggle
 	Template.CustomFireAnim = 'HL_Psi_ProjectileMedium';
 	Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
 	Template.BuildVisualizationFn = TypicalAbility_BuildVisualization;
@@ -3117,6 +3132,7 @@ static function X2AbilityTemplate Warden_BD_Fuse()
 	Template.PostActivationEvents.AddItem(class'X2Ability_PsiOperativeAbilitySet'.default.FusePostEventName);
 
 	Template.bShowActivation = true;
+	// Works but no idea what actual fuse does for anims 
 	Template.CustomFireAnim = 'HL_SignalPointAttackA';
 	Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
 	Template.BuildVisualizationFn = TypicalAbility_BuildVisualization;
