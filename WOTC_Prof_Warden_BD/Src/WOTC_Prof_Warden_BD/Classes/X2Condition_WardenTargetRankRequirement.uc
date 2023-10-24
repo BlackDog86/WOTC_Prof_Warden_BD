@@ -1,4 +1,3 @@
-
 class X2Condition_WardenTargetRankRequirement extends X2Condition;
 
 // Variables to pass into the condition check:

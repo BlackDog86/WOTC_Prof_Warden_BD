@@ -24,10 +24,10 @@ function int GetAttackingDamageModifier(XComGameState_Effect EffectState, XComGa
 				if (NewGameState == none)
 					{			
 					return BonusDamage;
-					}				
-				
+					}
 				//	only add the bonus damage when the damage effect is applying the weapon's base damage
-				DamageEffect = X2Effect_ApplyWeaponDamage(class'X2Effect'.static.GetX2Effect(AppliedData.EffectRef));			
+		DamageEffect = X2Effect_ApplyWeaponDamage(class'X2Effect'.static.GetX2Effect(AppliedData.EffectRef));			
+		
 				if (DamageEffect != none && !DamageEffect.bIgnoreBaseDamage)
 					{
 					// Reset the bonus damage unitvalue
@@ -35,12 +35,6 @@ function int GetAttackingDamageModifier(XComGameState_Effect EffectState, XComGa
 					NewSourceUnit.SetUnitFloatValue(class'X2Ability_Warden'.default.ConsumeBonusDamageValue,0);					
 					`log("Consume Shot taken - Resetting Bonus Damage Unitvalue to 0 & removing effect");
 					EffectState.RemoveEffect(NewGameState,NewGameState);
-					// Also reset the expended warden shields back to 0 if we don't have any left (this should hopefully make shields granted by other stuff not matter in respect of bonus damage)
-					//	If (InitialShield - int(UV2.fValue) <= Attacker.GetCurrentStat(eStat_ShieldHP))
-					//	{
-					//	Attacker.SetUnitFloatValue(class'X2Effect_WardenKineticArmor'.default.KineticArmorExpendedShields, 0, eCleanup_BeginTactical);
-					//	`log("Shot taken and no kinetic shields left - setting Unit Value to 0");
-					//	}
 					return BonusDamage;
 					}						
 		}

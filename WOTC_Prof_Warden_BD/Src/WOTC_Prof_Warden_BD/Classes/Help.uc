@@ -1230,5 +1230,212 @@ final static function ApplyAdditionalDamage_MergeVisualization(X2Action BuildTre
 }
 
 
+
+// Soulblade TODO: Balance Effects, icon, voice, visualisation
+static final function X2AbilityTemplate Warden_BD_SoulBlade()
+{
+	local X2AbilityTemplate										Template;
+	local X2AbilityCooldown										Cooldown;
+	local X2AbilityCost_ActionPoints							ActionPointCost;
+	local X2Effect_PersistentStatChange							DummyEffect;
+
+	`CREATE_X2ABILITY_TEMPLATE(Template, 'Warden_BD_SoulBlade');
+	Template.AbilitySourceName = 'eAbilitySource_Psionic';
+	Template.IconImage = "img:///UILibrary_XPACK_Common.PerkIcons.UIPerk_ceramicblade";
+	Template.ShotHUDPriority = class'UIUtilities_Tactical'.const.CLASS_LIEUTENANT_PRIORITY;
+	Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_AlwaysShow;
+		
+	// # Costs and Cooldowns
+	Cooldown = new class'X2AbilityCooldown';
+	Cooldown.iNumTurns = default.SOULBLADE_COOLDOWN;
+	Template.AbilityCooldown = Cooldown;
+
+	// Action cost for this ability.
+	ActionPointCost = new class'X2AbilityCost_ActionPoints';
+	ActionPointCost.iNumPoints = 1; 
+	ActionPointCost.bConsumeAllPoints = true;
+	ActionPointCost.AllowedTypes.Length = 0;
+	// ALLLL THE POOOOIIIINNNNTTTSSSS!
+	ActionPointCost.AllowedTypes.AddItem(default.SpecialMomentumAP);
+	ActionPointCost.AllowedTypes.AddItem(default.DefenderAP);
+	ActionPointCost.AllowedTypes.AddItem(default.CrusaderAP);
+	ActionPointCost.AllowedTypes.AddItem(default.WatcherAP);
+	ActionPointCost.AllowedTypes.AddItem(default.RageAP);
+	ActionPointCost.AllowedTypes.AddItem(default.ChargeAP);
+	ActionPointCost.AllowedTypes.AddItem(default.DefenderCrusaderAP);
+	ActionPointCost.AllowedTypes.AddItem(default.DefenderWatcherAP);
+	ActionPointCost.AllowedTypes.AddItem(default.DefenderRageAP);
+	ActionPointCost.AllowedTypes.AddItem(default.DefenderChargeAP);
+	ActionPointCost.AllowedTypes.AddItem(default.CrusaderWatcherAP);
+	ActionPointCost.AllowedTypes.AddItem(default.CrusaderRageAP);
+	ActionPointCost.AllowedTypes.AddItem(default.CrusaderChargeAP);
+	ActionPointCost.AllowedTypes.AddItem(default.WatcherRageAP);
+	ActionPointCost.AllowedTypes.AddItem(default.WatcherChargeAP);
+	ActionPointCost.AllowedTypes.AddItem(default.RageChargeAP);
+	ActionPointCost.AllowedTypes.AddItem(default.DefenderCrusaderWatcherAP);
+	ActionPointCost.AllowedTypes.AddItem(default.DefenderCrusaderRageAP);
+	ActionPointCost.AllowedTypes.AddItem(default.DefenderCrusaderChargeAP);
+	ActionPointCost.AllowedTypes.AddItem(default.DefenderWatcherRageAP);
+	ActionPointCost.AllowedTypes.AddItem(default.DefenderWatcherChargeAP);
+	ActionPointCost.AllowedTypes.AddItem(default.DefenderRageChargeAP);
+	ActionPointCost.AllowedTypes.AddItem(default.CrusaderWatcherRageAP);
+	ActionPointCost.AllowedTypes.AddItem(default.CrusaderWatcherChargeAP);
+	ActionPointCost.AllowedTypes.AddItem(default.CrusaderRageChargeAP);
+	ActionPointCost.AllowedTypes.AddItem(default.WatcherRageChargeAP);
+	ActionPointCost.AllowedTypes.AddItem(default.DefenderCrusaderWatcherRageAP);
+	ActionPointCost.AllowedTypes.AddItem(default.DefenderCrusaderWatcherChargeAP);
+	ActionPointCost.AllowedTypes.AddItem(default.DefenderCrusaderRageChargeAP);
+	ActionPointCost.AllowedTypes.AddItem(default.CrusaderWatcherRageChargeAP);
+	ActionPointCost.AllowedTypes.AddItem(default.DefenderCrusaderWatcherRageChargeAP);
+	Template.AbilityCosts.AddItem(ActionPointCost);	
+
+	// # Targeting and Triggering
+	Template.AbilityToHitCalc = default.DeadEye;
+	Template.DisplayTargetHitChance = false;
+	Template.AbilityTargetStyle = default.SelfTarget;	
+
+	// Ability trigger determines how it is activated. In this case - by the user manually.
+	Template.AbilityTriggers.AddItem(default.PlayerInputTrigger);
+		
+	// Create a persistent effect which does nothing - we need to do this to apply an effect which can be picked up by the wardensworddamage effect
+	DummyEffect = new class'X2Effect_PersistentStatChange';	
+	DummyEffect.BuildPersistentEffect(2, false, false, false, eGameRule_PlayerTurnEnd);
+	DummyEffect.AddPersistentStatChange(eStat_Mobility, 0);
+	DummyEffect.SetDisplayInfo(ePerkBuff_Bonus, Template.LocFriendlyName, Template.GetMyLongDescription(), Template.IconImage, true, "", Template.AbilitySourceName);	
+	Template.AddTargetEffect(DummyEffect);
+	
+	// TODO: Figure out better activation speech (limited to existing lines in XComCharacterVoiceBank.uc)
+	Template.ActivationSpeech = 'RunAndGun';
+
+	// TODO: Figure out more fitting confirm sound or use standard.
+	Template.AbilityConfirmSound = "TacticalUI_Activate_Ability_Run_N_Gun";
+
+	// This will determine if this ability break concealment under default rules
+	// And whether it's eligigible to Covering Fire reaction attacks.
+	Template.Hostility = eHostility_Neutral;
+
+	// This will tell TypicalAbility_BuildVisualization to display a flyover with the ability's LocFlyOverText when it's activated.
+	Template.bShowActivation = true;
+
+	// This will tell TypicalAbility_BuildVisualization to not play an activation animation for this ability. To be changed once we have an animation.
+	Template.bSkipFireAction = true;
+
+	// This function will apply game state changes caused by this ability. Use standard here.
+	Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
+
+	// This function will visualize the ability (change the visual representation of the world caused by this ability). Use standard.
+	Template.BuildVisualizationFn = TypicalAbility_BuildVisualization;
+
+	// # Other properties
+	// This will determine whether this ability can appear in randomly generated XCOM rows of other soldier classes.
+	// Since this is a niche ability that applies only to melee damage, best not to make it cross-class.
+	Template.bCrossClassEligible = false;
+	
+	return Template;
+}
+static function X2AbilityTemplate Warden_BD_ImbueAmmo()
+{
+
+	local X2AbilityTemplate										Template;
+	local X2AbilityCooldown										Cooldown;
+	local X2AbilityCost_ActionPoints							ActionPointCost;
+	local X2Effect_PersistentStatChange							DummyEffect;
+
+	`CREATE_X2ABILITY_TEMPLATE(Template, 'Warden_BD_ImbueAmmo');
+	Template.AbilitySourceName = 'eAbilitySource_Psionic';
+	Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_tracerbeams";
+	Template.ShotHUDPriority = class'UIUtilities_Tactical'.const.CLASS_LIEUTENANT_PRIORITY;
+	Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_AlwaysShow;
+		
+	// # Costs and Cooldowns
+	Cooldown = new class'X2AbilityCooldown';
+	Cooldown.iNumTurns = default.SOULBLADE_COOLDOWN;
+	Template.AbilityCooldown = Cooldown;
+
+	// Action cost for this ability.
+	ActionPointCost = new class'X2AbilityCost_ActionPoints';
+	ActionPointCost.iNumPoints = 1; 
+	ActionPointCost.bConsumeAllPoints = true;
+	ActionPointCost.AllowedTypes.Length = 0;
+
+	// Many, Many Points
+	ActionPointCost.AllowedTypes.AddItem(default.SpecialMomentumAP);
+	ActionPointCost.AllowedTypes.AddItem(default.DefenderAP);
+	ActionPointCost.AllowedTypes.AddItem(default.CrusaderAP);
+	ActionPointCost.AllowedTypes.AddItem(default.WatcherAP);
+	ActionPointCost.AllowedTypes.AddItem(default.RageAP);
+	ActionPointCost.AllowedTypes.AddItem(default.ChargeAP);
+	ActionPointCost.AllowedTypes.AddItem(default.DefenderCrusaderAP);
+	ActionPointCost.AllowedTypes.AddItem(default.DefenderWatcherAP);
+	ActionPointCost.AllowedTypes.AddItem(default.DefenderRageAP);
+	ActionPointCost.AllowedTypes.AddItem(default.DefenderChargeAP);
+	ActionPointCost.AllowedTypes.AddItem(default.CrusaderWatcherAP);
+	ActionPointCost.AllowedTypes.AddItem(default.CrusaderRageAP);
+	ActionPointCost.AllowedTypes.AddItem(default.CrusaderChargeAP);
+	ActionPointCost.AllowedTypes.AddItem(default.WatcherRageAP);
+	ActionPointCost.AllowedTypes.AddItem(default.WatcherChargeAP);
+	ActionPointCost.AllowedTypes.AddItem(default.RageChargeAP);
+	ActionPointCost.AllowedTypes.AddItem(default.DefenderCrusaderWatcherAP);
+	ActionPointCost.AllowedTypes.AddItem(default.DefenderCrusaderRageAP);
+	ActionPointCost.AllowedTypes.AddItem(default.DefenderCrusaderChargeAP);
+	ActionPointCost.AllowedTypes.AddItem(default.DefenderWatcherRageAP);
+	ActionPointCost.AllowedTypes.AddItem(default.DefenderWatcherChargeAP);
+	ActionPointCost.AllowedTypes.AddItem(default.DefenderRageChargeAP);
+	ActionPointCost.AllowedTypes.AddItem(default.CrusaderWatcherRageAP);
+	ActionPointCost.AllowedTypes.AddItem(default.CrusaderWatcherChargeAP);
+	ActionPointCost.AllowedTypes.AddItem(default.CrusaderRageChargeAP);
+	ActionPointCost.AllowedTypes.AddItem(default.WatcherRageChargeAP);
+	ActionPointCost.AllowedTypes.AddItem(default.DefenderCrusaderWatcherRageAP);
+	ActionPointCost.AllowedTypes.AddItem(default.DefenderCrusaderWatcherChargeAP);
+	ActionPointCost.AllowedTypes.AddItem(default.DefenderCrusaderRageChargeAP);
+	ActionPointCost.AllowedTypes.AddItem(default.CrusaderWatcherRageChargeAP);
+	ActionPointCost.AllowedTypes.AddItem(default.DefenderCrusaderWatcherRageChargeAP);
+	Template.AbilityCosts.AddItem(ActionPointCost);	
+
+	// # Targeting and Triggering
+	Template.AbilityToHitCalc = default.DeadEye;
+	Template.DisplayTargetHitChance = false;
+	Template.AbilityTargetStyle = default.SelfTarget;	
+
+	// Ability trigger determines how it is activated. In this case - by the user manually.
+	Template.AbilityTriggers.AddItem(default.PlayerInputTrigger);
+		
+	// Create a persistent effect which does nothing - we need to do this to apply an effect which can be picked up by the wardensworddamage effect
+	DummyEffect = new class'X2Effect_PersistentStatChange';	
+	DummyEffect.BuildPersistentEffect(2, false, false, false, eGameRule_PlayerTurnEnd);
+	DummyEffect.AddPersistentStatChange(eStat_Mobility, 0);
+	DummyEffect.SetDisplayInfo(ePerkBuff_Bonus, Template.LocFriendlyName, Template.GetMyLongDescription(), Template.IconImage, true, "", Template.AbilitySourceName);	
+	Template.AddTargetEffect(DummyEffect);
+	
+	// TODO: Figure out better activation speech (limited to existing lines in XComCharacterVoiceBank.uc)
+	Template.ActivationSpeech = 'RunAndGun';
+
+	// TODO: Figure out more fitting confirm sound or use standard.
+	Template.AbilityConfirmSound = "TacticalUI_Activate_Ability_Run_N_Gun";
+
+	// This will determine if this ability break concealment under default rules
+	// And whether it's eligigible to Covering Fire reaction attacks.
+	Template.Hostility = eHostility_Neutral;
+
+	// This will tell TypicalAbility_BuildVisualization to display a flyover with the ability's LocFlyOverText when it's activated.
+	Template.bShowActivation = true;
+
+	// This will tell TypicalAbility_BuildVisualization to not play an activation animation for this ability. To be changed once we have an animation.
+	Template.bSkipFireAction = true;
+
+	// This function will apply game state changes caused by this ability. Use standard here.
+	Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
+
+	// This function will visualize the ability (change the visual representation of the world caused by this ability). Use standard.
+	Template.BuildVisualizationFn = TypicalAbility_BuildVisualization;
+
+	// # Other properties
+	// This will determine whether this ability can appear in randomly generated XCOM rows of other soldier classes.
+	// Since this is a niche ability that applies only to melee damage, best not to make it cross-class.
+	Template.bCrossClassEligible = false;
+	
+	return Template;
+}
+
 */
 

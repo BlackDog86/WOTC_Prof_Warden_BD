@@ -30,7 +30,6 @@ simulated protected function OnEffectAdded(const out EffectAppliedData ApplyEffe
 	if (TargetUnit == none || AddAbilities.Length == 0)
 		return;
 
-
 	// If components to assign a source weapon are defined for the effect, attempt to find the item reference to use when initiating the abilities (used for visualizations, ammo costs, etc.)
 	if (ApplyToWeaponSlot != eInvSlot_Unknown || ApplyToWeaponCat != '' || ApplyToItem != '')
 	{
@@ -94,7 +93,6 @@ simulated protected function OnEffectAdded(const out EffectAppliedData ApplyEffe
 						break;
 	}	}	}	}	}
 	
-
 	// Call function to initiate each added ability
 	AbilityTemplateMgr = class'X2AbilityTemplateManager'.static.GetAbilityTemplateManager();
 	foreach AddAbilities(AbilityName)

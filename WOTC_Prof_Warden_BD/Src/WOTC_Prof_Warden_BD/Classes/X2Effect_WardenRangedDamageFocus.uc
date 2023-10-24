@@ -1,4 +1,6 @@
-class X2Effect_WardenRangedDamageFocus extends X2Effect_Persistent;
+class X2Effect_WardenRangedDamageFocus extends X2Effect_Persistent config(WardenSkills);
+
+var config int FIREARMFOCUS_MAXIMUM_BONUS;
 
 function int GetAttackingDamageModifier(XComGameState_Effect EffectState, XComGameState_Unit Attacker, Damageable TargetDamageable, XComGameState_Ability AbilityState, const out EffectAppliedData AppliedData, const int CurrentDamage, optional XComGameState NewGameState)
 {
@@ -26,9 +28,9 @@ function int GetAttackingDamageModifier(XComGameState_Effect EffectState, XComGa
 				`log("Current value of Ranged Stance Counter is: " @UV.fValue);		
 				
 				// Cap the maximum damage to 3
-				if (BonusDamage > 3)
+				if (BonusDamage > default.FIREARMFOCUS_MAXIMUM_BONUS)
 					{
-					BonusDamage = 3;
+					BonusDamage = default.FIREARMFOCUS_MAXIMUM_BONUS;
 					}
 				`log("Adding bonus damage of: " @BonusDamage);
 				//	no game state means it's for damage preview

@@ -4,7 +4,7 @@
 
 [WOTC_Prof_Warden_BD X2SoldierClassTemplate]
 DisplayName="Warden"
-ClassSummary="Wardens represent a special military wing of the Templar order.They are highly capable soldiers who excel in using the Ebb and Flow of psionic energy on the battlefield to their advantage. Wardens are granted access to stances which boost capabilities with their weapons & successful attacks from the correct stance will grant them access to additional abilities that can change the course of a battle."
+ClassSummary="Wardens represent a militarised wing of the Templars and excel in harnessing the ebb and flow of psionic energies on the battlefield. Wardens start each turn by alternating their stance which boosts capability with one of their weapons. Carrying out a turn-ending attack with the correct weapon & stance combination grants the warden a 'flow' action point which they can use to activate powerful abilities.
 AbilityTreeTitles[0]="Bushido"
 AbilityTreeTitles[1]="Kendo"
 AbilityTreeTitles[2]="Aikido"
@@ -43,191 +43,187 @@ Summary = "All Warden's Stance proficiencies will start at level 3, regardless o
 
 [Warden_BD_MeleeStance X2AbilityTemplate]
 LocFriendlyName="Melee Stance"
-LocLongDescription="Mobility is increased in melee stance by <Ability:MELEESTANCE_I_MOBILITY_BONUS>,<Ability:MELEESTANCE_II_MOBILITY_BONUS>,<Ability:MELEESTANCE_III_MOBILITY_BONUS> at Squaddie, Sergeant & Major Ranks Respectively"
-LocHelpText="Melee Stance"
-LocPromotionPopupText="<Bullet/> No cooldown."
-LocFlyOverText="Mobility is increased in melee stance by <Ability:MELEESTANCE_I_MOBILITY_BONUS>,<Ability:MELEESTANCE_II_MOBILITY_BONUS>,<Ability:MELEESTANCE_III_MOBILITY_BONUS> at Squaddie, Sergeant & Major Ranks Respectively"
+LocLongDescription="Mobility is increased in melee stance by <font color='#CA7200'><Ability:MELEESTANCE_I_MOBILITY_BONUS/></font> at Squaddie rank, <font color='#CA7200'><Ability:MELEESTANCE_II_MOBILITY_BONUS/></font> at Sergeant Rank and <font color='#CA7200'><Ability:MELEESTANCE_III_MOBILITY_BONUS/></font> at Major rank."
+LocHelpText="Mobility is increased in melee stance by <font color='#CA7200'><Ability:MELEESTANCE_I_MOBILITY_BONUS/></font> at Squaddie Rank,<font color='#CA7200'><Ability:MELEESTANCE_II_MOBILITY_BONUS/></font> at Sergeant Rank and <font color='#CA7200'><Ability:MELEESTANCE_III_MOBILITY_BONUS/></font> at Major Rank."
+LocFlyOverText="Melee Stance"
 
 [Warden_BD_RangedStance X2AbilityTemplate]
 LocFriendlyName="Ranged Stance"
-LocLongDescription="Enemy defense from cover is reduced in ranged stance by <Ability:RANGEDSTANCE_I_CDEF_BONUS>, <Ability:RANGEDSTANCE_II_CDEF_BONUS>, <Ability:RANGEDSTANCE_III_CDEF_BONUS>% at Squaddie, Sergeant & Major Ranks Respectively"
-LocHelpText="Ranged Stance"
-LocPromotionPopupText="<Bullet/> No cooldown."
-LocFlyOverText="Enemy defense from cover is reduced in ranged stance by <Ability:RANGEDSTANCE_I_CDEF_BONUS>, <Ability:RANGEDSTANCE_II_CDEF_BONUS>, <Ability:RANGEDSTANCE_III_CDEF_BONUS>% at Squaddie, Sergeant & Major Ranks Respectively"
+LocLongDescription="Enemy defense from cover is reduced in ranged stance by <font color='#CA7200'><Ability:RANGEDSTANCE_I_CDEF_BONUS/></font>% at Squaddie rank, <font color='#CA7200'><Ability:RANGEDSTANCE_II_CDEF_BONUS/></font>% at Sergeant rank and <font color='#CA7200'><Ability:RANGEDSTANCE_III_CDEF_BONUS/></font>% at Major rank."
+LocHelpText="Enemy defense from cover is reduced in ranged stance by <font color='#CA7200'><Ability:RANGEDSTANCE_I_CDEF_BONUS/></font>% at Squaddie rank, <font color='#CA7200'><Ability:RANGEDSTANCE_II_CDEF_BONUS/></font>% at Sergeant rank and <font color='#CA7200'><Ability:RANGEDSTANCE_III_CDEF_BONUS/></font>% at Major rank."
+LocFlyOverText="Ranged Stance"
 
 [Warden_BD_EbbAndFlow X2AbilityTemplate]
 LocFriendlyName="Ebb & Flow - Hidden"
-LocLongDescription="Hidden ability which actually does the stance switching"
-LocHelpText="Hidden ability which actually does the stance switching"
-LocPromotionPopupText="<Bullet/> No cooldown."
+LocLongDescription="Hidden ability which actually does the stance switching."
+LocHelpText="Hidden ability which actually does the stance switching."
 LocFlyOverText="Ebb & Flow - Hidden"
 
 [Warden_BD_EbbAndFlowDummy X2AbilityTemplate]
 LocFriendlyName="Ebb & Flow"
-LocLongDescription="Switch stance at the start of the next turn"
-LocHelpText="Switch stance at the start of the next turn"
-LocPromotionPopupText="<Bullet/> No cooldown."
-LocFlyOverText="Switch stance at the start of the next turn"
+LocLongDescription="Switch stance at the start of the next turn."
+LocHelpText="Switch stance at the start of the next turn."
+LocFlyOverText="Ebb & Flow"
 
 [Warden_BD_EbbAndFlowManual X2AbilityTemplate]
 LocFriendlyName="Flow Mastery"
-LocLongDescription="Switch stance Immediately - No action point cost (Cannot be activated with flow action points)"
-LocHelpText="Switch stance Immediately - No action point cost (Cannot be activated with flow action points)"
-LocPromotionPopupText="<Bullet/> No cooldown."
-LocFlyOverText="Switch stance Immediately - No action point cost (Cannot be activated with flow action points)"
+LocLongDescription="Switch stance immediately - No action point cost (Cannot be activated with flow action points)."
+LocHelpText="Switch stance immediately - No action point cost (Cannot be activated with flow action points)."
+LocFlyOverText="Flow Mastery"
 
 [Warden_BD_ProficiencyPassives X2AbilityTemplate]
 LocFriendlyName="Proficiency Bonuses - Warden"
-LocLongDescription="Hidden ability which grants charges to Flow Mastery & sets up the default +5 aim for the warden's sword"
-LocHelpText="Hidden ability which grants charges to Flow Mastery & sets up the default +5 aim for the warden's sword"
-LocPromotionPopupText="<Bullet/> No cooldown."
+LocLongDescription="Hidden ability which grants charges to Flow Mastery & sets up the default aim bonus for the warden's sword."
+LocHelpText="Hidden ability which grants charges to Flow Mastery & sets up the default aim bonus for the warden's sword."
 LocFlyOverText="Proficiency Bonuses - Warden"
 
 [Warden_BD_Rewind X2AbilityTemplate]
-LocFriendlyName="Rewind"
-LocLongDescription="Teleport back to the turn-start location"
-LocHelpText="Teleport back to the turn-start location"
-LocPromotionPopupText="<Bullet/> No cooldown."
-LocFlyOverText="Teleport back to the turn-start location"
+LocFriendlyName="Blink"
+LocLongDescription="Use a flow action point to vanish and re-appear at the turn-start location. <font color='#CA7200'><Ability:REWIND_COOLDOWN/></font>-turn cooldown."
+LocHelpText="Use a flow action point to vanish and re-appear at the turn-start location. <font color='#CA7200'><Ability:REWIND_COOLDOWN/></font>-turn cooldown."
+LocFlyOverText="Blink"
 
 [Warden_BD_Mirror X2AbilityTemplate]
 LocFriendlyName="Barrier"
-LocLongDescription="Create an elemental barrier which degrades the next two incoming hits to grazes. Damage taken through the barrier is also returned back psionically to the attacker."
-LocHelpText="Create an elemental barrier which degrades the next two incoming hits to grazes. Damage taken through the barrier is also returned back psionically to the attacker."
-LocPromotionPopupText="<Bullet/> No cooldown."
-LocFlyOverText="Create an elemental barrier which degrades the next two incoming hits to grazes. Damage taken through the barrier is also returned back psionically to the attacker."
+LocLongDescription="Create an elemental barrier which degrades the next <font color='#CA7200'><Ability:MIRROR_NUMBER_OF_ATTACKS/></font> incoming hits to grazes. Damage taken through the barrier is returned back psionically to the attacker. <font color='#CA7200'><Ability:MIRROR_COOLDOWN/></font>-turn cooldown."
+LocHelpText="Create an elemental barrier which degrades the next <font color='#CA7200'><Ability:MIRROR_NUMBER_OF_ATTACKS/></font> incoming hits to grazes. Damage taken through the barrier is returned back psionically to the attacker. <font color='#CA7200'><Ability:MIRROR_COOLDOWN/></font>-turn cooldown."
+LocFlyOverText="Barrier"
 
 [Warden_BD_MirrorReturnFire X2AbilityTemplate]
-LocFriendlyName="Mirror - Return Fire"
+LocFriendlyName="Barrier - Return Fire"
 LocLongDescription="Hidden ability which handles returning psi damage."
 LocHelpText="Mirror - Return Fire"
-LocPromotionPopupText="<Bullet/> No cooldown."
-LocFlyOverText="Mirror - Return Fire"
+LocFlyOverText="Barrier - Return Fire"
 
 [Warden_BD_KineticArmor X2AbilityTemplate]
 LocFriendlyName="Kinetic Armor"
-LocLongDescription="Gain ablative hit points equal to 1/3 of max. health. Any damage dealt to the shield on this turn will be added to the Warden's attack on the next turn."
-LocHelpText="Gain ablative hit points depending on proficiency. Return damage dealt to the shields as psi. Switch Stance."
-LocPromotionPopupText="<Bullet/> No cooldown."
+LocLongDescription="Gain ablative hit points equal to <font color='#CA7200'><Ability:KINETIC_ARMOR_PERCENTAGE/></font>% of max. health. Any damage dealt to the shield on this turn will be added to the Warden's attack on the next turn. <font color='#CA7200'><Ability:KINETICARMOR_COOLDOWN/></font>-turn cooldown."
+LocHelpText="Gain ablative hit points equal to <font color='#CA7200'><Ability:KINETIC_ARMOR_PERCENTAGE/></font> % of max. health. Any damage dealt to the shield on this turn will be added to the Warden's attack on the next turn. <font color='#CA7200'><Ability:KINETICARMOR_COOLDOWN/></font>-turn cooldown."
 LocFlyOverText="Kinetic Armor"
 
 [Warden_BD_DefenderPassive X2AbilityTemplate]
 LocFriendlyName="Guardsman"
-LocLongDescription="Throwing grenades & using items grants Flow Action Points. Hunker can be used from Flow Action points"
-LocHelpText="Throwing grenades & using items grants Flow Action Points. Hunker can be used from Flow Action points"
-LocPromotionPopupText="<Bullet/> No cooldown."
+LocLongDescription="Throwing grenades & using items grants flow action points. Hunker can be used from flow action points."
+LocHelpText="Throwing grenades & using items grants flow action points. Hunker can be used from flow action points."
 LocFlyOverText="Guardsman"
 
 [Warden_BD_CrusaderPassive X2AbilityTemplate]
 LocFriendlyName="Crusader"
-LocLongDescription="Reload can be activated from flow Action Points - Warden's Sword has +5 aim & +10 crit"
-LocHelpText="Reload can be activated from flow Action Points - Warden's Sword has +5 aim & +10 crit"
-LocPromotionPopupText="<Bullet/> No cooldown."
+LocLongDescription="Reload can be activated from flow action points - Warden's sword has +<font color='#CA7200'><Ability:CRUSADER_AIM_BONUS/></font> aim and +<font color='#CA7200'><Ability:CRUSADER_CRIT_BONUS/></font> critical hit chance."
+LocHelpText="Reload can be activated from flow action points - Warden's sword has +<font color='#CA7200'><Ability:CRUSADER_AIM_BONUS/></font> aim and +<font color='#CA7200'><Ability:CRUSADER_CRIT_BONUS/></font> critical hit chance."
 LocFlyOverText="Crusader"
 
 [Warden_BD_WatcherPassive X2AbilityTemplate]
 LocFriendlyName="Watcher"
-LocLongDescription="Overwatch can be used from flow APs & the aim penalty is removed"
-LocHelpText="Overwatch can be used from flow APs & the aim penalty is removed"
-LocPromotionPopupText="<Bullet/> No cooldown."
+LocLongDescription="Overwatch can be used from flow action points & the aim penalty is removed."
+LocHelpText="Overwatch can be used from flow action points & the aim penalty is removed."
 LocFlyOverText="Watcher"
 
-[Warden_BD_ImbueAmmo X2AbilityTemplate]
+[Warden_BD_NonStandardShot X2AbilityTemplate]
+LocFriendlyName="Non-standard shot"
+LocLongDescription="Test ability to fire a non standard shot!"
+LocHelpText="Test ability to fire a non standard shot!"
+LocFlyOverText="Non-standard shot"
+
+[Warden_BD_NonStandardSlash X2AbilityTemplate]
+LocFriendlyName="Non-standard slash"
+LocLongDescription="Test ability for non standard slash!"
+LocHelpText="Test ability for non standard slash!"
+LocFlyOverText="Non-standard slash"
+
+[Warden_BD_GrantImbueAmmoCharges X2AbilityTemplate]
 LocFriendlyName="Imbue Ammo"
-LocLongDescription="Channel psionic energy into your ammo, converting its damage type to psionic & ignoring Armor & shields."
-LocHelpText="Channel psionic energy into your ammo, converting its damage type to psionic & ignoring Armor & shields."
-LocPromotionPopupText="<Bullet/> No cooldown."
+LocLongDescription="Create a psionically charged bullet which can be fired from the next turn onwards. The attack deals +<font color='#CA7200'><Ability:IMBUEAMMO_DAMAGE_BONUS/></font> base damage, ignores armor & shields and bypasses sustained units but cannot critically hit. <font color='#CA7200'><Ability:IMBUEAMMO_COOLDOWN/></font>-turn cooldown."
+LocHelpText="Create a psionically charged bullet which can be fired from the next turn onwards. The attack deals +<font color='#CA7200'><Ability:IMBUEAMMO_DAMAGE_BONUS/></font> base damage, ignores armor & shields and bypasses sustained units but cannot critically hit. <font color='#CA7200'><Ability:IMBUEAMMO_COOLDOWN/></font>-turn cooldown."
+LocFlyOverText="Imbue Ammo"
+
+[Warden_BD_GrantSoulBladeCharges X2AbilityTemplate]
+LocFriendlyName="Soul-Blade"
+LocLongDescription="Channel psionic energy into your sword, granting access to a special psionic melee attack from the next turn. The attack does +<font color='#CA7200'><Ability:SOULBLADE_DAMAGE_BONUS/></font> base damage, ignores armor & shields and bypasses sustained units but cannot critically hit. <font color='#CA7200'><Ability:SOULBLADE_COOLDOWN/></font>-turn cooldown."
+LocHelpText="Channel psionic energy into your sword, granting access to a special psionic melee attack from the next turn. The attack does +<font color='#CA7200'><Ability:SOULBLADE_DAMAGE_BONUS/></font> base damage, ignores armor & shields and bypasses sustained units but cannot critically hit. <font color='#CA7200'><Ability:SOULBLADE_COOLDOWN/></font>-turn cooldown."
+LocFlyOverText="Soul-Blade"
+
+[Warden_BD_ImbueAmmo X2AbilityTemplate]
+LocFriendlyName="Fire Imbued Ammo"
+LocLongDescription="Fire a psionic bullet at an enemy. The attack deals +<font color='#CA7200'><Ability:IMBUEAMMO_DAMAGE_BONUS/></font> base damage, ignores armor & shields and bypasses sustained units but cannot critically hit."
+LocHelpText="Fire a psionic bullet at an enemy. The attack deals +<font color='#CA7200'><Ability:IMBUEAMMO_DAMAGE_BONUS/></font> base damage, ignores armor & shields and bypasses sustained units but cannot critically hit."
 LocFlyOverText="Imbue Ammo"
 
 [Warden_BD_SoulBlade X2AbilityTemplate]
-LocFriendlyName="Soul-Blade"
-LocLongDescription="Channel psionic energy into your sword, converting its damage type to psionic & ignoring Armor & shields."
-LocHelpText="Channel psionic energy into your sword, converting its damage type to psionic & ignoring Armor & shields."
-LocPromotionPopupText="<Bullet/> No cooldown."
-LocFlyOverText="Channel psionic energy into your sword, converting its damage type to psionic & ignoring Armor & shields."
+LocFriendlyName="Soul-Blade Attack"
+LocLongDescription="Perform a psionically enhanced sword attack. The attack does +<font color='#CA7200'><Ability:SOULBLADE_DAMAGE_BONUS/></font> base damage, ignores armor & shields and bypasses sustained units but cannot critically hit."
+LocHelpText="Perform a psionically enhanced sword attack. The attack does +<font color='#CA7200'><Ability:SOULBLADE_DAMAGE_BONUS/></font> base damage, ignores armor & shields and bypasses sustained units but cannot critically hit."
+LocFlyOverText="Soul-Blade Attack"
 
 [Warden_BD_DefensiveWard X2AbilityTemplate]
 LocFriendlyName="Seal of Destruction"
-LocLongDescription="Place a psionic seal on the ground. Any enemy units still standing in the seal's area of effect at the beginning of the next turn will be dealt psionic damage."
-LocHelpText="PPlace a psionic seal on the ground. Any enemy units still standing in the seal's area of effect at the beginning of the next turn will be dealt psionic damage."
-LocPromotionPopupText="<Bullet/> No cooldown."
+LocLongDescription="Place a psionic seal on the ground. Any non-robotic enemy units still standing in the seal's area of effect at the beginning of the next turn will be dealt <font color='#CA7200'><Ability:DEFENSIVEWARD_DAMAGE/></font> psionic damage. <font color='#CA7200'><Ability:DEFENSIVEWARD_COOLDOWN/></font>-turn cooldown."
+LocHelpText="Place a psionic seal on the ground. Any non-robotic enemy units still standing in the seal's area of effect at the beginning of the next turn will be dealt <font color='#CA7200'><Ability:DEFENSIVEWARD_DAMAGE/></font> psionic damage. <font color='#CA7200'><Ability:DEFENSIVEWARD_COOLDOWN/></font>-turn cooldown."
 LocFlyOverText="Seal of Psionics"
 
 [Warden_BD_FirearmFocusPassive X2AbilityTemplate]
 LocFriendlyName="Firearm Focus"
-LocLongDescription="Add +1 damage to the bullpup (maximum +5) each time ranged stance is entered"
-LocHelpText="Add +1 damage to the bullpup (maximum +5) each time ranged stance is entered"
-LocPromotionPopupText="<Bullet/> No cooldown."
+LocLongDescription="Add +1 stacking damage to the bullpup (maximum +<font color='#CA7200'><Ability:FIREARMFOCUS_MAXIMUM_BONUS/></font>) each time ranged stance is entered."
+LocHelpText="Add +1 stacking damage to the bullpup (maximum +<font color='#CA7200'><Ability:FIREARMFOCUS_MAXIMUM_BONUS/></font>) each time ranged stance is entered."
 LocFlyOverText="Firearm Focus"
 
 [Warden_BD_MeleeFocusPassive X2AbilityTemplate]
 LocFriendlyName="Blade Focus"
-LocLongDescription="Add +1 damage to the warden's sword (maximum +5) each time melee stance is entered"
-LocHelpText="Add +1 damage to the bullpup (maximum +5) each time ranged stance is entered"
-LocPromotionPopupText="<Bullet/> No cooldown."
+LocLongDescription="Add +1 stacking damage to the Warden's sword (maximum +<font color='#CA7200'><Ability:MELEEFOCUS_MAXIMUM_BONUS/></font>) each time melee stance is entered."
+LocHelpText="Add +1 stacking damage to the Warden's sword (maximum +<font color='#CA7200'><Ability:MELEEFOCUS_MAXIMUM_BONUS/></font>) each time melee stance is entered."
 LocFlyOverText="Blade Focus"
 
 [Warden_BD_Combatives X2AbilityTemplate]
 LocFriendlyName="Riposte"
-LocLongDescription="Perform a counter-attack against up to three enemies attacking you at melee range per turn"
-LocHelpText="Perform a counter-attack against up to three enemies attacking you at melee range per turn"
+LocLongDescription="Perform a counter-attack with your sword against up to <font color='#CA7200'><Ability:COUNTER_NUMBER_OF_ATTACKS/></font> enemies attacking you at melee range per turn."
+LocHelpText="Perform a counter-attack with your sword against up to <font color='#CA7200'><Ability:COUNTER_NUMBER_OF_ATTACKS/></font> enemies attacking you at melee range per turn."
 LocPromotionPopupText="<Bullet/> No cooldown."
 LocFlyOverText="Riposte"
 
 [Warden_BD_Fissure X2AbilityTemplate]
 LocFriendlyName="Seal of Rupturing"
-LocLongDescription="Place a seal on the ground, at the start of the next turn, any units remaining inside the seal will be ruptured."
-LocHelpText="Place a seal on the ground, at the start of the next turn, any units remaining inside the seal will be ruptured."
+LocLongDescription="Place a seal on the ground. At the start of the next turn, any non-robotic units remaining inside the seal will be ruptured. <font color='#CA7200'><Ability:FISSURE_COOLDOWN/></font>-turn cooldown."
+LocHelpText="Place a seal on the ground. At the start of the next turn, any non-robotic units remaining inside the seal will be ruptured. <font color='#CA7200'><Ability:FISSURE_COOLDOWN/></font>-turn cooldown."
 LocPromotionPopupText="<Bullet/> No cooldown."
 LocFlyOverText="Fissure"
 
 [Warden_BD_Tide X2AbilityTemplate]
 LocFriendlyName="Tide"
-LocLongDescription="Knocks down enemies in a 6 tile AOE around the warden. Does 2-3 fall damage (ignoring cover & Armor) & stuns for 1AP. Retain Stance."
-LocHelpText="Knocks down enemies in a 6 tile AOE around the warden. Does 2-3 fall damage (ignoring cover & Armor) & stuns for 1AP. Retain Stance."
+LocLongDescription="Knocks down & damages non-flying enemies, ignoring cover & armour. Deals <font color='#CA7200'><Ability:TIDE_DAMAGE/></font> damage with a <font color='#CA7200'><Ability:TIDE_PLUSONE/></font>% Chance of an additional +1 damage in a <font color='#CA7200'><Ability:TIDE_AREA_OF_EFFECT/></font> tile radius around the warden and stuns all enemies for <font color='#CA7200'><Ability:TIDE_STUN_DURATION/></font> action point. <font color='#CA7200'><Ability:TIDE_COOLDOWN/></font>-turn cooldown."
+LocHelpText="Knocks down & damages non-flying enemies, ignoring cover & armour. Deals <font color='#CA7200'><Ability:TIDE_DAMAGE/></font> damage with a <font color='#CA7200'><Ability:TIDE_PLUSONE/></font>% Chance of an additional +1 damage in a <font color='#CA7200'><Ability:TIDE_AREA_OF_EFFECT/></font> tile radius around the warden and stuns all enemies for <font color='#CA7200'><Ability:TIDE_STUN_DURATION/></font> actoin point. <font color='#CA7200'><Ability:TIDE_COOLDOWN/></font>-turn cooldown."
 LocPromotionPopupText="<Bullet/> No cooldown."
 LocFlyOverText="Tide"
 
 [Warden_BD_Consume X2AbilityTemplate]
 LocFriendlyName="Consume"
-LocLongDescription="Cleanse any mental and active DOT effects from XCOM units in an AOE and gain +2 damage per effect removed to the Warden’s next attack"
-LocHelpText="Cleanse any mental and active DOT effects from an XCOM unit and gain +2 damage per effect removed to the Warden’s Sword"
+LocLongDescription="Cleanse all mental and active DOT effects from non-robotic XCOM units in the AOE and gain <font color='#CA7200'><Ability:CONSUME_MULTIPLIER/></font> damage per effect removed to the Warden's next attack. <font color='#CA7200'><Ability:CONSUME_COOLDOWN/></font>-turn cooldown."
+LocHelpText="Cleanse all mental and active DOT effects from non-robotic XCOM units in the AOE and gain <font color='#CA7200'><Ability:CONSUME_MULTIPLIER/></font> damage per effect removed to the Warden's next attack. <font color='#CA7200'><Ability:CONSUME_COOLDOWN/></font>-turn cooldown."
 LocPromotionPopupText="<Bullet/> No cooldown."
 LocFlyOverText="Consume"
 
 [Warden_BD_ConsumeAdditionalDamage X2AbilityTemplate]
-LocFriendlyName="Consume"
+LocFriendlyName="Consume Damage"
 LocLongDescription="Adds additional damage to the warden's next attack"
 LocHelpText="Adds additional damage to the warden's next attack"
-LocPromotionPopupText="<Bullet/> No cooldown."
+LocFlyOverText="Consume Damage"
 
 [Warden_BD_RagePassive X2AbilityTemplate]
 LocFriendlyName="Warden's Rage"
-LocLongDescription="Standard shot can be activated from flow action points, allowing two shots or slash / shot in a single turn"
-LocHelpText="Standard shot can be activated from flow action points, allowing two shots or slash / shot in a single turn"
-LocPromotionPopupText="<Bullet/> No cooldown."
+LocLongDescription="Standard shot can be activated from flow action points, allowing two shots or slash / shot in a single turn."
+LocHelpText="Standard shot can be activated from flow action points, allowing two shots or slash / shot in a single turn."
 LocFlyOverText="Warden's Rage"
 
-[Warden_BD_ChargePassive X2AbilityTemplate]
+[Warden_BD_Charge X2AbilityTemplate]
 LocFriendlyName="Warden's Charge"
-LocLongDescription="Sword slash can be activated from flow Action Points"
-LocHelpText="Sword slash can be activated from flow Action Points"
-LocPromotionPopupText="<Bullet/> No cooldown."
+LocLongDescription="Sword slash can be activated from flow action points, allowing slash / slash or shot / slash in a single turn."
+LocHelpText="Sword slash can be activated from flow action points, allowing slash / slash or shot / slash in a single turn."
 LocFlyOverText="Warden's Charge"
 
 [Warden_BD_Retribution X2AbilityTemplate]
 LocFriendlyName="Seal of Retribution"
-LocLongDescription="All units standing in the seal's area of Effect at the end of the turn will be granted a free overwatch shot."
-LocHelpText="All units standing in the seal's area of Effect at the end of the turn will be granted a free overwatch shot."
-LocPromotionPopupText="<Bullet/> No cooldown."
+LocLongDescription="Place a seal on the ground. All non-robotic friendly units standing in the seal's area of effect at the end of the turn will be granted a free overwatch shot. <font color='#CA7200'><Ability:RETRIBUTION_COOLDOWN/></font>-turn cooldown."
+LocHelpText="Place a seal on the ground. All non-robotic friendly units standing in the seal's area of effect at the end of the turn will be granted a free overwatch shot. <font color='#CA7200'><Ability:RETRIBUTION_COOLDOWN/></font>-turn cooldown."
 LocFlyOverText="Seal of Retribution"
-
-[Warden_BD_Breacher X2AbilityTemplate]
-LocFriendlyName="Breacher"
-LocLongDescription="Gain a Grenade pocket"
-LocHelpText="Gain a Grenade pocket"
-LocPromotionPopupText="<Bullet/> No cooldown."
-LocFlyOverText="Breacher"
 
 [Warden_BD_Brand X2AbilityTemplate]
 LocFriendlyName="Brand"
@@ -237,15 +233,15 @@ LocFlyOverText="Brand"
 
 [Warden_BD_Pillar X2AbilityTemplate]
 LocFriendlyName="Pillar"
-LocLongDescription="Create a large obelisk at the target location, granting high cover"
-LocHelpText="Create a large obelisk at the target location, granting high cover"
+LocLongDescription="Create a large obelisk at the target location, granting high cover lasting for <font color='#CA7200'><Ability:PILLLAR_NUMBER_OF_TURNS/></font> turns. <font color='#CA7200'><Ability:PILLAR_COOLDOWN/></font>-turn cooldown."
+LocHelpText="Create a large obelisk at the target location, granting high cover lasting for <font color='#CA7200'><Ability:PILLLAR_NUMBER_OF_TURNS/></font> turns.<font color='#CA7200'><Ability:PILLAR_COOLDOWN/></font>-turn cooldown."
 LocPromotionPopupText="<Bullet/> No cooldown."
 LocFlyOverText="Pillar"
 
 [Warden_BD_Inspire X2AbilityTemplate]
 LocFriendlyName="Wardens Inspiration"
-LocLongDescription="Grant a standard action point to an ally - uses Flow action points to activate"
-LocHelpText="Grant a standard action point to an ally - uses Flow action points to activate"
+LocLongDescription="Grant a standard action point to an ally - uses Flow action points to activate. <font color='#CA7200'><Ability:INSPIRE_COOLDOWN/></font>-turn cooldown."
+LocHelpText="Grant a standard action point to an ally - uses Flow action points to activate. <font color='#CA7200'><Ability:INSPIRE_COOLDOWN/></font>-turn cooldown."
 LocPromotionPopupText="<Bullet/> No cooldown."
 LocFlyOverText="Warden's Inspiration"
 
