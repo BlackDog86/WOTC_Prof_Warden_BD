@@ -31,11 +31,14 @@ DescriptionEntry="Wardens represent a special military wing of the Templar order
 
 [WOTC_Prof_Warden_BD_Unlock1 X2SoldierAbilityUnlockTemplate]
 DisplayName = "Warden: Concentration I"
-Summary = "All Warden's Stance proficiencies will start at level 2, regardless of rank."
+Summary = "Warden's Stance proficiencies (Increased mobility in melee stance, increased defense from cover in ranged stance) will now start at level 2, regardless of rank"
 
 [WOTC_Prog_Warden_BD_Unlock2 X2SoldierAbilityUnlockTemplate]
 DisplayName = "Warden: Concentration II"
-Summary = "All Warden's Stance proficiencies will start at level 3, regardless of rank.<br/><br/><font color='#CA7200'>Requires Warden Concentration I</font>"
+Summary = "Warden's Stance proficiencies (Increased mobility in melee stance, increased defense from cover in ranged stance) will now start at level 2, regardless of rank<br/><br/><font color='#CA7200'>Requires Warden Concentration I</font>"
+
+[X2Ability_Warden]
+BrandedFriendlyName = "Branded"
 
 ;  ////////////////
 ;  // Abilities  //
@@ -79,14 +82,14 @@ LocFlyOverText="Proficiency Bonuses - Warden"
 
 [Warden_BD_Rewind X2AbilityTemplate]
 LocFriendlyName="Blink"
-LocLongDescription="Use a flow action point to vanish and re-appear at the turn-start location. <font color='#CA7200'><Ability:REWIND_COOLDOWN/></font>-turn cooldown."
-LocHelpText="Use a flow action point to vanish and re-appear at the turn-start location. <font color='#CA7200'><Ability:REWIND_COOLDOWN/></font>-turn cooldown."
+LocLongDescription="Use a flow action point to vanish and re-appear at the turn-start location.<font color='#CA7200'><Ability:REWIND_COOLDOWN/></font>-turn cooldown."
+LocHelpText="Use a flow action point to vanish and re-appear at the turn-start location.<font color='#CA7200'><Ability:REWIND_COOLDOWN/></font>-turn cooldown."
 LocFlyOverText="Blink"
 
 [Warden_BD_Mirror X2AbilityTemplate]
 LocFriendlyName="Barrier"
-LocLongDescription="Create an elemental barrier which degrades the next <font color='#CA7200'><Ability:MIRROR_NUMBER_OF_ATTACKS/></font> incoming hits to grazes. Damage taken through the barrier is returned back psionically to the attacker. <font color='#CA7200'><Ability:MIRROR_COOLDOWN/></font>-turn cooldown."
-LocHelpText="Create an elemental barrier which degrades the next <font color='#CA7200'><Ability:MIRROR_NUMBER_OF_ATTACKS/></font> incoming hits to grazes. Damage taken through the barrier is returned back psionically to the attacker. <font color='#CA7200'><Ability:MIRROR_COOLDOWN/></font>-turn cooldown."
+LocLongDescription="Create an elemental barrier which degrades the next <font color='#CA7200'><Ability:MIRROR_NUMBER_OF_ATTACKS/></font> incoming hits to grazes. Direct attacks on the barrier return the damage psionically to the attacker. <font color='#CA7200'><Ability:MIRROR_COOLDOWN/></font>-turn cooldown."
+LocHelpText="Create an elemental barrier which degrades the next <font color='#CA7200'><Ability:MIRROR_NUMBER_OF_ATTACKS/></font> incoming hits to grazes. Direct attacks on the barrier return the damage psionically to the attacker. <font color='#CA7200'><Ability:MIRROR_COOLDOWN/></font>-turn cooldown."
 LocFlyOverText="Barrier"
 
 [Warden_BD_MirrorReturnFire X2AbilityTemplate]
@@ -97,8 +100,8 @@ LocFlyOverText="Barrier - Return Fire"
 
 [Warden_BD_KineticArmor X2AbilityTemplate]
 LocFriendlyName="Kinetic Armor"
-LocLongDescription="Gain ablative hit points equal to <font color='#CA7200'><Ability:KINETIC_ARMOR_PERCENTAGE/></font>% of max. health. Any damage dealt to the shield on this turn will be added to the Warden's attack on the next turn. <font color='#CA7200'><Ability:KINETICARMOR_COOLDOWN/></font>-turn cooldown."
-LocHelpText="Gain ablative hit points equal to <font color='#CA7200'><Ability:KINETIC_ARMOR_PERCENTAGE/></font> % of max. health. Any damage dealt to the shield on this turn will be added to the Warden's attack on the next turn. <font color='#CA7200'><Ability:KINETICARMOR_COOLDOWN/></font>-turn cooldown."
+LocLongDescription="Gain ablative hit points equal to <font color='#CA7200'><Ability:KINETIC_ARMOR_PERCENTAGE/></font>% of max. health. <Ability:KINETIC_ARMOR_SHIELD_DAMAGE_PERCENTAGE/>% of damage dealt to the shield each turn is added to the Warden's next attack.<font color='#CA7200'><Ability:KINETICARMOR_COOLDOWN/></font>-turn cooldown."
+LocHelpText="Gain ablative hit points equal to <font color='#CA7200'><Ability:KINETIC_ARMOR_PERCENTAGE/></font> % of max. health. <Ability:KINETIC_ARMOR_SHIELD_DAMAGE_PERCENTAGE/>% of damage dealt to the shield each turn is added to the Warden's next attack.<font color='#CA7200'><Ability:KINETICARMOR_COOLDOWN/></font>-turn cooldown."
 LocFlyOverText="Kinetic Armor"
 
 [Warden_BD_DefenderPassive X2AbilityTemplate]
@@ -133,14 +136,14 @@ LocFlyOverText="Non-standard slash"
 
 [Warden_BD_GrantImbueAmmoCharges X2AbilityTemplate]
 LocFriendlyName="Imbue Ammo"
-LocLongDescription="Create a psionically charged bullet which can be fired from the next turn onwards. The attack deals +<font color='#CA7200'><Ability:IMBUEAMMO_DAMAGE_BONUS/></font> base damage, ignores armor & shields and bypasses sustained units but cannot critically hit. <font color='#CA7200'><Ability:IMBUEAMMO_COOLDOWN/></font>-turn cooldown."
-LocHelpText="Create a psionically charged bullet which can be fired from the next turn onwards. The attack deals +<font color='#CA7200'><Ability:IMBUEAMMO_DAMAGE_BONUS/></font> base damage, ignores armor & shields and bypasses sustained units but cannot critically hit. <font color='#CA7200'><Ability:IMBUEAMMO_COOLDOWN/></font>-turn cooldown."
+LocLongDescription="Create a psionically charged bullet which can be fired from the bullpup on the next turn in ranged stance. The attack deals +<font color='#CA7200'><Ability:IMBUEAMMO_DAMAGE_BONUS/></font> base damage, ignores armor & shields and bypasses sustained units but cannot critically hit. <font color='#CA7200'><Ability:IMBUEAMMO_COOLDOWN/></font>-turn cooldown."
+LocHelpText="Create a psionically charged bullet which can be fired from the bullpup on the next turn in ranged stance. The attack deals +<font color='#CA7200'><Ability:IMBUEAMMO_DAMAGE_BONUS/></font> base damage, ignores armor & shields and bypasses sustained units but cannot critically hit. <font color='#CA7200'><Ability:IMBUEAMMO_COOLDOWN/></font>-turn cooldown."
 LocFlyOverText="Imbue Ammo"
 
 [Warden_BD_GrantSoulBladeCharges X2AbilityTemplate]
 LocFriendlyName="Soul-Blade"
-LocLongDescription="Channel psionic energy into your sword, granting access to a special psionic melee attack from the next turn. The attack does +<font color='#CA7200'><Ability:SOULBLADE_DAMAGE_BONUS/></font> base damage, ignores armor & shields and bypasses sustained units but cannot critically hit. <font color='#CA7200'><Ability:SOULBLADE_COOLDOWN/></font>-turn cooldown."
-LocHelpText="Channel psionic energy into your sword, granting access to a special psionic melee attack from the next turn. The attack does +<font color='#CA7200'><Ability:SOULBLADE_DAMAGE_BONUS/></font> base damage, ignores armor & shields and bypasses sustained units but cannot critically hit. <font color='#CA7200'><Ability:SOULBLADE_COOLDOWN/></font>-turn cooldown."
+LocLongDescription="Channel psionic energy into your sword, granting a psionically enhanced attack on the next turn in melee stance. The attack does +<font color='#CA7200'><Ability:SOULBLADE_DAMAGE_BONUS/></font> base damage, ignores armor & shields and bypasses sustained units but cannot critically hit. <font color='#CA7200'><Ability:SOULBLADE_COOLDOWN/></font>-turn cooldown."
+LocHelpText="Channel psionic energy into your sword, granting a psionically enhanced attack on the next turn in melee stance. The attack does +<font color='#CA7200'><Ability:SOULBLADE_DAMAGE_BONUS/></font> base damage, ignores armor & shields and bypasses sustained units but cannot critically hit. <font color='#CA7200'><Ability:SOULBLADE_COOLDOWN/></font>-turn cooldown."
 LocFlyOverText="Soul-Blade"
 
 [Warden_BD_ImbueAmmo X2AbilityTemplate]
@@ -189,8 +192,8 @@ LocFlyOverText="Fissure"
 
 [Warden_BD_Tide X2AbilityTemplate]
 LocFriendlyName="Tide"
-LocLongDescription="Knocks down & damages non-flying enemies, ignoring cover & armour. Deals <font color='#CA7200'><Ability:TIDE_DAMAGE/></font> damage with a <font color='#CA7200'><Ability:TIDE_PLUSONE/></font>% Chance of an additional +1 damage in a <font color='#CA7200'><Ability:TIDE_AREA_OF_EFFECT/></font> tile radius around the warden and stuns all enemies for <font color='#CA7200'><Ability:TIDE_STUN_DURATION/></font> action point. <font color='#CA7200'><Ability:TIDE_COOLDOWN/></font>-turn cooldown."
-LocHelpText="Knocks down & damages non-flying enemies, ignoring cover & armour. Deals <font color='#CA7200'><Ability:TIDE_DAMAGE/></font> damage with a <font color='#CA7200'><Ability:TIDE_PLUSONE/></font>% Chance of an additional +1 damage in a <font color='#CA7200'><Ability:TIDE_AREA_OF_EFFECT/></font> tile radius around the warden and stuns all enemies for <font color='#CA7200'><Ability:TIDE_STUN_DURATION/></font> actoin point. <font color='#CA7200'><Ability:TIDE_COOLDOWN/></font>-turn cooldown."
+LocLongDescription="Knocks down & damages non-flying enemies, ignoring cover & armour. Deals <font color='#CA7200'><Ability:TIDE_DAMAGE/></font> damage in a <font color='#CA7200'><Ability:TIDE_AREA_OF_EFFECT/></font> tile radius around the warden and stuns all enemies for <font color='#CA7200'><Ability:TIDE_STUN_DURATION/></font> action point. <font color='#CA7200'><Ability:TIDE_COOLDOWN/></font>-turn cooldown."
+LocHelpText="Knocks down & damages non-flying enemies, ignoring cover & armour. Deals <font color='#CA7200'><Ability:TIDE_DAMAGE/></font> damage in a <font color='#CA7200'><Ability:TIDE_AREA_OF_EFFECT/></font> tile radius around the warden and stuns all enemies for <font color='#CA7200'><Ability:TIDE_STUN_DURATION/></font> action point. <font color='#CA7200'><Ability:TIDE_COOLDOWN/></font>-turn cooldown."
 LocPromotionPopupText="<Bullet/> No cooldown."
 LocFlyOverText="Tide"
 
@@ -227,42 +230,46 @@ LocFlyOverText="Seal of Retribution"
 
 [Warden_BD_Brand X2AbilityTemplate]
 LocFriendlyName="Brand"
-LocLongDescription = "Brand an enemy with a psionic hex, permanently weakening them against incoming attacks."
-LocPromotionPopupText = "Brand an enemy with a psionic hex, permanently enhancing all attacks against them:<br/><br/><font color='#CA7200'>Base Effects:</font> (<font color='#c451c2'><Bullet/> Attacks against the target gain <font color='#3ABD23'>+<Ability:BRAND_OFFENSE_STAT_BONUS/>%</font> Chance to Hit/Crit.<br/><Bullet/><br/><br/><font color='#CA7200'>Target suffers <font color='#3ABD23'>+<Ability:BRAND_DAMAGE_BONUS/></font> Damage when attacked and an additional <font color='#3ABD23'>+<Ability:BRAND_EMPOWERED_CRIT_DAMAGE_BONUS/></font> Damage when Critically Hit.<br/><br/>NOTES:<br/><Bullet/> The effects from Brand will persist so long as the <Ability:ClassName/> remains alive.<br/><Bullet/>""
+LocLongDescription = "Brand an enemy with a psionic hex, granting +<font color='#3ABD23'><Ability:BRAND_OFFENSE_STAT_BONUS/></font>% to Hit & Crit and +<font color='#3ABD23'><Ability:BRAND_DAMAGE_BONUS/></font> damage against the target on all future attacks."
+LocHelpText = "Brand an enemy with a psionic hex, granting +<font color='#3ABD23'><Ability:BRAND_OFFENSE_STAT_BONUS/></font>% to Hit & Crit and +<font color='#3ABD23'><Ability:BRAND_DAMAGE_BONUS/></font> damage against the target on all future attacks."
 LocFlyOverText="Brand"
 
 [Warden_BD_Pillar X2AbilityTemplate]
 LocFriendlyName="Pillar"
 LocLongDescription="Create a large obelisk at the target location, granting high cover lasting for <font color='#CA7200'><Ability:PILLLAR_NUMBER_OF_TURNS/></font> turns. <font color='#CA7200'><Ability:PILLAR_COOLDOWN/></font>-turn cooldown."
 LocHelpText="Create a large obelisk at the target location, granting high cover lasting for <font color='#CA7200'><Ability:PILLLAR_NUMBER_OF_TURNS/></font> turns.<font color='#CA7200'><Ability:PILLAR_COOLDOWN/></font>-turn cooldown."
-LocPromotionPopupText="<Bullet/> No cooldown."
 LocFlyOverText="Pillar"
 
 [Warden_BD_Inspire X2AbilityTemplate]
 LocFriendlyName="Wardens Inspiration"
 LocLongDescription="Grant a standard action point to an ally - uses Flow action points to activate. <font color='#CA7200'><Ability:INSPIRE_COOLDOWN/></font>-turn cooldown."
 LocHelpText="Grant a standard action point to an ally - uses Flow action points to activate. <font color='#CA7200'><Ability:INSPIRE_COOLDOWN/></font>-turn cooldown."
-LocPromotionPopupText="<Bullet/> No cooldown."
 LocFlyOverText="Warden's Inspiration"
 
 [Warden_BD_Fuse X2AbilityTemplate]
 LocFriendlyName="Fuse"
 LocLongDescription="Remotely detonate an enemy's equipped explosive. <font color='#CA7200'><Ability:FUSE_COOLDOWN/></font>-turn cooldown."
 LocHelpText="Remotely detonate an enemy's equipped explosive. <font color='#CA7200'><Ability:FUSE_COOLDOWN/></font>-turn cooldown."
-LocPromotionPopupText="<Bullet/> No cooldown."
 LocFlyOverText="Fuse"
 
-[WOTC_Prof_Warden_BD_AcademyAbility X2AbilityTemplate]
-LocFriendlyName="Prof GTS Unlocks"
-LocLongDescription="Prof GTS Unlocks"
-LocHelpText="Prof GTS Unlocks"
-LocPromotionPopupText="Prof GTS Unlocks"
+[WOTC_Prof_Warden_BD_AcademyAbility1 X2AbilityTemplate]
+LocFriendlyName="Warden: Warden's Concentration I"
+LocLongDescription="Warden Proficiency abilities (+<font color='#CA7200'><Ability:MELEESTANCE_I_MOBILITY_BONUS/></font>/<font color='#CA7200'><Ability:MELEESTANCE_II_MOBILITY_BONUS/></font>/<font color='#CA7200'><Ability:MELEESTANCE_III_MOBILITY_BONUS/></font> mobility in melee stance & +<font color='#CA7200'><Ability:RANGEDSTANCE_I_CDEF_BONUS/></font>/<font color='#CA7200'><Ability:RANGEDSTANCE_II_CDEF_BONUS/></font>/<font color='#CA7200'><Ability:RANGEDSTANCE_III_CDEF_BONUS/></font> cover defense in ranged stance) will start at level 2, regardless of soldier rank.
+LocHelpText="Warden: Warden's Concentration I"
+LocPromotionPopupText="Warden Proficiency abilities (+<font color='#CA7200'><Ability:MELEESTANCE_I_MOBILITY_BONUS/></font>/<font color='#CA7200'><Ability:MELEESTANCE_II_MOBILITY_BONUS/></font>/<font color='#CA7200'><Ability:MELEESTANCE_III_MOBILITY_BONUS/></font> mobility in melee stance & +<font color='#CA7200'><Ability:RANGEDSTANCE_I_CDEF_BONUS/></font>/<font color='#CA7200'><Ability:RANGEDSTANCE_II_CDEF_BONUS/></font>/<font color='#CA7200'><Ability:RANGEDSTANCE_III_CDEF_BONUS/></font> cover defense in ranged stance) will start at level 2, regardless of soldier rank.
+LocFlyOverText="Prof GTS Unlocks"
+
+[WOTC_Prof_Warden_BD_AcademyAbility2 X2AbilityTemplate]
+LocFriendlyName="Warden: Warden's Concentration II"
+LocLongDescription="Warden Proficiency abilities (+<font color='#CA7200'><Ability:MELEESTANCE_I_MOBILITY_BONUS/></font>/<font color='#CA7200'><Ability:MELEESTANCE_II_MOBILITY_BONUS/></font>/<font color='#CA7200'><Ability:MELEESTANCE_III_MOBILITY_BONUS/></font> mobility in melee stance & +<font color='#CA7200'><Ability:RANGEDSTANCE_I_CDEF_BONUS/></font>/<font color='#CA7200'><Ability:RANGEDSTANCE_II_CDEF_BONUS/></font>/<font color='#CA7200'><Ability:RANGEDSTANCE_III_CDEF_BONUS/></font> cover defense in ranged stance) will start at level 3, regardless of soldier rank.
+LocHelpText="Warden: Warden's Concentration II"
+LocPromotionPopupText="Warden Proficiency abilities (+<font color='#CA7200'><Ability:MELEESTANCE_I_MOBILITY_BONUS/></font>/<font color='#CA7200'><Ability:MELEESTANCE_II_MOBILITY_BONUS/></font>/<font color='#CA7200'><Ability:MELEESTANCE_III_MOBILITY_BONUS/></font> mobility in melee stance & +<font color='#CA7200'><Ability:RANGEDSTANCE_I_CDEF_BONUS/></font>/<font color='#CA7200'><Ability:RANGEDSTANCE_II_CDEF_BONUS/></font>/<font color='#CA7200'><Ability:RANGEDSTANCE_III_CDEF_BONUS/></font> cover defense in ranged stance) will start at level 3, regardless of soldier rank.
 LocFlyOverText="Prof GTS Unlocks"
 
 [WOTC_Prof_Warden_BD_Unlock1 X2SoldierAbilityUnlockTemplate]
 DisplayName = "Warden: Warden's Concentration I"
-Summary = "All Warden Proficiency abilities will now start at level 2, regardless of rank."
+Summary = "Warden Proficiency abilities (+<font color='#CA7200'><Ability:MELEESTANCE_I_MOBILITY_BONUS/></font>/<font color='#CA7200'><Ability:MELEESTANCE_II_MOBILITY_BONUS/></font>/<font color='#CA7200'><Ability:MELEESTANCE_III_MOBILITY_BONUS/></font> mobility in melee stance & +<font color='#CA7200'><Ability:RANGEDSTANCE_I_CDEF_BONUS/></font>/<font color='#CA7200'><Ability:RANGEDSTANCE_II_CDEF_BONUS/></font>/<font color='#CA7200'><Ability:RANGEDSTANCE_III_CDEF_BONUS/></font> cover defense in ranged stance) will start at level 2, regardless of soldier rank."
 
 [WOTC_Prof_Warden_BD_Unlock2 X2SoldierAbilityUnlockTemplate]
 DisplayName = "Warden: Warden's Concentration II"
-Summary = "All Warden Proficiency abilities will now start at level 3, regardless of rank."
+Summary = "Warden Proficiency abilities (+<font color='#CA7200'><Ability:MELEESTANCE_I_MOBILITY_BONUS/></font>/<font color='#CA7200'><Ability:MELEESTANCE_II_MOBILITY_BONUS/></font>/<font color='#CA7200'><Ability:MELEESTANCE_III_MOBILITY_BONUS/></font> mobility in melee stance & +<font color='#CA7200'><Ability:RANGEDSTANCE_I_CDEF_BONUS/></font>/<font color='#CA7200'><Ability:RANGEDSTANCE_II_CDEF_BONUS/></font>/<font color='#CA7200'><Ability:RANGEDSTANCE_III_CDEF_BONUS/></font> cover defense in ranged stance) will start at level 3, regardless of soldier rank."

@@ -34,7 +34,34 @@
     <Content Include="Config\XComWOTC_CostBasedAbilityColors.ini">
       <SubType>Content</SubType>
     </Content>
+    <Content Include="Content\Anim_Warden_BD_Blink.upk">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Content\Anim_Warden_BD_Brand.upk">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Content\Anim_Warden_BD_Fuse.upk">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Content\Anim_Warden_BD_ImbueAmmo.upk">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Content\Anim_Warden_BD_Seals.upk">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Content\Anim_Warden_BD_StanceAndShields.upk">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Content\Anim_Warden_BD_Tide.upk">
+      <SubType>Content</SubType>
+    </Content>
     <Content Include="Content\Perk_Warden_BD_Combatives.upk">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Content\Perk_Warden_BD_Fuse.upk">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Content\Perk_Warden_BD_Inspire.upk">
       <SubType>Content</SubType>
     </Content>
     <Content Include="Content\Perk_Warden_BD_KineticArmor.upk">
@@ -50,6 +77,9 @@
       <SubType>Content</SubType>
     </Content>
     <Content Include="Content\Perk_Warden_BD_Ranged.upk">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Content\Perk_Warden_BD_Seals.upk">
       <SubType>Content</SubType>
     </Content>
     <Content Include="Content\Perk_Warden_BD_SoulBlade.upk">
@@ -69,13 +99,13 @@
     <Content Include="Localization\XComGame.int" />
     <Content Include="Localization\WOTC_Prof_Warden_BD.int" />
     <Content Include="Src\extra_globals.uci" />
+    <Content Include="Src\WOTC_Prof_Warden_BD\Classes\X2Effect_Flyover.uc">
+      <SubType>Content</SubType>
+    </Content>
     <Content Include="Src\WOTC_Prof_Warden_BD\Classes\X2Ability_Warden_Utilities.uc">
       <SubType>Content</SubType>
     </Content>
     <Content Include="Src\WOTC_Prof_Warden_BD\Classes\X2Condition_BD_ImmuneToFalling.uc">
-      <SubType>Content</SubType>
-    </Content>
-    <Content Include="Src\WOTC_Prof_Warden_BD\Classes\X2Effect_WardenAddOverwatchActionPoints.uc">
       <SubType>Content</SubType>
     </Content>
     <Content Include="Src\WOTC_Prof_Warden_BD\Classes\X2Effect_WardenBrandDamage.uc">
@@ -133,6 +163,9 @@
       <SubType>Content</SubType>
     </Content>
     <Content Include="Src\WOTC_Prof_Warden_BD\Classes\X2Effect_WardenRangedDamageFocus.uc">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Src\WOTC_Prof_Warden_BD\Classes\X2Effect_WardenRetributionOverwatch.uc">
       <SubType>Content</SubType>
     </Content>
     <Content Include="Src\WOTC_Prof_Warden_BD\Classes\X2Effect_WardenStatusEffectCounter.uc">

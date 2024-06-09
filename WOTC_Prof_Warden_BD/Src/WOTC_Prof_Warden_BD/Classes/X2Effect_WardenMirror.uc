@@ -7,7 +7,7 @@ function bool ChangeHitResultForTarget(XComGameState_Effect EffectState, XComGam
 		Aim = X2AbilityToHitCalc_StandardAim(AbilityState.GetMyTemplate().AbilityToHitCalc);
 
 		// Only respond to direct attacks against the target, ignore AOE attacks 
-		If ( Aim == none || Aim.bReactionFire || !bIsPrimaryTarget)
+		If ( Aim == none || !bIsPrimaryTarget)
 		{ 		
 		return false;
 		}

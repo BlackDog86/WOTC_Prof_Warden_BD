@@ -1,5 +1,7 @@
 class X2Effect_WardenKineticArmorDamage extends X2Effect_Persistent config(WardenSkills);
 
+var config int KINETIC_ARMOR_SHIELD_DAMAGE_PERCENTAGE;
+
 function int GetAttackingDamageModifier(XComGameState_Effect EffectState, XComGameState_Unit Attacker, Damageable TargetDamageable, XComGameState_Ability AbilityState, const out EffectAppliedData AppliedData, const int CurrentDamage, optional XComGameState NewGameState)
 {
 	local XComGameState_Item			SourceWeapon;
@@ -7,7 +9,6 @@ function int GetAttackingDamageModifier(XComGameState_Effect EffectState, XComGa
 	local XComGameState_Unit			NewSourceUnit;
 	local UnitValue						UV;
 	local int							BonusDamage;
-	//local int							InitialShield;
 
 	SourceWeapon = AbilityState.GetSourceWeapon();
 	//InitialShield = Attacker.GetMaxStat(eStat_HP) * float(KINETIC_Armor_SHIELD_HP_PERCENTAGE) / 100.0f;
@@ -18,8 +19,8 @@ function int GetAttackingDamageModifier(XComGameState_Effect EffectState, XComGa
 	// If the source weapon exists
 	if (SourceWeapon != none)
 		{
-		// Add 'amount of shields lost / 2 & round up' damage to weapon
-		BonusDamage = Round((UV.fValue)/2);			
+		// Bonus damage = amount of shields lost / shielding factor, rounding up damage to weapon
+		BonusDamage = Round((UV.fValue)*((default.KINETIC_ARMOR_SHIELD_DAMAGE_PERCENTAGE)/100));			
 		`log("Bonus damage to apply = " @BonusDamage);			
 				// Damage preview
 				if (NewGameState == none)

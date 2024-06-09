@@ -1,5 +1,7 @@
 class X2DLCInfo_WOTC_Prof_Warden_BD extends X2DownloadableContentInfo;
 
+var config array<name> IncludeTemplateNames;
+
 static event OnPostTemplatesCreated()
 {
 	SetupGTSUnlocks();
@@ -90,14 +92,11 @@ static function bool AbilityTagExpandHandler_CH(string InString, out string OutS
 		case 'FISSURE_COOLDOWN':
 			OutString = string(class'X2Ability_Warden'.default.FISSURE_COOLDOWN);
 			return true;
-		case 'TIDE_PLUSONE':
-			OutString = string(class'X2Ability_Warden'.default.TIDE_DAMAGE_PLUSONE);
-			return true;
 		case 'TIDE_DAMAGE':
 			OutString = string(class'X2Ability_Warden'.default.TIDE_DAMAGE_AMOUNT);
 			return true;
 		case 'TIDE_AREA_OF_EFFECT':	
-			OutString = string(class'X2Ability_Warden'.default.TIDE_RADIUS);
+			OutString = string(class'X2Ability_Warden'.default.TIDE_RADIUS_METERS);
 			return true;
 		case 'TIDE_STUN_DURATION':
 			OutString = string(class'X2Ability_Warden'.default.TIDE_STUN_TURNS);
@@ -134,6 +133,9 @@ static function bool AbilityTagExpandHandler_CH(string InString, out string OutS
 			return true;
 		case 'FUSE_COOLDOWN':
 			OutString = string(class'X2Ability_Warden'.default.FUSE_COOLDOWN);
+			return true;
+		case 'KINETIC_ARMOR_SHIELD_DAMAGE_PERCENTAGE':
+			OutString = string(class'X2Effect_WardenKineticArmorDamage'.default.KINETIC_ARMOR_SHIELD_DAMAGE_PERCENTAGE);
 			return true;
 		default:
 			return false;
@@ -382,4 +384,29 @@ static function PatchReload()
 			 }
 		}
 	}
+}
+
+static function WeaponInitialized(XGWeapon WeaponArchetype, XComWeapon Weapon, optional XComGameState_Item ItemState = none)
+{
+    local XComContentManager            Content;
+    local X2UnifiedProjectile           Projectile;
+    local X2UnifiedProjectileElement    Element;
+	local XComGameState_Unit			UnitState;
+
+
+	UnitState = XComGameState_Unit(`XCOMHISTORY.GetGameStateForObjectID(ItemState.OwnerStateObject.ObjectID));
+	
+	if (UnitState != none && UnitState.HasAbilityFromAnySource('Warden_BD_ImbueAmmo'))
+    {
+        Content = `CONTENT;
+        Weapon.CustomUnitPawnAnimsets.AddItem(AnimSet(Content.RequestGameArchetype("Anim_Warden_BD_ImbueAmmo.Anims.AS_ImbueAmmo")));
+
+        Projectile = X2UnifiedProjectile(Content.RequestGameArchetype("Anim_Warden_BD_ImbueAmmo.PJ_ImbuedShot"));
+        foreach Projectile.ProjectileElements(Element)
+        {
+            `AMLOG("Adding projectile elements into array:" @ Weapon.DefaultProjectileTemplate.ProjectileElements.Length);
+            Weapon.DefaultProjectileTemplate.ProjectileElements.AddItem(Element);
+        }
+    }
+
 }
