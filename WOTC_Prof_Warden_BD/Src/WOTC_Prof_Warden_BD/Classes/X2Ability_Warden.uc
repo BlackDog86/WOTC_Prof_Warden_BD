@@ -28,6 +28,7 @@ var const name	DefensiveWardStage1EffectName;
 var const name	DefensiveWardStage1FXName;
 var const name	RetributionStage1EffectName;
 var const name	RetributionStage1FXName;
+var const name  ConsumeFXName;
 
 //Trigger Names
 var const name	FissureTriggerName;
@@ -100,7 +101,8 @@ var config int	DEFENSIVE_WARD_DAMAGE;
 var config int	DEFENSIVE_WARD_SPREAD;
 var config int	SEAL_START_DELAY;
 
-var config int	COUNTERATTACK_DODGE_AMOUNT;
+var config int	RANGED_COUNTERATTACK_DODGE_AMOUNT;
+var config int	MELEE_COUNTERATTACK_DODGE_AMOUNT;
 var config int	MAX_COUNTERATTACKS_ALLOWED;
 
 var config int	FISSURE_RADIUS_METERS;
@@ -168,7 +170,6 @@ static function array<X2DataTemplate> CreateTemplates()
 	Templates.AddItem(Warden_BD_CombativesAttack());
 	Templates.AddItem(Warden_BD_CombativesPreparation());
 	Templates.AddItem(Warden_BD_CombativesCounterattack());
-	Templates.AddItem(Warden_BD_CombativesStats());
 	Templates.AddItem(Warden_BD_Fissure());
 	Templates.AddItem(Warden_BD_Fissure_Stage2());
 	Templates.AddItem(Warden_BD_Tide());
@@ -212,6 +213,7 @@ static final function X2AbilityTemplate Warden_BD_RangedStance()
 	AnimSetEffect.AddAnimSetWithPath("Templar_Pillar_ANIM.Anims.AS_Pillar");
 	AnimSetEffect.AddAnimSetWithPath("Templar_Exchange_ANIM.AS_Exchange");
 	AnimSetEffect.AddAnimSetWithPath("Templar_GainingFocus_ANIM.AS_GainingFocus");
+	AnimSetEffect.AddAnimSetWithPath("Anim_Warden_BD_Combatives.AS_CounterAttack");
 	AnimSetEffect.BuildPersistentEffect(1, true, false, false);
 	AnimSetEffect.EffectName = 'AddWardenAdditionalAnimsets';
 	Template.AddTargetEffect(AnimSetEffect);
@@ -647,7 +649,6 @@ static final function X2AbilityTemplate Warden_BD_EbbandFlow()
 	// Only fire if flow APs were granted before
 	Template.AbilityShooterConditions.AddItem(default.LivingShooterProperty);
 	Template.AbilityShooterConditions.AddItem(CheckFlowAPsGranted);
-	Template.AddShooterEffectExclusions();
 	
 	// Check if we're in melee stance
 	CheckMeleeStance = new Class'X2Condition_Unitvalue';
@@ -733,6 +734,8 @@ static function X2AbilityTemplate Warden_BD_ProficiencyPassives()
 	// Grant Flow Mastery, single charge at appropriate rank
 	AddAbilityEffect = new class'X2Effect_WardenAddAbilitiesToTarget';
 	AddAbilityEffect.AddAbilities.AddItem('Warden_BD_EbbAndFlowManual');
+	BonusCharges.iChargeModifier = 1;
+	BonusCharges.BuildPersistentEffect (1, true, false, false);
 	AddAbilityEffect.EffectName = 'ProficiencyEbbandFlow';
 	AddAbilityEffect.TargetConditions.AddItem(RankCondition1);
 	Template.AddTargetEffect(AddAbilityEffect);
@@ -743,6 +746,7 @@ static function X2AbilityTemplate Warden_BD_ProficiencyPassives()
 	BonusCharges.iChargeModifier = 1;
 	BonusCharges.BuildPersistentEffect (1, true, false, false);
 	BonusCharges.TargetConditions.AddItem(RankCondition2);
+	AddAbilityEffect.EffectName = 'ProficiencyEbbandFlow';
 	Template.AddTargetEffect(BonusCharges);
 
 	// Warden's sword default aim buff
@@ -923,6 +927,7 @@ static function X2AbilityTemplate Warden_BD_Rewind()
 	Template.AbilityToHitCalc = default.DeadEye;
 	Template.AbilityTargetStyle = default.SelfTarget;	
 	Template.AbilityTriggers.AddItem(default.PlayerInputTrigger);
+	Template.AddShooterEffectExclusions();
 	
 	// Vis
 	Template.bSkipFireAction = false;
@@ -1072,10 +1077,10 @@ Static final function X2AbilityTemplate Warden_BD_MirrorReturnFire()
 	DamageEffect.bBypassShields = true;
 	DamageEffect.bIgnoreArmor = true;
 	Template.AddTargetEffect(DamageEffect);
-	//Works :) Probably needs some PFX
-	Template.CustomFireAnim = 'HL_SignalPointFlankedA';
+	Template.CustomFireAnim = 'HL_Brand_Volley';
 	Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
 	Template.BuildVisualizationFn = TypicalAbility_BuildVisualization;
+	Template.CinescriptCameraType = "StandardGunFiring";
 	Template.bSkipFireAction = false;
 
 	return Template;
@@ -1229,7 +1234,7 @@ static function X2AbilityTemplate Warden_BD_GrantImbueAmmoCharges()
 	return Template;
 }
 
-static function X2AbilityTemplate Warden_BD_NonStandardShot( Name AbilityName='MZNonStandardShot', string IconImage = "img:///UILibrary_PerkIcons.UIPerk_standard", bool DontShowInPerkList = false, bool bNoAmmoCost = false, bool bAllowBurning = false, bool bAllowDisoriented = false)
+static function X2AbilityTemplate Warden_BD_NonStandardShot( Name AbilityName='MZNonStandardShot', string IconImage = "img:///UILibrary_PerkIcons.UIPerk_standard", bool DontShowInPerkList = false, bool bNoAmmoCost = false, bool bAllowBurning = true, bool bAllowDisoriented = false)
 {
 	local X2AbilityTemplate                 Template;	
 	local X2AbilityCost_Ammo                AmmoCost;
@@ -1448,6 +1453,7 @@ static function X2AbilityTemplate Warden_BD_GrantSoulBladeCharges()
 
 	// Ability trigger determines how it is activated. In this case - by the user manually.
 	Template.AbilityTriggers.AddItem(default.PlayerInputTrigger);
+	Template.AddShooterEffectExclusions();
 
 	// # Targeting and Triggering
 	Template.AbilityToHitCalc = default.DeadEye;
@@ -1473,7 +1479,7 @@ static function X2AbilityTemplate Warden_BD_GrantSoulBladeCharges()
 	return Template;
 }
 
-static function X2AbilityTemplate Warden_BD_NonStandardSlash(Name AbilityName = 'Warden_BD_NonStandardSlash', string IconImage = "img:///UILibrary_PerkIcons.UIPerk_swordSlash", optional bool bAllowBurning=false)
+static function X2AbilityTemplate Warden_BD_NonStandardSlash(Name AbilityName = 'Warden_BD_NonStandardSlash', string IconImage = "img:///UILibrary_PerkIcons.UIPerk_swordSlash", optional bool bAllowBurning=true)
 {
 	local X2AbilityTemplate                 Template;
 	local X2AbilityCost_ActionPoints        ActionPointCost;
@@ -1765,7 +1771,7 @@ static function X2AbilityTemplate Warden_BD_DefensiveWard_Stage2()
 
 	Template.bSkipFireAction = true;
 	Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
-	Template.BuildVisualizationFn = TypicalAbility_BuildVisualization;
+	Template.BuildVisualizationFn = Seal_BuildVisualization;
 	Template.CinescriptCameraType = "Codex_PsiBomb_Stage2";
 //BEGIN AUTOGENERATED CODE: Template Overrides 'PsiBombStage2'
 	Template.bFrameEvenWhenUnitIsHidden = true;
@@ -1816,38 +1822,7 @@ static function X2AbilityTemplate Warden_BD_Combatives()
 	Template = PurePassive('Warden_BD_Combatives', "img:///UILibrary_PerkIcons.UIPerk_muton_counterattack", false, 'eAbilitySource_Perk');
 	Template.AdditionalAbilities.AddItem('Warden_BD_CombativesAttack');
 	Template.AdditionalAbilities.AddiTEm('Warden_BD_CombativesPreparation');
-	Template.AdditionalAbilities.AddItem('Warden_BD_CombativesCounterattack');
-	Template.AdditionalAbilities.AddItem('Warden_BD_CombativesStats');
-	return Template;
-}
-
-static function X2AbilityTemplate Warden_BD_CombativesStats()
-{
-	local X2AbilityTemplate						Template;
-	local X2Effect_PersistentStatChange			StatEffect;
-	local X2Effect_AdditionalAnimSets			AnimSetEffect;
-
-	`CREATE_X2ABILITY_TEMPLATE(Template, 'Warden_BD_CombativesStats');
-	Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_muton_counterattack";
-	Template.eAbilityIconBehaviorHUD = EAbilityIconBehavior_NeverShow;
-	Template.Hostility = eHostility_Neutral;
-	Template.AbilityToHitCalc = default.DeadEye;
-	Template.AbilityTargetStyle = default.SelfTarget;
-	Template.AbilityTriggers.AddItem(default.UnitPostBeginPlayTrigger);
-	Template.Hostility = eHostility_Neutral;
-	Template.AbilitySourceName = 'eAbilitySource_Perk';
-
-	StatEffect = new class'X2Effect_PersistentStatChange';
-	StatEffect.AddPersistentStatChange(eStat_Dodge, 0);
-	StatEffect.BuildPersistentEffect(1, true, false, false);
-	Template.AddTargetEffect(StatEffect);
-	Template.bCrossClassEligible = false;
-
-	AnimSetEffect = new class'X2Effect_AdditionalAnimSets';
-	AnimSetEffect.AddAnimSetWithPath("Perk_Warden_BD_Combatives.Anims.AS_CounterAttack");
-	Template.AddTargetEffect(AnimSetEffect);
-
-	Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
+	Template.AdditionalAbilities.AddItem('Warden_BD_CombativesCounterAttack');
 
 	return Template;
 }
@@ -1903,7 +1878,7 @@ static function X2AbilityTemplate Warden_BD_CombativesAttack()
 	// Make a condition which checks that the number of times the abilty has been activated this turn is equal to the maximum allowed by config
 	CheckNumberOfActivations = new Class'X2Condition_Unitvalue';
 	CheckNumberOfActivations.AddCheckValue(default.NumberOfCounterAttacksValueName,default.MAX_COUNTERATTACKS_ALLOWED,eCheck_Exact);
-
+	
 	// Only set the unitvalue to zero if the number of activations is right
 	SetUnitValEffect = new class'X2Effect_SetUnitValue';
 	SetUnitValEffect.UnitName = class'X2Ability'.default.CounterattackDodgeEffectName;
@@ -1921,6 +1896,8 @@ static function X2AbilityTemplate Warden_BD_CombativesAttack()
 	RemoveEffects.bApplyOnMiss = true;
 	RemoveEffects.TargetConditions.AddItem(CheckNumberOfActivations);
 	Template.AddShooterEffect(RemoveEffects);
+
+	Template.bShowActivation = true;
 
 	Template.AbilityTargetStyle = default.SimpleSingleMeleeTarget;
 	Template.AbilityTriggers.AddItem(default.PlayerInputTrigger);
@@ -1942,8 +1919,10 @@ static function X2AbilityTemplate Warden_BD_CombativesPreparation()
 {
 	local X2AbilityTemplate					Template;
 	local X2AbilityTrigger_EventListener	Trigger;
-	local X2Effect_ToHitModifier			DodgeEffect;
-
+	local X2Effect_ToHitModifier			RangedDodgeEffect, MeleeDodgeEffect;
+	local X2Effect_SetUnitValue				SetUnitValEffect;
+	local X2Condition_UnitValue				CheckMeleeStance, CheckRangedStance;
+	
 	`CREATE_X2ABILITY_TEMPLATE(Template, 'Warden_BD_CombativesPreparation');
 
 	Template.bDontDisplayInAbilitySummary = true;
@@ -1961,14 +1940,37 @@ static function X2AbilityTemplate Warden_BD_CombativesPreparation()
 	Trigger.ListenerData.EventFn = class'XComGameState_Ability'.static.AbilityTriggerEventListener_Self;
 	Template.AbilityTriggers.AddItem(Trigger);
 	Template.AbilityTriggers.AddItem(new class'X2AbilityTrigger_UnitPostBeginPlay');
+
+	CheckMeleeStance = new Class'X2Condition_Unitvalue';
+	CheckMeleeStance.AddCheckValue(default.MeleeStanceValueName,1,eCheck_Exact);
+	
+	CheckRangedStance = new Class'X2Condition_Unitvalue';
+	CheckRangedStance.AddCheckValue(default.RangedStanceValueName,1,eCheck_Exact);
 	
 	// During the Enemy player's turn, the Unit gets a dodge increase
-	DodgeEffect = new class'X2Effect_ToHitModifier';
-	DodgeEffect.EffectName = class'X2Ability'.default.CounterattackDodgeEffectName;
-	DodgeEffect.BuildPersistentEffect(1, false, false, false, eGameRule_PlayerTurnBegin);
-	DodgeEffect.AddEffectHitModifier(eHit_Graze, default.COUNTERATTACK_DODGE_AMOUNT, Template.LocFriendlyName, class'X2AbilityToHitCalc_StandardMelee', true, false, true, true, , false);
-	DodgeEffect.bApplyAsTarget = true;
-	Template.AddShooterEffect(DodgeEffect);
+	MeleeDodgeEffect = new class'X2Effect_ToHitModifier';
+	MeleeDodgeEffect.EffectName = class'X2Ability'.default.CounterattackDodgeEffectName;
+	MeleeDodgeEffect.BuildPersistentEffect(1, false, false, false, eGameRule_PlayerTurnBegin);
+	MeleeDodgeEffect.AddEffectHitModifier(eHit_Graze, default.MELEE_COUNTERATTACK_DODGE_AMOUNT, Template.LocFriendlyName, class'X2AbilityToHitCalc_StandardMelee', true, false, true, true, , false);
+	MeleeDodgeEffect.bApplyAsTarget = true;
+	MeleeDodgeEffect.TargetConditions.AddItem(CheckMeleeStance);
+	Template.AddShooterEffect(MeleeDodgeEffect);	
+
+	// During the Enemy player's turn, the Unit gets a dodge increase
+	RangedDodgeEffect = new class'X2Effect_ToHitModifier';
+	RangedDodgeEffect.EffectName = class'X2Ability'.default.CounterattackDodgeEffectName;
+	RangedDodgeEffect.BuildPersistentEffect(1, false, false, false, eGameRule_PlayerTurnBegin);
+	RangedDodgeEffect.AddEffectHitModifier(eHit_Graze, default.RANGED_COUNTERATTACK_DODGE_AMOUNT, Template.LocFriendlyName, class'X2AbilityToHitCalc_StandardMelee', true, false, true, true, , false);
+	RangedDodgeEffect.bApplyAsTarget = true;
+	RangedDodgeEffect.TargetConditions.AddItem(CheckRangedStance);
+	Template.AddShooterEffect(RangedDodgeEffect);
+
+	// Apply a unit value at the end of the turn signifying to the engine that a counter attack will occur
+	SetUnitValEffect = new class'X2Effect_SetUnitValue';
+	SetUnitValEffect.UnitName = class'X2Ability'.default.CounterattackDodgeEffectName;
+	SetUnitValEffect.NewValueToSet = class'X2Ability'.default.CounterattackDodgeUnitValue;
+	SetUnitValEffect.CleanupType = eCleanup_BeginTurn;
+	Template.AddTargetEffect(SetUnitValEffect);
 	
 	Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
 
@@ -1980,7 +1982,7 @@ static function X2AbilityTemplate Warden_BD_CombativesCounterattack()
 	local X2AbilityTemplate Template;
 	local X2AbilityTrigger_EventListener EventListener;
 
-	`CREATE_X2ABILITY_TEMPLATE(Template, 'Warden_BD_CombativesCounterattack');
+	`CREATE_X2ABILITY_TEMPLATE(Template, 'Warden_BD_CombativesCounterAttack');
 	Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_muton_counterattack";
 
 	Template.bDontDisplayInAbilitySummary = true;
@@ -2002,7 +2004,6 @@ static function X2AbilityTemplate Warden_BD_CombativesCounterattack()
 	Template.AbilityTargetStyle = default.SelfTarget;
 
 	Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
-	Template.CinescriptCameraType = "AdvStunLancer_StunLancer";
 
 	return Template;
 }
@@ -2175,7 +2176,7 @@ static function X2AbilityTemplate Warden_BD_Fissure_Stage2()
 
 	Template.bSkipFireAction = true;
 	Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
-	Template.BuildVisualizationFn = TypicalAbility_BuildVisualization;
+	Template.BuildVisualizationFn = Seal_BuildVisualization;
 	Template.CinescriptCameraType = "Codex_PsiBomb_Stage2";
 //BEGIN AUTOGENERATED CODE: Template Overrides 'PsiBombStage2'
 	Template.bFrameEvenWhenUnitIsHidden = true;
@@ -2251,7 +2252,7 @@ static function X2DataTemplate Warden_BD_Tide()
 
 	//Can't use while dead
 	Template.AbilityShooterConditions.AddItem(default.LivingShooterProperty);
-
+	Template.AddShooterEffectExclusions();
 	// Add dead eye to guarantee
 	Template.AbilityToHitCalc = default.DeadEye;
 	Template.AbilityTargetStyle = default.SelfTarget;
@@ -2305,7 +2306,7 @@ static function X2DataTemplate Warden_BD_Tide()
 	
 	Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
 	Template.BuildVisualizationFn = TypicalAbility_BuildVisualization;
-	Template.CinescriptCameraType = "AdvShieldBearer_EnergyShieldArmor";
+	Template.CinescriptCameraType = "Sectoid_Mindspin";
 
 	Template.SuperConcealmentLoss = class'X2AbilityTemplateManager'.default.SuperConcealmentStandardShotLoss;
 	Template.ChosenActivationIncreasePerUse = class'X2AbilityTemplateManager'.default.StandardShotChosenActivationIncreasePerUse;
@@ -2326,6 +2327,7 @@ static function X2DataTemplate Warden_BD_Consume()
 	local name										HealType;
 	local X2AbilityTarget_Cursor					CursorTarget;
 	local X2Effect_TriggerEvent						TriggerDamageEffect;
+	local X2Effect_PerkAttachForFX					FXEffect;
 
 	`CREATE_X2ABILITY_TEMPLATE(Template, 'Warden_BD_Consume');
 	Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_item_neuraldampingmodule";
@@ -2340,6 +2342,7 @@ static function X2DataTemplate Warden_BD_Consume()
 	ActionPointCost.iNumPoints = 1; 
 	ActionPointCost.bConsumeAllPoints = true;
 	ActionPointCost.AllowedTypes.Length = 0;
+
 	// Points Ahoy!
 	ActionPointCost.AllowedTypes.AddItem(default.SpecialMomentumAP);
 	ActionPointCost.AllowedTypes.AddItem(default.DefenderAP);
@@ -2384,6 +2387,7 @@ static function X2DataTemplate Warden_BD_Consume()
 	Template.AbilityShooterConditions.AddItem(default.LivingShooterProperty);
 	Template.AddShooterEffectExclusions();
 	Template.ActivationSpeech = 'HealingAlly';
+	Template.CustomFireAnim = 'HL_Brand';
 
 	RadiusMultiTarget = new class'X2AbilityMultiTarget_Radius';
 	RadiusMultiTarget.fTargetRadius = default.CONSUME_RADIUS_METERS;
@@ -2428,15 +2432,20 @@ static function X2DataTemplate Warden_BD_Consume()
 		}
 	Template.AddMultiTargetEffect(RemoveEffects);
 	
+	// This effect is here to attach perk FX to
+	FXEffect = new class'X2Effect_PerkAttachForFX';
+	FXEffect.BuildPersistentEffect(1, false, true, , eGameRule_PlayerTurnEnd);
+	FXEffect.EffectName = default.ConsumeFXName;
+	Template.AddShooterEffect(FXEffect);
+
 	TriggerDamageEffect = new Class'X2Effect_TriggerEvent';
 	TriggerDamageEffect.TriggerEventName = 'ConsumeTrigger';	
 	Template.AddShooterEffect(TriggerDamageEffect);
-		
-	Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
-	Template.BuildVisualizationFn = TypicalAbility_BuildVisualization;
-	Template.CinescriptCameraType = "AdvShieldBearer_EnergyShieldArmor";	
-	// Works but looks janky
-	Template.CustomFireAnim = 'HL_Brand';
+	
+	Template.CinescriptCameraType = "Psionic_FireAtUnit";	
+	Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;	
+	Template.BuildVisualizationFn = Consume_BuildVisualization;	
+	//Template.BuildVisualizationFn = Seal_BuildVisualization;		
 	Template.AdditionalAbilities.AddItem('Warden_BD_ConsumeAdditionalDamage');
 
 	return Template;
@@ -2485,9 +2494,10 @@ static final function X2AbilityTemplate Warden_BD_ConsumeAdditionalDamage()
 	Template.bShowActivation = false;
 	Template.bSkipFireAction = true;
 
+	Template.CustomSelfFireAnim = 'HL_IdleA';
 	Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
 	Template.BuildVisualizationFn = TypicalAbility_BuildVisualization;
-	Template.CustomSelfFireAnim = 'HL_IdleA';
+	
 	Template.bCrossClassEligible = false;
 		
 	return Template;
@@ -2593,13 +2603,13 @@ static function X2AbilityTemplate Warden_BD_Charge()
 	// This will tell TypicalAbility_BuildVisualization to not play an activation animation for this ability. To be changed once we have an animation.
 	Template.bSkipFireAction = false;
 
+	// Works, not terribly inspiring - maybe more of a 'hold sword in the air anim' would be better?
+	Template.CustomFireAnim = 'HL_CallGremlinA';	
 	// This function will apply game state changes caused by this ability. Use standard here.
 	Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
 
 	// This function will visualize the ability (change the visual representation of the world caused by this ability). Use standard.
 	Template.BuildVisualizationFn = TypicalAbility_BuildVisualization;
-	// Works, not terribly inspiring - maybe more of a 'hold sword in the air anim' would be better?
-	Template.CustomFireAnim = 'HL_SignalAngryA';	
 	// # Other properties
 	// This will determine whether this ability can appear in randomly generated XCOM rows of other soldier classes.
 	// Since this is a niche ability that applies only to melee damage, best not to make it cross-class.
@@ -2697,7 +2707,7 @@ static function X2AbilityTemplate Warden_BD_Retribution()
 
 	// This effect is here to attach perk FX to
 	FXEffect = new class'X2Effect_PerkAttachForFX';
-	FXEffect.BuildPersistentEffect(1, false, true, , eGameRule_PlayerTurnBegin);
+	FXEffect.BuildPersistentEffect(1, false, true, , eGameRule_PlayerTurnEnd);
 	FXEffect.EffectName = default.RetributionStage1FXName;
 	Template.AddShooterEffect(FXEffect);
 
@@ -2710,7 +2720,6 @@ static function X2AbilityTemplate Warden_BD_Retribution()
 	Template.AddShooterEffect(DelayedOverwatchEffect);
 	
 	Template.TargetingMethod = class'X2TargetingMethod_VoidRift';
-	// Doesn't work - gun wiggle again
 	Template.CustomFireAnim = 'HL_Seal_Blue';
 	Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
 	Template.BuildInterruptGameStateFn = TypicalAbility_BuildInterruptGameState;
@@ -2777,7 +2786,7 @@ static function X2AbilityTemplate Warden_BD_Retribution_Stage2()
 
 	Template.bSkipFireAction = true;
 	Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
-	Template.BuildVisualizationFn = TypicalAbility_BuildVisualization;
+	Template.BuildVisualizationFn = Seal_BuildVisualization;
 	Template.CinescriptCameraType = "Codex_PsiBomb_Stage2";
 //BEGIN AUTOGENERATED CODE: Template Overrides 'PsiBombStage2'
 	Template.bFrameEvenWhenUnitIsHidden = true;
@@ -3098,7 +3107,7 @@ static function X2AbilityTemplate Warden_BD_Inspire()
 
 	Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
 	Template.BuildVisualizationFn = TypicalAbility_BuildVisualization;
-	Template.CinescriptCameraType = "Psionic_FireAtUnit";
+	Template.CinescriptCameraType = "StandardGunFiring";
 	Template.ActivationSpeech = 'Inspire';
 	Template.SuperConcealmentLoss = class'X2AbilityTemplateManager'.default.SuperConcealmentStandardShotLoss;
 	Template.ChosenActivationIncreasePerUse = class'X2AbilityTemplateManager'.default.NonAggressiveChosenActivationIncreasePerUse;
@@ -3471,6 +3480,51 @@ static final function EventListenerReturn MirrorReturnFireListener(Object EventD
 //				Visualisation Functions
 //	========================================
 
+function Consume_BuildVisualization(XComGameState VisualizeGameState)
+{
+	local XComGameStateVisualizationMgr		VisMgr;
+	local X2Action							FoundAction;
+	local VisualizationActionMetadata		ActionMetadata;
+	local XComGameStateHistory				History;
+	local XComGameStateContext_Ability		Context;
+	local int								SourceUnitID;
+	local X2Action_CameraLookAt				LookAtTargetAction;
+	local X2Action_TimedWait				WaitAction;
+
+	//	Call the typical ability visuailzation. With just that, the ability would look like the soldier firing the rocket upwards, and then enemy getting damage for seemingly no reason.
+	class'X2Ability'.static.TypicalAbility_BuildVisualization(VisualizeGameState);
+
+	VisMgr = `XCOMVISUALIZATIONMGR;
+	History = `XCOMHISTORY;
+	Context = XComGameStateContext_Ability(VisualizeGameState.GetContext());
+	SourceUnitID = Context.InputContext.SourceObject.ObjectID;
+
+	ActionMetadata.StateObject_OldState = History.GetGameStateForObjectID(SourceUnitID, eReturnType_Reference, VisualizeGameState.HistoryIndex - 1);
+	ActionMetadata.StateObject_NewState = VisualizeGameState.GetGameStateForObjectID(SourceUnitID);
+	ActionMetadata.VisualizeActor = History.GetVisualizer(SourceUnitID);
+
+	//	Find the Fire Action in vis tree configured by Typical Ability Build Viz
+	FoundAction = VisMgr.GetNodeOfType(VisMgr.BuildVisTree, class'X2Action_Fire');
+
+	if (FoundAction != none)
+	{
+		//	This action will pause the Vis Tree until the Unit Hit (Notify Target) Anim Notify is reached in the Fire Action's AnimSequence (in the Fire Lockon firing animation)
+		class'X2Action_WaitForAbilityEffect'.static.AddToVisualizationTree(ActionMetadata, Context, true, FoundAction);
+
+		//	Start setting up the action that will pan the camera towards the location of the primary target
+		LookAtTargetAction = X2Action_CameraLookAt(class'X2Action_CameraLookAt'.static.AddToVisualizationTree(ActionMetadata, Context));
+		LookAtTargetAction.LookAtLocation = Context.InputContext.TargetLocations[0];
+		LookAtTargetAction.LookAtDuration = 4.0f;
+		LookAtTargetAction.BlockUntilFinished = true;
+
+		//	Pan camera towards the location of the primary target so PFX can be observed
+		LookAtTargetAction = X2Action_CameraLookAt(class'X2Action_CameraLookAt'.static.AddToVisualizationTree(ActionMetadata, Context));
+		LookAtTargetAction.LookAtActor = ActionMetadata.VisualizeActor;
+		LookAtTargetAction.LookAtDuration = 1.5f;
+		
+	}
+}
+
 // Pillar Visualisation Function
 function Pillar_BuildVisualization(XComGameState VisualizeGameState)
 {
@@ -3491,6 +3545,122 @@ function Pillar_BuildVisualization(XComGameState VisualizeGameState)
 
 	//class'X2Action_WaitForAbilityEffect'.static.AddToVisualizationTree(BuildTrack, VisualizeGameState.GetContext());
 	class'X2Action_ShowSpawnedDestructible'.static.AddToVisualizationTree(BuildTrack, VisualizeGameState.GetContext());
+}
+
+// Seals 2nd Stage Visualisation Function
+function Seal_BuildVisualization(XComGameState VisualizeGameState)
+{
+	local XComGameStateHistory History;
+	local XComGameStateContext_Ability  Context;
+	local StateObjectReference InteractingUnitRef;
+	local X2AbilityTemplate AbilityTemplate;
+	local VisualizationActionMetadata EmptyTrack;
+	local VisualizationActionMetadata CyberusBuildTrack, ActionMetadata;
+	local int i, j;
+	local X2VisualizerInterface TargetVisualizerInterface;
+	local XComGameState_EnvironmentDamage EnvironmentDamageEvent;
+	local XComGameState_WorldEffectTileData WorldDataUpdate;
+	local XComGameState_InteractiveObject InteractiveObject;
+	local X2Action_PlayEffect EffectAction;
+	local X2Action_StartStopSound SoundAction;
+	local XComGameState_Unit CyberusUnit;
+	local X2Action_TimedInterTrackMessageAllMultiTargets MultiTargetMessageAction;
+	local X2Action_TimedWait WaitAction;
+	local X2Action_CameraLookAt LookAtAction;
+
+	History = `XCOMHISTORY;
+
+	Context = XComGameStateContext_Ability(VisualizeGameState.GetContext());
+	InteractingUnitRef = Context.InputContext.SourceObject;
+
+	AbilityTemplate = class'XComGameState_Ability'.static.GetMyTemplateManager().FindAbilityTemplate(Context.InputContext.AbilityTemplateName);
+
+	//****************************************************************************************
+	//Configure the visualization track for the source
+	//****************************************************************************************
+	CyberusBuildTrack = EmptyTrack;
+	History.GetCurrentAndPreviousGameStatesForObjectID(InteractingUnitRef.ObjectID,
+													   CyberusBuildTrack.StateObject_OldState, CyberusBuildTrack.StateObject_NewState,
+													   eReturnType_Reference,
+													   VisualizeGameState.HistoryIndex);
+	CyberusBuildTrack.VisualizeActor = History.GetVisualizer(InteractingUnitRef.ObjectID);
+
+	CyberusUnit = XComGameState_Unit(CyberusBuildTrack.StateObject_OldState);
+
+	if( CyberusUnit != none)
+	{
+		// Pause visualiser to allow camera to pan to loation
+		WaitAction = X2Action_TimedWait(class'X2Action_TimedWait'.static.AddToVisualizationTree(CyberusBuildTrack, Context));
+		WaitAction.DelayTimeSec = 1.0f;
+		
+		// Play the Explosion audio
+		SoundAction = X2Action_StartStopSound(class'X2Action_StartStopSound'.static.AddToVisualizationTree(CyberusBuildTrack, Context));
+		SoundAction.Sound = new class'SoundCue';
+		SoundAction.Sound.AkEventOverride = AkEvent'SoundX2AvatarFX.Avatar_Ability_Dimensional_Rift_Explode';
+		SoundAction.bIsPositional = true;
+		SoundAction.vWorldPosition = Context.InputContext.TargetLocations[0];
+
+		// Play the Explosion FX
+		EffectAction = X2Action_PlayEffect(class'X2Action_PlayEffect'.static.AddToVisualizationTree(CyberusBuildTrack, Context));
+		EffectAction.bWaitForCompletion = false;
+
+			If (Context.InputContext.AbilityTemplateName == 'Warden_BD_Fissure_Stage2')
+				{
+				EffectAction.EffectName = "Perk_Warden_BD_Seals.P_Seal_Red_Stage2";
+				}
+			Else If (Context.InputContext.AbilityTemplateName == 'Warden_BD_DefensiveWard_Stage2')
+				{
+				EffectAction.EffectName = "Perk_Warden_BD_Seals.P_Seal_Purple_Stage2";
+				}
+			Else If (Context.InputContext.AbilityTemplateName == 'Warden_BD_Retribution_Stage2')
+				{
+				EffectAction.EffectName = "Perk_Warden_BD_Seals.P_Seal_Blue_Stage2";
+				}			
+			EffectAction.EffectLocation = Context.InputContext.TargetLocations[0];
+			
+		// Notify multi targets of explosion
+		MultiTargetMessageAction = X2Action_TimedInterTrackMessageAllMultiTargets(class'X2Action_TimedInterTrackMessageAllMultiTargets'.static.AddToVisualizationTree(CyberusBuildTrack, Context));
+		MultiTargetMessageAction.SendMessagesAfterSec = 0.2f;
+	}
+
+	//****************************************************************************************
+	//Configure the visualization track for the targets
+	//****************************************************************************************
+	for (i = 0; i < Context.InputContext.MultiTargets.Length; ++i)
+	{
+		InteractingUnitRef = Context.InputContext.MultiTargets[i];
+
+		if( InteractingUnitRef == CyberusUnit.GetReference() )
+		{
+			ActionMetadata = CyberusBuildTrack;
+
+			WaitAction = X2Action_TimedWait(class'X2Action_TimedWait'.static.AddToVisualizationTree(CyberusBuildTrack, Context));
+			WaitAction.DelayTimeSec = 0.1f;
+		}
+		else
+		{
+			ActionMetadata = EmptyTrack;
+			ActionMetadata.StateObject_OldState = History.GetGameStateForObjectID(InteractingUnitRef.ObjectID, eReturnType_Reference, VisualizeGameState.HistoryIndex - 1);
+			ActionMetadata.StateObject_NewState = VisualizeGameState.GetGameStateForObjectID(InteractingUnitRef.ObjectID);
+			ActionMetadata.VisualizeActor = History.GetVisualizer(InteractingUnitRef.ObjectID);
+
+			class'X2Action_WaitForAbilityEffect'.static.AddToVisualizationTree(ActionMetadata, Context, false, ActionMetadata.LastActionAdded);
+		}
+
+		for( j = 0; j < Context.ResultContext.MultiTargetEffectResults[i].Effects.Length; ++j )
+		{
+			Context.ResultContext.MultiTargetEffectResults[i].Effects[j].AddX2ActionsForVisualization(VisualizeGameState, ActionMetadata, Context.ResultContext.MultiTargetEffectResults[i].ApplyResults[j]);
+		}
+
+		TargetVisualizerInterface = X2VisualizerInterface(ActionMetadata.VisualizeActor);
+		if( TargetVisualizerInterface != none )
+		{
+			//Allow the visualizer to do any custom processing based on the new game state. For example, units will create a death action when they reach 0 HP.
+			TargetVisualizerInterface.BuildAbilityEffectsVisualization(VisualizeGameState, ActionMetadata);
+		}
+	}
+
+	TypicalAbility_AddEffectRedirects(VisualizeGameState, CyberusBuildTrack);
 }
 
 //	========================================
@@ -3854,6 +4024,7 @@ defaultproperties
 	DefensiveWardStage1FXName="BD_DefensiveWardStage1FX"
 	RetributionStage1EffectName="BD_RetributionStage1Effect"
 	RetributionStage1FXName="BD_RetributionStage1FX"
+	ConsumeFXName="BD_ConsumeFX"
 
 	//Triggers
 	FissureTriggerName="FissureTrigger"

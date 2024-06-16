@@ -34,58 +34,70 @@
     <Content Include="Config\XComWOTC_CostBasedAbilityColors.ini">
       <SubType>Content</SubType>
     </Content>
-    <Content Include="Content\Anim_Warden_BD_Blink.upk">
+    <Content Include="ContentForCook\Anim_Warden_BD_Blink.upk">
       <SubType>Content</SubType>
     </Content>
-    <Content Include="Content\Anim_Warden_BD_Brand.upk">
+    <Content Include="ContentForCook\Anim_Warden_BD_Brand.upk">
       <SubType>Content</SubType>
     </Content>
-    <Content Include="Content\Anim_Warden_BD_Fuse.upk">
+    <Content Include="ContentForCook\Anim_Warden_BD_Combatives.upk">
       <SubType>Content</SubType>
     </Content>
-    <Content Include="Content\Anim_Warden_BD_ImbueAmmo.upk">
+    <Content Include="ContentForCook\Anim_Warden_BD_Fuse.upk">
       <SubType>Content</SubType>
     </Content>
-    <Content Include="Content\Anim_Warden_BD_Seals.upk">
+    <Content Include="ContentForCook\Anim_Warden_BD_ImbueAmmo.upk">
       <SubType>Content</SubType>
     </Content>
-    <Content Include="Content\Anim_Warden_BD_StanceAndShields.upk">
+    <Content Include="ContentForCook\Anim_Warden_BD_Seals.upk">
       <SubType>Content</SubType>
     </Content>
-    <Content Include="Content\Anim_Warden_BD_Tide.upk">
+    <Content Include="ContentForCook\Anim_Warden_BD_StanceAndShields.upk">
       <SubType>Content</SubType>
     </Content>
-    <Content Include="Content\Perk_Warden_BD_Combatives.upk">
+    <Content Include="ContentForCook\Anim_Warden_BD_Tide.upk">
       <SubType>Content</SubType>
     </Content>
-    <Content Include="Content\Perk_Warden_BD_Fuse.upk">
+    <Content Include="ContentForCook\Perk_Warden_BD_Charge.upk">
       <SubType>Content</SubType>
     </Content>
-    <Content Include="Content\Perk_Warden_BD_Inspire.upk">
+    <Content Include="ContentForCook\Perk_Warden_BD_Combatives.upk">
       <SubType>Content</SubType>
     </Content>
-    <Content Include="Content\Perk_Warden_BD_KineticArmor.upk">
+    <Content Include="ContentForCook\Perk_Warden_BD_Consume.upk">
       <SubType>Content</SubType>
     </Content>
-    <Content Include="Content\Perk_Warden_BD_Melee.upk">
+    <Content Include="ContentForCook\Perk_Warden_BD_Fuse.upk">
       <SubType>Content</SubType>
     </Content>
-    <Content Include="Content\Perk_Warden_BD_Mirror.upk">
+    <Content Include="ContentForCook\Perk_Warden_BD_ImbueAmmo.upk">
       <SubType>Content</SubType>
     </Content>
-    <Content Include="Content\Perk_Warden_BD_Pillar.upk">
+    <Content Include="ContentForCook\Perk_Warden_BD_Inspire.upk">
       <SubType>Content</SubType>
     </Content>
-    <Content Include="Content\Perk_Warden_BD_Ranged.upk">
+    <Content Include="ContentForCook\Perk_Warden_BD_KineticArmor.upk">
       <SubType>Content</SubType>
     </Content>
-    <Content Include="Content\Perk_Warden_BD_Seals.upk">
+    <Content Include="ContentForCook\Perk_Warden_BD_Melee.upk">
       <SubType>Content</SubType>
     </Content>
-    <Content Include="Content\Perk_Warden_BD_SoulBlade.upk">
+    <Content Include="ContentForCook\Perk_Warden_BD_Mirror.upk">
       <SubType>Content</SubType>
     </Content>
-    <Content Include="Content\Warden_BD_PerkIcons.upk">
+    <Content Include="ContentForCook\Perk_Warden_BD_Pillar.upk">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="ContentForCook\Perk_Warden_BD_Ranged.upk">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="ContentForCook\Perk_Warden_BD_Seals.upk">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="ContentForCook\Perk_Warden_BD_SoulBlade.upk">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="ContentForCook\Warden_BD_PerkIcons.upk">
       <SubType>Content</SubType>
     </Content>
     <Content Include="ReadMe.txt" />
@@ -94,8 +106,6 @@
     <Content Include="Config\Base\XComEditor.ini" />
     <Content Include="Config\Base\XComEngine.ini" />
     <Content Include="Config\Base\XComGame.ini" />
-    <Content Include="Config\XComTemplateCreator.ini" />
-    <Content Include="Config\XComTemplateEditor.ini" />
     <Content Include="Localization\XComGame.int" />
     <Content Include="Localization\WOTC_Prof_Warden_BD.int" />
     <Content Include="Src\extra_globals.uci" />

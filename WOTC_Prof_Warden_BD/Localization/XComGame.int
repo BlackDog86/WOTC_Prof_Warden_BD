@@ -4,25 +4,57 @@
 
 [WOTC_Prof_Warden_BD X2SoldierClassTemplate]
 DisplayName="Warden"
-ClassSummary="Wardens represent a militarised wing of the Templars and excel in harnessing the ebb and flow of psionic energies on the battlefield. Wardens start each turn by alternating their stance which boosts capability with one of their weapons. Carrying out a turn-ending attack with the correct weapon & stance combination grants the warden a 'flow' action point which they can use to activate powerful abilities.
-AbilityTreeTitles[0]="Bushido"
-AbilityTreeTitles[1]="Kendo"
-AbilityTreeTitles[2]="Aikido"
-AbilityTreeTitles[3]="Kobudo"
+ClassSummary="Wardens are a militarised wing of the Templars which excel as front-line and supporting class. They possess two stances (ranged and melee), which alternate based on battlefield conditions and provide bonuses to their weapons. Carrying out an attack with a matching stance/weapon combination grants the warden a 'flow' action point which they can use to activate powerful supporting abilities.
+AbilityTreeTitles[0]="Inquisitor"
+AbilityTreeTitles[1]="Spiritblade"
+AbilityTreeTitles[2]="Adept"
+AbilityTreeTitles[3]="Disciple"
 
-+RandomNickNames = "Shogun"
-+RandomNickNames = "Daimyo"
-+RandomNickNames = "Samurai"
-;+RandomNickNames_Male = "Dave"
-;+RandomNickNames_Female = "Jane"
++RandomNickNames = "The Enlightened"
++RandomNickNames = "Soulcarver"
++RandomNickNames = "Divinity"
++RandomNickNames = "Bladecaller"
++RandomNickNames = "Vindicator"
++RandomNickNames = "The Chaste"
++RandomNickNames = "Animus"
++RandomNickNames = "Sanctity"
++RandomNickNames = "Prophet"
++RandomNickNames = "The Pious"
++RandomNickNames = "Emissary"
++RandomNickNames = "Scholar"
++RandomNickNames = "Void Knight"
 
++PhotoboothSoloBLines_Male = "Years of training, minutes of victory."
++PhotoboothSoloBLines_Male = "The tides of battle, flow in our favour."
++PhotoboothSoloBLines_Male = "Pristine barrel, sharpened steel."
++PhotoboothSoloBLines_Male = "The strength of our enemies ebbs away."
++PhotoboothSoloBLines_Male = "No pride, only vengeance."
++PhotoboothSoloBLines_Male = "Turning the tide."
++PhotoboothSoloBLines_Male = "Watching, waiting."
++PhotoboothSoloBLines_Male = "Carved asunder."
 +PhotoboothSoloBLines_Male = "Close quarters, no mercy."
-+PhotoboothSoloBLines_Male = "His blade will bring JUSTICE!"
-+PhotoboothSoloBLines_Male = "Close, Personal, and DEADLY!"
++PhotoboothSoloBLines_Male = "The inquisition has begun."
++PhotoboothSoloBLines_Male = "For the fallen!"
++PhotoboothSoloBLines_Male = "Purge these heretics!"
++PhotoboothSoloBLines_Male = "For the templars!"
++PhotoboothSoloBLines_Male = "The tide turns in our favour."
++PhotoboothSoloBLines_Male = "Ride the waves, stay the course."
 
++PhotoboothSoloBLines_Female = "Years of training, minutes of victory."
++PhotoboothSoloBLines_Female = "The tides of battle, flow in our favour."
++PhotoboothSoloBLines_Female = "Pristine barrel, sharpened steel."
++PhotoboothSoloBLines_Female = "The strength of our enemies ebbs away."
++PhotoboothSoloBLines_Female = "No pride, only vengeance."
++PhotoboothSoloBLines_Female = "Turning the tide."
++PhotoboothSoloBLines_Female = "Watching, waiting."
++PhotoboothSoloBLines_Female = "Carved asunder."
 +PhotoboothSoloBLines_Female = "Close quarters, no mercy."
-+PhotoboothSoloBLines_Female = "Her blade will bring JUSTICE!"
-+PhotoboothSoloBLines_Female = "Close, Personal, and DEADLY!"
++PhotoboothSoloBLines_Female = "The inquisition has begun."
++PhotoboothSoloBLines_Female = "For the fallen!"
++PhotoboothSoloBLines_Female = "Purge these heretics!"
++PhotoboothSoloBLines_Female = "For the templars!"
++PhotoboothSoloBLines_Female = "The tide turns in our favour."
++PhotoboothSoloBLines_Female = "Ride the waves, stay the course."
 
 [WOTC_Warden_BD X2EncyclopediaTemplate]
 ListTitle = "Warden Class"
@@ -71,7 +103,7 @@ LocFlyOverText="Ebb & Flow"
 [Warden_BD_EbbAndFlowManual X2AbilityTemplate]
 LocFriendlyName="Flow Mastery"
 LocLongDescription="Switch stance immediately - No action point cost (Cannot be activated with flow action points)."
-LocHelpText="Switch stance immediately - No action point cost (Cannot be activated with flow action points)."
+LocHelpText="Switch stance immediately - No action point cost."
 LocFlyOverText="Flow Mastery"
 
 [Warden_BD_ProficiencyPassives X2AbilityTemplate]
@@ -82,15 +114,15 @@ LocFlyOverText="Proficiency Bonuses - Warden"
 
 [Warden_BD_Rewind X2AbilityTemplate]
 LocFriendlyName="Blink"
-LocLongDescription="Use a flow action point to vanish and re-appear at the turn-start location.<font color='#CA7200'><Ability:REWIND_COOLDOWN/></font>-turn cooldown."
-LocHelpText="Use a flow action point to vanish and re-appear at the turn-start location.<font color='#CA7200'><Ability:REWIND_COOLDOWN/></font>-turn cooldown."
+LocLongDescription="Vanish and re-appear at the turn-start location. <font color='#CA7200'><Ability:REWIND_COOLDOWN/></font>-turn cooldown."
+LocHelpText="</font>anish and re-appear at the turn-start location. <font color='#CA7200'><Ability:REWIND_COOLDOWN/></font>-turn cooldown."
 LocFlyOverText="Blink"
 
 [Warden_BD_Mirror X2AbilityTemplate]
-LocFriendlyName="Barrier"
+LocFriendlyName="Reflective Barrier"
 LocLongDescription="Create an elemental barrier which degrades the next <font color='#CA7200'><Ability:MIRROR_NUMBER_OF_ATTACKS/></font> incoming hits to grazes. Direct attacks on the barrier return the damage psionically to the attacker. <font color='#CA7200'><Ability:MIRROR_COOLDOWN/></font>-turn cooldown."
-LocHelpText="Create an elemental barrier which degrades the next <font color='#CA7200'><Ability:MIRROR_NUMBER_OF_ATTACKS/></font> incoming hits to grazes. Direct attacks on the barrier return the damage psionically to the attacker. <font color='#CA7200'><Ability:MIRROR_COOLDOWN/></font>-turn cooldown."
-LocFlyOverText="Barrier"
+LocHelpText="Create an barrier which reduces the next <font color='#CA7200'><Ability:MIRROR_NUMBER_OF_ATTACKS/></font> hits to grazes and returns damage to the attacker. <font color='#CA7200'><Ability:MIRROR_COOLDOWN/></font>-turn cooldown."
+LocFlyOverText="Reflective Barrier"
 
 [Warden_BD_MirrorReturnFire X2AbilityTemplate]
 LocFriendlyName="Barrier - Return Fire"
@@ -100,15 +132,15 @@ LocFlyOverText="Barrier - Return Fire"
 
 [Warden_BD_KineticArmor X2AbilityTemplate]
 LocFriendlyName="Kinetic Armor"
-LocLongDescription="Gain ablative hit points equal to <font color='#CA7200'><Ability:KINETIC_ARMOR_PERCENTAGE/></font>% of max. health. <Ability:KINETIC_ARMOR_SHIELD_DAMAGE_PERCENTAGE/>% of damage dealt to the shield each turn is added to the Warden's next attack.<font color='#CA7200'><Ability:KINETICARMOR_COOLDOWN/></font>-turn cooldown."
-LocHelpText="Gain ablative hit points equal to <font color='#CA7200'><Ability:KINETIC_ARMOR_PERCENTAGE/></font> % of max. health. <Ability:KINETIC_ARMOR_SHIELD_DAMAGE_PERCENTAGE/>% of damage dealt to the shield each turn is added to the Warden's next attack.<font color='#CA7200'><Ability:KINETICARMOR_COOLDOWN/></font>-turn cooldown."
+LocLongDescription="Gain ablative hit points equal to <font color='#CA7200'><Ability:KINETIC_ARMOR_PERCENTAGE/></font>% of max. health. <font color='#CA7200'><Ability:KINETIC_ARMOR_SHIELD_DAMAGE_PERCENTAGE/></font>% of damage dealt to the shield each turn is added to the Warden's next attack. <font color='#CA7200'><Ability:KINETICARMOR_COOLDOWN/></font>-turn cooldown."
+LocHelpText="Gain ablative hit points and add <Ability:KINETIC_ARMOR_SHIELD_DAMAGE_PERCENTAGE/></font>% of damage dealt to the shield to the Warden's next attack. <font color='#CA7200'><Ability:KINETICARMOR_COOLDOWN/></font>-turn cooldown."
 LocFlyOverText="Kinetic Armor"
 
 [Warden_BD_DefenderPassive X2AbilityTemplate]
-LocFriendlyName="Guardsman"
+LocFriendlyName="Squire"
 LocLongDescription="Throwing grenades & using items grants flow action points. Hunker can be used from flow action points."
 LocHelpText="Throwing grenades & using items grants flow action points. Hunker can be used from flow action points."
-LocFlyOverText="Guardsman"
+LocFlyOverText="Squire"
 
 [Warden_BD_CrusaderPassive X2AbilityTemplate]
 LocFriendlyName="Crusader"
@@ -117,10 +149,10 @@ LocHelpText="Reload can be activated from flow action points - Warden's sword ha
 LocFlyOverText="Crusader"
 
 [Warden_BD_WatcherPassive X2AbilityTemplate]
-LocFriendlyName="Watcher"
+LocFriendlyName="Night Watchman"
 LocLongDescription="Overwatch can be used from flow action points & the aim penalty is removed."
 LocHelpText="Overwatch can be used from flow action points & the aim penalty is removed."
-LocFlyOverText="Watcher"
+LocFlyOverText="Night Watchman"
 
 [Warden_BD_NonStandardShot X2AbilityTemplate]
 LocFriendlyName="Non-standard shot"
@@ -135,34 +167,34 @@ LocHelpText="Test ability for non standard slash!"
 LocFlyOverText="Non-standard slash"
 
 [Warden_BD_GrantImbueAmmoCharges X2AbilityTemplate]
-LocFriendlyName="Imbue Ammo"
+LocFriendlyName="Astral Bullet"
 LocLongDescription="Create a psionically charged bullet which can be fired from the bullpup on the next turn in ranged stance. The attack deals +<font color='#CA7200'><Ability:IMBUEAMMO_DAMAGE_BONUS/></font> base damage, ignores armor & shields and bypasses sustained units but cannot critically hit. <font color='#CA7200'><Ability:IMBUEAMMO_COOLDOWN/></font>-turn cooldown."
-LocHelpText="Create a psionically charged bullet which can be fired from the bullpup on the next turn in ranged stance. The attack deals +<font color='#CA7200'><Ability:IMBUEAMMO_DAMAGE_BONUS/></font> base damage, ignores armor & shields and bypasses sustained units but cannot critically hit. <font color='#CA7200'><Ability:IMBUEAMMO_COOLDOWN/></font>-turn cooldown."
-LocFlyOverText="Imbue Ammo"
+LocHelpText="Create a psionically charged bullet which can be fired from the bullpup in ranged stance."
+LocFlyOverText="Astral Bullet"
 
 [Warden_BD_GrantSoulBladeCharges X2AbilityTemplate]
 LocFriendlyName="Soul-Blade"
 LocLongDescription="Channel psionic energy into your sword, granting a psionically enhanced attack on the next turn in melee stance. The attack does +<font color='#CA7200'><Ability:SOULBLADE_DAMAGE_BONUS/></font> base damage, ignores armor & shields and bypasses sustained units but cannot critically hit. <font color='#CA7200'><Ability:SOULBLADE_COOLDOWN/></font>-turn cooldown."
-LocHelpText="Channel psionic energy into your sword, granting a psionically enhanced attack on the next turn in melee stance. The attack does +<font color='#CA7200'><Ability:SOULBLADE_DAMAGE_BONUS/></font> base damage, ignores armor & shields and bypasses sustained units but cannot critically hit. <font color='#CA7200'><Ability:SOULBLADE_COOLDOWN/></font>-turn cooldown."
+LocHelpText="Enhance your sword attack with psionic energy and gain a special attack on the next turn in melee stance.<font color='#CA7200'><Ability:SOULBLADE_COOLDOWN/></font>-turn cooldown."
 LocFlyOverText="Soul-Blade"
 
 [Warden_BD_ImbueAmmo X2AbilityTemplate]
-LocFriendlyName="Fire Imbued Ammo"
+LocFriendlyName="Fire Astral Bullet"
 LocLongDescription="Fire a psionic bullet at an enemy. The attack deals +<font color='#CA7200'><Ability:IMBUEAMMO_DAMAGE_BONUS/></font> base damage, ignores armor & shields and bypasses sustained units but cannot critically hit."
-LocHelpText="Fire a psionic bullet at an enemy. The attack deals +<font color='#CA7200'><Ability:IMBUEAMMO_DAMAGE_BONUS/></font> base damage, ignores armor & shields and bypasses sustained units but cannot critically hit."
-LocFlyOverText="Imbue Ammo"
+LocHelpText="Fire a psionic bullet at an enemy. Ignores armor, shields and bypasses sustained units but cannot critically hit."
+LocFlyOverText="Fire Astral Bullet"
 
 [Warden_BD_SoulBlade X2AbilityTemplate]
 LocFriendlyName="Soul-Blade Attack"
 LocLongDescription="Perform a psionically enhanced sword attack. The attack does +<font color='#CA7200'><Ability:SOULBLADE_DAMAGE_BONUS/></font> base damage, ignores armor & shields and bypasses sustained units but cannot critically hit."
-LocHelpText="Perform a psionically enhanced sword attack. The attack does +<font color='#CA7200'><Ability:SOULBLADE_DAMAGE_BONUS/></font> base damage, ignores armor & shields and bypasses sustained units but cannot critically hit."
+LocHelpText="Perform a psionically enhanced sword attack. Ignores armor, shields and bypasses sustained units but cannot critically hit."
 LocFlyOverText="Soul-Blade Attack"
 
 [Warden_BD_DefensiveWard X2AbilityTemplate]
-LocFriendlyName="Seal of Destruction"
-LocLongDescription="Place a psionic seal on the ground. Any non-robotic enemy units still standing in the seal's area of effect at the beginning of the next turn will be dealt <font color='#CA7200'><Ability:DEFENSIVEWARD_DAMAGE/></font> psionic damage. <font color='#CA7200'><Ability:DEFENSIVEWARD_COOLDOWN/></font>-turn cooldown."
-LocHelpText="Place a psionic seal on the ground. Any non-robotic enemy units still standing in the seal's area of effect at the beginning of the next turn will be dealt <font color='#CA7200'><Ability:DEFENSIVEWARD_DAMAGE/></font> psionic damage. <font color='#CA7200'><Ability:DEFENSIVEWARD_COOLDOWN/></font>-turn cooldown."
-LocFlyOverText="Seal of Psionics"
+LocFriendlyName="Sigil of Destruction"
+LocLongDescription="Place a psionic ward on the ground. Any non-robotic enemy units still standing in the ward's area of effect at the beginning of the next turn will be dealt <font color='#CA7200'><Ability:DEFENSIVEWARD_DAMAGE/></font> psionic damage. <font color='#CA7200'><Ability:DEFENSIVEWARD_COOLDOWN/></font>-turn cooldown."
+LocHelpText="Place a ward on the ground. At the beginning of the next turn, non-robotic enemies will be dealt <font color='#CA7200'><Ability:DEFENSIVEWARD_DAMAGE/></font> psionic damage. <font color='#CA7200'><Ability:DEFENSIVEWARD_COOLDOWN/></font>-turn cooldown."
+LocFlyOverText="Sigil of Destruction"
 
 [Warden_BD_FirearmFocusPassive X2AbilityTemplate]
 LocFriendlyName="Firearm Focus"
@@ -184,23 +216,23 @@ LocPromotionPopupText="<Bullet/> No cooldown."
 LocFlyOverText="Riposte"
 
 [Warden_BD_Fissure X2AbilityTemplate]
-LocFriendlyName="Seal of Rupturing"
-LocLongDescription="Place a seal on the ground. At the start of the next turn, any non-robotic units remaining inside the seal will be ruptured. <font color='#CA7200'><Ability:FISSURE_COOLDOWN/></font>-turn cooldown."
-LocHelpText="Place a seal on the ground. At the start of the next turn, any non-robotic units remaining inside the seal will be ruptured. <font color='#CA7200'><Ability:FISSURE_COOLDOWN/></font>-turn cooldown."
+LocFriendlyName="Sundering Sigil"
+LocLongDescription="Place a ward on the ground. At the start of the next turn, any non-robotic units remaining inside the ward will be ruptured. <font color='#CA7200'><Ability:FISSURE_COOLDOWN/></font>-turn cooldown."
+LocHelpText="Place a ward on the ground. At the start of the next turn, any non-robotic units remaining inside the ward will be ruptured. <font color='#CA7200'><Ability:FISSURE_COOLDOWN/></font>-turn cooldown."
 LocPromotionPopupText="<Bullet/> No cooldown."
-LocFlyOverText="Fissure"
+LocFlyOverText="Sundering Sigil"
 
 [Warden_BD_Tide X2AbilityTemplate]
 LocFriendlyName="Tide"
-LocLongDescription="Knocks down & damages non-flying enemies, ignoring cover & armour. Deals <font color='#CA7200'><Ability:TIDE_DAMAGE/></font> damage in a <font color='#CA7200'><Ability:TIDE_AREA_OF_EFFECT/></font> tile radius around the warden and stuns all enemies for <font color='#CA7200'><Ability:TIDE_STUN_DURATION/></font> action point. <font color='#CA7200'><Ability:TIDE_COOLDOWN/></font>-turn cooldown."
-LocHelpText="Knocks down & damages non-flying enemies, ignoring cover & armour. Deals <font color='#CA7200'><Ability:TIDE_DAMAGE/></font> damage in a <font color='#CA7200'><Ability:TIDE_AREA_OF_EFFECT/></font> tile radius around the warden and stuns all enemies for <font color='#CA7200'><Ability:TIDE_STUN_DURATION/></font> action point. <font color='#CA7200'><Ability:TIDE_COOLDOWN/></font>-turn cooldown."
+LocLongDescription="Create a psionic shockwave that pushes back & damages non-flying enemies, ignoring cover & armour. Deals <font color='#CA7200'><Ability:TIDE_DAMAGE/></font> damage in a <font color='#CA7200'><Ability:TIDE_AREA_OF_EFFECT/></font> tile radius around the warden and stuns all enemies for <font color='#CA7200'><Ability:TIDE_STUN_DURATION/></font> action point. <font color='#CA7200'><Ability:TIDE_COOLDOWN/></font>-turn cooldown."
+LocHelpText="Knock down & damage non-flying enemies, ignoring cover & armour. Deals <font color='#CA7200'><Ability:TIDE_DAMAGE/></font> damage in a <font color='#CA7200'><Ability:TIDE_AREA_OF_EFFECT/></font> tile radius around the warden. Stuns for <font color='#CA7200'><Ability:TIDE_STUN_DURATION/></font> action point. <font color='#CA7200'><Ability:TIDE_COOLDOWN/></font>-turn cooldown."
 LocPromotionPopupText="<Bullet/> No cooldown."
 LocFlyOverText="Tide"
 
 [Warden_BD_Consume X2AbilityTemplate]
 LocFriendlyName="Consume"
-LocLongDescription="Cleanse all mental and active DOT effects from non-robotic XCOM units in the AOE and gain <font color='#CA7200'><Ability:CONSUME_MULTIPLIER/></font> damage per effect removed to the Warden's next attack. <font color='#CA7200'><Ability:CONSUME_COOLDOWN/></font>-turn cooldown."
-LocHelpText="Cleanse all mental and active DOT effects from non-robotic XCOM units in the AOE and gain <font color='#CA7200'><Ability:CONSUME_MULTIPLIER/></font> damage per effect removed to the Warden's next attack. <font color='#CA7200'><Ability:CONSUME_COOLDOWN/></font>-turn cooldown."
+LocLongDescription="Cleanse all mental and active damage-over-time effects from non-robotic XCOM units in the AOE and gain <font color='#CA7200'><Ability:CONSUME_MULTIPLIER/></font> damage per effect removed to the Warden's next attack. <font color='#CA7200'><Ability:CONSUME_COOLDOWN/></font>-turn cooldown."
+LocHelpText="Cleanse all impairmens from non-robotic XCOM units in the area and gain <font color='#CA7200'><Ability:CONSUME_MULTIPLIER/></font> damage per effect removed to the Warden's next attack. <font color='#CA7200'><Ability:CONSUME_COOLDOWN/></font>-turn cooldown."
 LocPromotionPopupText="<Bullet/> No cooldown."
 LocFlyOverText="Consume"
 
@@ -217,33 +249,33 @@ LocHelpText="Standard shot can be activated from flow action points, allowing tw
 LocFlyOverText="Warden's Rage"
 
 [Warden_BD_Charge X2AbilityTemplate]
-LocFriendlyName="Warden's Charge"
+LocFriendlyName="Warden's Surge"
 LocLongDescription="Sword slash can be activated from flow action points, allowing slash / slash or shot / slash in a single turn."
 LocHelpText="Sword slash can be activated from flow action points, allowing slash / slash or shot / slash in a single turn."
-LocFlyOverText="Warden's Charge"
+LocFlyOverText="Warden's Surge"
 
 [Warden_BD_Retribution X2AbilityTemplate]
-LocFriendlyName="Seal of Retribution"
-LocLongDescription="Place a seal on the ground. All non-robotic friendly units standing in the seal's area of effect at the end of the turn will be granted a free overwatch shot. <font color='#CA7200'><Ability:RETRIBUTION_COOLDOWN/></font>-turn cooldown."
-LocHelpText="Place a seal on the ground. All non-robotic friendly units standing in the seal's area of effect at the end of the turn will be granted a free overwatch shot. <font color='#CA7200'><Ability:RETRIBUTION_COOLDOWN/></font>-turn cooldown."
-LocFlyOverText="Seal of Retribution"
+LocFriendlyName="Sigil of Retribution"
+LocLongDescription="Place a ward on the ground. All non-robotic friendly units standing in the ward's area of effect at the end of the turn will be granted a free overwatch shot. <font color='#CA7200'><Ability:RETRIBUTION_COOLDOWN/></font>-turn cooldown."
+LocHelpText="Place a ward on the ground. Units standing in the ward's area of effect at the end of the turn will be granted a free overwatch shot. <font color='#CA7200'><Ability:RETRIBUTION_COOLDOWN/></font>-turn cooldown."
+LocFlyOverText="Sigil of Retribution"
 
 [Warden_BD_Brand X2AbilityTemplate]
 LocFriendlyName="Brand"
 LocLongDescription = "Brand an enemy with a psionic hex, granting +<font color='#3ABD23'><Ability:BRAND_OFFENSE_STAT_BONUS/></font>% to Hit & Crit and +<font color='#3ABD23'><Ability:BRAND_DAMAGE_BONUS/></font> damage against the target on all future attacks."
-LocHelpText = "Brand an enemy with a psionic hex, granting +<font color='#3ABD23'><Ability:BRAND_OFFENSE_STAT_BONUS/></font>% to Hit & Crit and +<font color='#3ABD23'><Ability:BRAND_DAMAGE_BONUS/></font> damage against the target on all future attacks."
+LocHelpText = "Brand an enemy, granting +<font color='#3ABD23'><Ability:BRAND_OFFENSE_STAT_BONUS/></font>% to Hit & Crit and +<font color='#3ABD23'><Ability:BRAND_DAMAGE_BONUS/></font> damage on future attacks."
 LocFlyOverText="Brand"
 
 [Warden_BD_Pillar X2AbilityTemplate]
 LocFriendlyName="Pillar"
 LocLongDescription="Create a large obelisk at the target location, granting high cover lasting for <font color='#CA7200'><Ability:PILLLAR_NUMBER_OF_TURNS/></font> turns. <font color='#CA7200'><Ability:PILLAR_COOLDOWN/></font>-turn cooldown."
-LocHelpText="Create a large obelisk at the target location, granting high cover lasting for <font color='#CA7200'><Ability:PILLLAR_NUMBER_OF_TURNS/></font> turns.<font color='#CA7200'><Ability:PILLAR_COOLDOWN/></font>-turn cooldown."
+LocHelpText="Create a pillar at the target location. Grants high cover lasting for <font color='#CA7200'><Ability:PILLLAR_NUMBER_OF_TURNS/></font> turns.<font color='#CA7200'><Ability:PILLAR_COOLDOWN/></font>-turn cooldown."
 LocFlyOverText="Pillar"
 
 [Warden_BD_Inspire X2AbilityTemplate]
-LocFriendlyName="Wardens Inspiration"
-LocLongDescription="Grant a standard action point to an ally - uses Flow action points to activate. <font color='#CA7200'><Ability:INSPIRE_COOLDOWN/></font>-turn cooldown."
-LocHelpText="Grant a standard action point to an ally - uses Flow action points to activate. <font color='#CA7200'><Ability:INSPIRE_COOLDOWN/></font>-turn cooldown."
+LocFriendlyName="Warden's Inspiration"
+LocLongDescription="Grant a standard action point to an ally. <font color='#CA7200'><Ability:INSPIRE_COOLDOWN/></font>-turn cooldown."
+LocHelpText="Grant a standard action point to an ally. <font color='#CA7200'><Ability:INSPIRE_COOLDOWN/></font>-turn cooldown."
 LocFlyOverText="Warden's Inspiration"
 
 [Warden_BD_Fuse X2AbilityTemplate]

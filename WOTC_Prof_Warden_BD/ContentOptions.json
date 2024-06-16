@@ -1,11 +1,26 @@
 {
     "sfStandalone": [
-        "Perk_Warden_BD_Mirror",
+        "Anim_Warden_BD_Blink",
+		"Anim_Warden_BD_Brand",
+		"Anim_Warden_BD_Combatives",
+		"Anim_Warden_BD_Fuse",
+		"Anim_Warden_BD_ImbueAmmo",
+		"Anim_Warden_BD_Seals",
+		"Anim_Warden_BD_StanceAndShields",
+		"Anim_Warden_BD_Tide",
+		"Perk_Warden_BD_Charge",
+		"Perk_Warden_BD_Combatives",
+		"Perk_Warden_BD_Consume",
+		"Perk_Warden_BD_Fuse",
+		"Perk_Warden_BD_ImbueAmmo",
+		"Perk_Warden_BD_Inspire",
 		"Perk_Warden_BD_KineticArmor",
 		"Perk_Warden_BD_Melee",
+		"Perk_Warden_BD_Mirror",
 		"Perk_Warden_BD_Pillar",
 		"Perk_Warden_BD_Ranged",
-		"Perk_Warden_BD_SwordSlice",
+		"Perk_Warden_BD_Seals",
+		"Perk_Warden_BD_Soulblade",
 		"Warden_BD_PerkIcons"
 	]
 }
