@@ -734,10 +734,10 @@ static function X2AbilityTemplate Warden_BD_ProficiencyPassives()
 	// Grant Flow Mastery, single charge at appropriate rank
 	AddAbilityEffect = new class'X2Effect_WardenAddAbilitiesToTarget';
 	AddAbilityEffect.AddAbilities.AddItem('Warden_BD_EbbAndFlowManual');
-	BonusCharges.iChargeModifier = 1;
-	BonusCharges.BuildPersistentEffect (1, true, false, false);
+	AddAbilityEffect.BuildPersistentEffect (1, true, false, false);
 	AddAbilityEffect.EffectName = 'ProficiencyEbbandFlow';
 	AddAbilityEffect.TargetConditions.AddItem(RankCondition1);
+	
 	Template.AddTargetEffect(AddAbilityEffect);
 
 	// Grant an additional charge at the appopriate rank
@@ -3489,7 +3489,6 @@ function Consume_BuildVisualization(XComGameState VisualizeGameState)
 	local XComGameStateContext_Ability		Context;
 	local int								SourceUnitID;
 	local X2Action_CameraLookAt				LookAtTargetAction;
-	local X2Action_TimedWait				WaitAction;
 
 	//	Call the typical ability visuailzation. With just that, the ability would look like the soldier firing the rocket upwards, and then enemy getting damage for seemingly no reason.
 	class'X2Ability'.static.TypicalAbility_BuildVisualization(VisualizeGameState);
@@ -3550,24 +3549,19 @@ function Pillar_BuildVisualization(XComGameState VisualizeGameState)
 // Seals 2nd Stage Visualisation Function
 function Seal_BuildVisualization(XComGameState VisualizeGameState)
 {
-	local XComGameStateHistory History;
-	local XComGameStateContext_Ability  Context;
-	local StateObjectReference InteractingUnitRef;
-	local X2AbilityTemplate AbilityTemplate;
-	local VisualizationActionMetadata EmptyTrack;
-	local VisualizationActionMetadata CyberusBuildTrack, ActionMetadata;
-	local int i, j;
-	local X2VisualizerInterface TargetVisualizerInterface;
-	local XComGameState_EnvironmentDamage EnvironmentDamageEvent;
-	local XComGameState_WorldEffectTileData WorldDataUpdate;
-	local XComGameState_InteractiveObject InteractiveObject;
-	local X2Action_PlayEffect EffectAction;
-	local X2Action_StartStopSound SoundAction;
-	local XComGameState_Unit CyberusUnit;
-	local X2Action_TimedInterTrackMessageAllMultiTargets MultiTargetMessageAction;
-	local X2Action_TimedWait WaitAction;
-	local X2Action_CameraLookAt LookAtAction;
-
+	local XComGameStateHistory								History;
+	local XComGameStateContext_Ability						Context;
+	local StateObjectReference								InteractingUnitRef;
+	local X2AbilityTemplate									AbilityTemplate;
+	local VisualizationActionMetadata						EmptyTrack;
+	local VisualizationActionMetadata						CyberusBuildTrack, ActionMetadata;
+	local int												i, j;
+	local X2VisualizerInterface								TargetVisualizerInterface;
+	local X2Action_PlayEffect								EffectAction;
+	local X2Action_StartStopSound							SoundAction;
+	local XComGameState_Unit								CyberusUnit;
+	local X2Action_TimedInterTrackMessageAllMultiTargets	MultiTargetMessageAction;
+	local X2Action_TimedWait								WaitAction;
 	History = `XCOMHISTORY;
 
 	Context = XComGameStateContext_Ability(VisualizeGameState.GetContext());
