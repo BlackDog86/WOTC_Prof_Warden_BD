@@ -710,16 +710,16 @@ static function X2AbilityTemplate Warden_BD_ProficiencyPassives()
 	Template.eAbilityIconBehaviorHUD = EAbilityIconBehavior_NeverShow;
 	Template.Hostility = eHostility_Neutral;
 
-	//Create Ranks for Manual Ebb & Flow Effect (Corporal)
+	//Create Ranks for Manual Ebb & Flow Effect (Sergeant)
 	RankCondition1 = new class 'X2Condition_WardenTargetRankRequirement';
-	RankCondition1.iMinRank = 2;		// No minimum rank for level 1 bonuses
-	RankCondition1.iMaxRank = -1;	// Max rank is 1 below minimum rank for level 2 bonuses
+	RankCondition1.iMinRank = 3;		// No minimum rank for level 1 bonuses
+	RankCondition1.iMaxRank = 5;	// Max rank is 1 below minimum rank for level 2 bonuses
 	RankCondition1.LogEffectName = "Grant stanceswitch ability";	// EffectName to use in logs
 	RankCondition1.GiveProject = 'WOTC_Prof_Warden_BD_Unlock1';
 
-	//Create Ranks for Manual Ebb & Flow Effect (Captain)
+	//Create Ranks for Manual Ebb & Flow Effect (Major)
 	RankCondition2 = new class 'X2Condition_WardenTargetRankRequirement';
-	RankCondition2.iMinRank = 5;		// No minimum rank for level 1 bonuses
+	RankCondition2.iMinRank = 6;		// No minimum rank for level 1 bonuses
 	RankCondition2.iMaxRank = -1;	// Max rank is 1 below minimum rank for level 2 bonuses
 	RankCondition2.LogEffectName = "Grant stanceswitch ability";	// EffectName to use in logs
 	RankCondition2.GiveProject = 'WOTC_Prof_Warden_BD_Unlock1';
@@ -1002,6 +1002,8 @@ static final function X2AbilityTemplate Warden_BD_Mirror()
 	Template.AbilityToHitCalc = default.DeadEye;
 	Template.DisplayTargetHitChance = false;
 	Template.AbilityTargetStyle = default.SelfTarget;	
+	// Can't use while impaired
+	Template.AddShooterEffectExclusions();
 
 	// Ability trigger determines how it is activated. In this case - by the user manually.
 	Template.AbilityTriggers.AddItem(default.PlayerInputTrigger);
@@ -1071,7 +1073,7 @@ Static final function X2AbilityTemplate Warden_BD_MirrorReturnFire()
 
 	Template.AbilityTargetStyle = default.SimpleSingleTarget;
 	Template.AbilityShooterConditions.AddItem(default.LivingShooterProperty);
-
+	
 	DamageEffect = new class'X2Effect_WardenMirrorReturnFire';	
 	DamageEffect.EffectDamageValue.DamageType = 'Psi';
 	DamageEffect.bBypassShields = true;
@@ -1080,7 +1082,7 @@ Static final function X2AbilityTemplate Warden_BD_MirrorReturnFire()
 	Template.CustomFireAnim = 'HL_Brand_Volley';
 	Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
 	Template.BuildVisualizationFn = TypicalAbility_BuildVisualization;
-	Template.CinescriptCameraType = "StandardGunFiring";
+	Template.CinescriptCameraType = "Psionic_FireAtUnit";
 	Template.bSkipFireAction = false;
 
 	return Template;

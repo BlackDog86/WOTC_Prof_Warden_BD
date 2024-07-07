@@ -6,7 +6,7 @@ function ModifyReactionFireSuccess(XComGameState_Unit UnitState, XComGameState_U
 	local float	ReactionFireAim;
 
 	StandardAim = UnitState.GetCurrentStat(eStat_Offense);
-	ReactionFireAim = Round(0.7 * StandardAim);
+	ReactionFireAim = Round(class'X2AbilityToHitCalc_StandardAim'.default.REACTION_FINALMOD * StandardAim);
 	
 	Modifier = StandardAim - Int(ReactionFireAim);	
 }

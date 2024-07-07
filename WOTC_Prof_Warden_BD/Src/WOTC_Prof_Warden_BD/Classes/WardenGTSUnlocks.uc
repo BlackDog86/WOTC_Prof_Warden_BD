@@ -34,7 +34,7 @@ static function X2SoldierAbilityUnlockTemplate WOTC_Prof_Warden_BD_Unlock1()
 
 	`CREATE_X2TEMPLATE(class'X2SoldierAbilityUnlockTemplate', Template, 'WOTC_Prof_Warden_BD_Unlock1');	
 	Template.AllowedClasses.AddItem('WOTC_Prof_Warden_BD');
-	Template.strImage = "img:///UILibrary_PerkIcons.UIPerk_psychic";
+	Template.strImage = "img:///UILibrary_StrategyImages.GTS.GTS_SquadSize1";
 
 	// Requirements
 	Template.Requirements.RequiredHighestSoldierRank = 3;
@@ -61,7 +61,7 @@ static function X2SoldierAbilityUnlockTemplate WOTC_Prof_Warden_BD_Unlock2()
 
 	`CREATE_X2TEMPLATE(class'X2SoldierAbilityUnlockTemplate', Template, 'WOTC_Prof_Warden_BD_Unlock2');	
 	Template.AllowedClasses.AddItem('WOTC_Prof_Warden_BD');
-	Template.strImage = "img:///UILibrary_PerkIcons.UIPerk_psychic";
+	Template.strImage = "img:///UILibrary_StrategyImages.GTS.GTS_SquadSize2";
 
 	// Requirements
 	Template.Requirements.RequiredHighestSoldierRank = 6;

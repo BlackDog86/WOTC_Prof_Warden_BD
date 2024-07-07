@@ -3,16 +3,17 @@ class X2Effect_WardenMirror extends X2Effect_Persistent config(WardenSkills);
 function bool ChangeHitResultForTarget(XComGameState_Effect EffectState, XComGameState_Unit Attacker, XComGameState_Unit TargetUnit, XComGameState_Ability AbilityState, bool bIsPrimaryTarget, const EAbilityHitResult CurrentResult, out EAbilityHitResult NewHitResult)
 { 
 	local	X2AbilityToHitCalc_StandardAim	Aim;
+	local	XComGameState_Player			Player;
 
 		Aim = X2AbilityToHitCalc_StandardAim(AbilityState.GetMyTemplate().AbilityToHitCalc);
-
-		// Only respond to direct attacks against the target, ignore AOE attacks 
-		If ( Aim == none || !bIsPrimaryTarget)
+		Player = XComGameState_Player(`XCOMHISTORY.GetGameStateForObjectID(EffectState.ApplyEffectParameters.PlayerStateObjectRef.ObjectID));
+		
+		If (Aim == none)
 		{ 		
 		return false;
 		}
 		switch (CurrentResult)
-		{
+		{		
 		case eHit_Crit:
 			NewHitResult = eHit_Graze;	
 			return true;
@@ -25,7 +26,6 @@ function bool ChangeHitResultForTarget(XComGameState_Effect EffectState, XComGam
 		default:
 			break;
 		}	
-
 	return false; 
 }
 
@@ -38,18 +38,26 @@ function int GetDefendingDamageModifier(XComGameState_Effect EffectState, XComGa
 		UnitState = XComGameState_Unit(TargetDamageable);			
 		Player = XComGameState_Player(`XCOMHISTORY.GetGameStateForObjectID(EffectState.ApplyEffectParameters.PlayerStateObjectRef.ObjectID));
 		Aim = X2AbilityToHitCalc_StandardAim(AbilityState.GetMyTemplate().AbilityToHitCalc);
-		
-		// Do not trigger the event for damage preview, reaction fire, explosive damage or stuff that doesn't actually do any damage in the first place
-		If (UnitState == none || Player == none || Aim == none || Aim.bReactionFire || WeaponDamageEffect.bExplosiveDamage || CurrentDamage == 0 || NewGameState == none)
+		//If hit by an environmenal explosive, or if the attack didn't do any damage, due to missing or not being a damaging atatck at all, don't do anything
+		If (Aim == none || CurrentDamage == 0 )
+		{		
+		// Do not trigger at all against damage not applied by a unit & don't tick
+		Return 0;	
+		}
+		// Do not trigger the reaction fire against OW, damage preview, explosives or if the unit is impaired
+		Else If (UnitState == none || UnitState.IsImpaired() || UnitState.IsBurning() || UnitState.IsPanicked() || Aim.bReactionFire || WeaponDamageEffect.bExplosiveDamage || NewGameState == none)
 		{
-		Return 0;
-		`log("One of the states in Mirror GetDefendingDamageModifier was None - not triggereing the tick event");
+		// Tick the effect for AOE effects that graze even if fire wasn't returned
+		`XEVENTMGR.TriggerEvent('MirrorManualTick', Player, UnitState, NewGameState);
+		`log("Mirror not returning fire due to conditions");
+		Return 0;		
 		}
 		Else
-		{	
+		//someone made a direct attack - tick effect & return fire!
+		{		
 		`XEVENTMGR.TriggerEvent('MirrorReturnFire', Player, UnitState, NewGameState);	
-		`XEVENTMGR.TriggerEvent('MirrorManualTick', Player, UnitState, NewGameState);
-		 `log("Triggering mirror tick event");
+		`XEVENTMGR.TriggerEvent('MirrorManualTick', Player, UnitState, NewGameState);		
+		 `log("Triggering mirror return fire");
 		 return 0; 
 		}
 }

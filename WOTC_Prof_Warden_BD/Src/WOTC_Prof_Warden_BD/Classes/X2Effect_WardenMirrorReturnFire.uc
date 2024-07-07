@@ -12,14 +12,14 @@ function WeaponDamageValue GetBonusEffectDamageValue(XComGameState_Ability Abili
 		for (i = 0; i < SourceUnit.DamageResults.Length; i++)
 			{
 				LastDamageResult = SourceUnit.DamageResults[i];	
-				//`LOG("Array position" @ i @ "Caused damage to unit of" @ LastDamageResult.DamageAmount);
-				//`LOG("Array position" @ i @ "Removed shield HP of" @ LastDamageResult.ShieldHP);
-				//`LOG("Array position" @ i @ "had ability context" @ LastDamageResult.Context);
-				//`LOG("Array position" @ i @ "ability object ID is" @ LastDamageResult.SourceEffect.AbilityStateObjectRef.ObjectID);
+				`LOG("Array position" @ i @ "Caused damage to unit of" @ LastDamageResult.DamageAmount);
+				`LOG("Array position" @ i @ "Removed shield HP of" @ LastDamageResult.ShieldHP);
+				`LOG("Array position" @ i @ "had ability context" @ LastDamageResult.Context);
+				`LOG("Array position" @ i @ "ability object ID is" @ LastDamageResult.SourceEffect.AbilityStateObjectRef.ObjectID);
 				if (LastDamageResult.SourceEffect.AbilityStateObjectRef.ObjectID != 0)		
 					{
 					DamageValue.Damage = LastDamageResult.DamageAmount;			
-					//`LOG("Damage to deal is" @ DamageValue.Damage);	
+					`LOG("Damage to deal is" @ DamageValue.Damage);	
 					}			
 			}
 		Return DamageValue;
