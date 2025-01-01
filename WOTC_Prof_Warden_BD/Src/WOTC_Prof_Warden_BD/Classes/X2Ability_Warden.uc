@@ -2271,7 +2271,7 @@ static function X2DataTemplate Warden_BD_Tide()
 	// The Targets must be within the AOE & LOS
 	UnitPropertyCondition = new class'X2Condition_UnitProperty';
 	UnitPropertyCondition.ExcludeDead = true;
-	UnitPropertyCondition.ExcludeFriendlyToSource = false;
+	UnitPropertyCondition.ExcludeFriendlyToSource = true;
 	UnitPropertyCondition.ExcludeHostileToSource = false;
 	UnitPropertyCondition.ExcludeCivilian = true;
 	UnitPropertyCondition.FailOnNonUnits = true;
