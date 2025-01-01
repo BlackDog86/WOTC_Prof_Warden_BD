@@ -6,7 +6,6 @@ function bool ChangeHitResultForTarget(XComGameState_Effect EffectState, XComGam
 	local	XComGameState_Player			Player;
 
 		Aim = X2AbilityToHitCalc_StandardAim(AbilityState.GetMyTemplate().AbilityToHitCalc);
-		Player = XComGameState_Player(`XCOMHISTORY.GetGameStateForObjectID(EffectState.ApplyEffectParameters.PlayerStateObjectRef.ObjectID));
 		
 		If (Aim == none)
 		{ 		

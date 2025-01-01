@@ -2286,6 +2286,7 @@ static function X2DataTemplate Warden_BD_Tide()
 	DamageEffect = new class'X2Effect_ApplyWeaponDamage';
 	DamageEffect.bIgnoreArmor = true;
 	DamageEffect.bBypassShields = true;
+	DamageEffect.EffectDamageValue.DamageType = 'Psi';
 	DamageEffect.EffectDamageValue.Damage = default.TIDE_DAMAGE_AMOUNT;
 	DamageEffect.EnvironmentalDamageAmount = default.TIDE_ENVDAMAGE;
 	DamageEffect.TargetConditions.AddItem(ImmuneToFallingCondition);
@@ -3292,7 +3293,11 @@ static final function EventListenerReturn SpecialAPTrigger_EventListenerFn(Objec
 		`log("SpecialAPTrigger Ability Deals Damage: " @ AbilityTemplate.TargetEffectsDealDamage(SourceWeapon, ActivatedAbilityState));    
 		if (!AbilityTemplate.TargetEffectsDealDamage(SourceWeapon, ActivatedAbilityState))
 	         return ELR_NoInterrupt; 
-	}	
+
+		// fallback if the shot taken was from overwatch
+		if(X2AbilityToHitCalc_StandardAim(AbilityTemplate.AbilityToHitCalc).bReactionFire)			
+			return ELR_NoInterrupt; 	
+	}
 	// Fallback if any of these APs have been granted already
 	If (SourceUnit.GetUnitValue(default.FlowAPGrantedValueName, UV))
 		return ELR_NoInterrupt;
@@ -3568,8 +3573,6 @@ function Seal_BuildVisualization(XComGameState VisualizeGameState)
 
 	Context = XComGameStateContext_Ability(VisualizeGameState.GetContext());
 	InteractingUnitRef = Context.InputContext.SourceObject;
-
-	AbilityTemplate = class'XComGameState_Ability'.static.GetMyTemplateManager().FindAbilityTemplate(Context.InputContext.AbilityTemplateName);
 
 	//****************************************************************************************
 	//Configure the visualization track for the source
