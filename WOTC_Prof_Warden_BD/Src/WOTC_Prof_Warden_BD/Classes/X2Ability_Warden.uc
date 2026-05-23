@@ -103,9 +103,6 @@ var config int	MELEESTANCE_AIM_PENALTY;
 var config int	CRUSADER_AIM_BONUS;
 var config int	CRUSADER_CRIT_BONUS;
 
-var config int	KINETIC_ARMOR_SHIELD_HP_PERCENTAGE;
-var config int	KINETIC_ARMOR_COOLDOWN;
-
 var config int	MIRROR_NUMBER_OF_ATTACKS;
 var config int	MIRROR_COOLDOWN;
 
@@ -114,6 +111,7 @@ var config int	REWIND_COOLDOWN;
 var config int	IMBUEAMMO_COOLDOWN;
 var config int	IMBUEAMMO_DAMAGE_BONUS;
 var config int	IMBUEAMMO_INITIAL_CHARGES;
+var config int	IMBUEAMMO_ENVDAMAGE;
 
 var config int	SOULBLADE_COOLDOWN;
 var config int	SOULBLADE_DAMAGE_BONUS;
@@ -228,7 +226,8 @@ static function array<X2DataTemplate> CreateTemplates()
 	Templates.AddItem(Warden_BD_Inspire());
 	Templates.AddItem(Warden_BD_Fuse());
 	Templates.AddItem(Warden_BD_FractureRanged());
-	Templates.AddItem(Warden_BD_LastRites());
+	Templates.AddItem(Warden_BD_LastRitesChargeDummy());
+	Templates.AddItem(Warden_BD_LastRites());	
 	Templates.AddItem(Warden_BD_LastRitesRewind());
 	Templates.AddItem(Warden_BD_LastRitesDetonation());
 
@@ -548,7 +547,6 @@ static function X2AbilityTemplate Warden_BD_Stances()
 	Template.AdditionalAbilities.AddItem('Warden_BD_RangedStance');
 	Template.AdditionalAbilities.AddItem('Warden_BD_MeleeStance');
 	Template.AdditionalAbilities.AddItem('Warden_BD_WrongStancePenalties');
-
 	SetVeryHidden(Template);
 
 	return Template;
@@ -1822,6 +1820,7 @@ static function X2AbilityTemplate Warden_BD_ImbueAmmo() {
 	//WeaponDamageEffect.bIgnoreWeaponBaseDamageTypeForFlyover = true;
 	WeaponDamageEffect.bBypassShields = true;
 	WeaponDamageEffect.bBypassSustainEffects = true;
+	WeaponDamageEffect.EnvironmentalDamageAmount = default.IMBUEAMMO_ENVDAMAGE;
 	WeaponDamageEffect.EffectDamageValue.Damage = default.IMBUEAMMO_DAMAGE_BONUS;
 	WeaponDamageEffect.EffectDamageValue.Pierce = 99;
 	WeaponDamageEffect.DamageTypes.Length=0;
@@ -3190,7 +3189,7 @@ static function X2AbilityTemplate Warden_BD_Charge()
 	`CREATE_X2ABILITY_TEMPLATE(Template, 'Warden_BD_Charge');
 
 	// # Icon Setup
-	Template.AbilitySourceName = 'eAbilitySource_Standard';
+	Template.AbilitySourceName = 'eAbilitySource_Psionic';
 	Template.eAbilityIconBehaviorHUD = EAbilityIconBehavior_AlwaysShow;
 	Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_charge";
 	Template.bHideOnClassUnlock = false;
@@ -3499,15 +3498,15 @@ static function X2AbilityTemplate Warden_BD_Retribution_Stage2()
 static function X2AbilityTemplate Warden_BD_FractureRanged()
 {
     local X2AbilityTemplate                 Template;
-    local X2AbilityCost_ActionPoints        ActionPointCost;   
-    local X2AbilityCost_Charges             ChargeCost;
+    local X2AbilityCost_ActionPoints        ActionPointCost;
     local X2AbilityMultiTarget_AllUnits     MultiTargetUnits;
     local X2AbilityToHitCalc_StandardAim    ToHitCalc;
     local X2Condition_UnitProperty          TargetCondition;
     local X2Condition_UnitValue             CheckRangedStance;
     local X2Effect_ApplyWeaponDamage        DamageEffect;
     local X2Effect_ClearUnitValue           ClearFocusEffect;
-	local X2AbilityCooldown					Cooldown;
+    local X2AbilityCooldown                 Cooldown;
+
     `CREATE_X2ABILITY_TEMPLATE(Template, 'Warden_BD_FractureRanged');
 
     // # Icon Setup
@@ -3521,19 +3520,10 @@ static function X2AbilityTemplate Warden_BD_FractureRanged()
     Template.bFrameEvenWhenUnitIsHidden = true;
     Template.AbilityConfirmSound = "TacticalUI_ActivateAbility";
 
-	Cooldown = new class'X2AbilityCooldown';
-	Cooldown.iNumTurns = default.FRACTURE_RANGED_COOLDOWN;
-	Template.AbilityCooldown = Cooldown;
+    Cooldown = new class'X2AbilityCooldown';
+    Cooldown.iNumTurns = default.FRACTURE_RANGED_COOLDOWN;
+    Template.AbilityCooldown = Cooldown;
 
-    // # Single mission charge
-   // Charges = new class'X2AbilityCharges';
-   // Charges.InitialCharges = default.FRACTURE_RANGED_CHARGES;
-   // Template.AbilityCharges = Charges;
-
-    ChargeCost = new class'X2AbilityCost_Charges';
-    ChargeCost.NumCharges = 1;
-    Template.AbilityCosts.AddItem(ChargeCost);
-		
     // # Standard action point cost
     ActionPointCost = new class'X2AbilityCost_ActionPoints';
     ActionPointCost.iNumPoints = 1;
@@ -3547,41 +3537,40 @@ static function X2AbilityTemplate Warden_BD_FractureRanged()
     Template.AbilityShooterConditions.AddItem(default.LivingShooterProperty);
     Template.AddShooterEffectExclusions();
 
-    // # Targeting - StandardAim, no crits (matches ImbueAmmo profile)
+    // # Targeting
     ToHitCalc = new class'X2AbilityToHitCalc_StandardAim';
     ToHitCalc.bAllowCrit = false;
     Template.AbilityToHitCalc = ToHitCalc;
 
-    // # Self-target with AllUnits multi-target - engine populates
-    // MultiTargets with all visible enemies at activation time
     Template.AbilityTargetStyle = default.SimpleSingleTarget;
     Template.AbilityTriggers.AddItem(default.PlayerInputTrigger);
 
+    // # Warden as primary target so all enemies go into MultiTargets — no double hits
     MultiTargetUnits = new class'X2AbilityMultiTarget_AllUnits';
-	MultiTargetUnits.bAcceptEnemyUnits = true;
-	MultiTargetUnits.bUseAbilitySourceAsPrimaryTarget = true;
-	Template.AbilityMultiTargetStyle = MultiTargetUnits;
+    MultiTargetUnits.bAcceptEnemyUnits = true;
+    MultiTargetUnits.bUseAbilitySourceAsPrimaryTarget = true;
+    Template.AbilityMultiTargetStyle = MultiTargetUnits;
 
-	TargetCondition = new class'X2Condition_UnitProperty';
-	TargetCondition.ExcludeDead = true;
-	TargetCondition.ExcludeFriendlyToSource = true;
-	TargetCondition.ExcludeHostileToSource = false;
-	TargetCondition.ExcludeRobotic = true;
-	TargetCondition.FailOnNonUnits = true;
-	Template.AbilityTargetConditions.AddItem(TargetCondition);
-	Template.AbilityTargetConditions.AddItem(default.GameplayVisibilityCondition);
+    TargetCondition = new class'X2Condition_UnitProperty';
+    TargetCondition.ExcludeDead = true;
+    TargetCondition.ExcludeFriendlyToSource = true;
+    TargetCondition.ExcludeHostileToSource = false;
+    TargetCondition.ExcludeRobotic = true;
+    TargetCondition.FailOnNonUnits = true;
+    Template.AbilityTargetConditions.AddItem(TargetCondition);
+    Template.AbilityTargetConditions.AddItem(default.GameplayVisibilityCondition);
 
-    // # Damage - ImbueAmmo profile
-	DamageEffect = new class'X2Effect_WardenFractureRangedDamage';
-	DamageEffect.EffectDamageValue.DamageType = 'Psi';
-	DamageEffect.bBypassShields = true;
-	DamageEffect.bBypassSustainEffects = true;
-	DamageEffect.EffectDamageValue.Pierce = 99;
-	DamageEffect.EffectDamageValue.Damage = default.IMBUEAMMO_DAMAGE_BONUS;
-	DamageEffect.DamageTypes.Length = 0;
-	DamageEffect.DamageTypes.AddItem('Psi');
+    // # Damage only on multi-targets — Warden is primary so no double hits possible
+    DamageEffect = new class'X2Effect_WardenFractureRangedDamage';
+    DamageEffect.EffectDamageValue.DamageType = 'Psi';
+    DamageEffect.bBypassShields = true;
+    DamageEffect.bBypassSustainEffects = true;
+    DamageEffect.EffectDamageValue.Pierce = 99;
+    DamageEffect.EffectDamageValue.Damage = default.IMBUEAMMO_DAMAGE_BONUS;
+    DamageEffect.DamageTypes.Length = 0;
+    DamageEffect.DamageTypes.AddItem('Psi');
 	Template.AddTargetEffect(DamageEffect);
-	Template.AddMultiTargetEffect(DamageEffect);
+    Template.AddMultiTargetEffect(DamageEffect);
 
     // # Clear ranged focus counter on activation
     ClearFocusEffect = new class'X2Effect_ClearUnitValue';
@@ -3601,9 +3590,8 @@ static function X2AbilityTemplate Warden_BD_FractureRanged()
     Template.ChosenActivationIncreasePerUse = class'X2AbilityTemplateManager'.default.StandardShotChosenActivationIncreasePerUse;
     Template.LostSpawnIncreasePerUse = class'X2AbilityTemplateManager'.default.StandardShotLostSpawnIncreasePerUse;
 
-	Template.bSkipFireAction = true;
-
-	SetFireAnim(Template, 'FF_FireImbuedAmmo');
+    Template.bSkipFireAction = true;
+    SetFireAnim(Template, 'FF_FireImbuedAmmo');
 
     return Template;
 }
@@ -3618,13 +3606,10 @@ static function XComGameState FractureRanged_BuildGameState(XComGameStateContext
     local int                           ShotsToFire;
 
     AbilityContext = XComGameStateContext_Ability(Context);
-
     NewGameState = `XCOMHISTORY.CreateNewGameState(true, Context);
 
     if (AbilityContext != none)
     {
-        // Pull UnitState into NewGameState as a mutable object so
-        // SetUnitFloatValue writes into the new state, not history
         UnitState = XComGameState_Unit(
             NewGameState.ModifyStateObject(
                 class'XComGameState_Unit',
@@ -3642,17 +3627,15 @@ static function XComGameState FractureRanged_BuildGameState(XComGameStateContext
                 if (ImbueAmmoState != none)
                 {
                     ImbueAmmoState.iCharges += default.FRACTURE_RANGED_BULLET_CHARGES;
-                    ShotsToFire = Min(ImbueAmmoState.iCharges, AbilityContext.InputContext.MultiTargets.Length + 1);
+                    ShotsToFire = Min(ImbueAmmoState.iCharges, AbilityContext.InputContext.MultiTargets.Length +1);
                     UnitState.SetUnitFloatValue(default.FractureRangedShotsFired, ShotsToFire, eCleanup_BeginTactical);
-                    `LOG("FractureRanged: ImbueAmmo charges before barrage: "
-                        $ ImbueAmmoState.iCharges,,'BDLOG');
+                    `LOG("FractureRanged: MultiTargets.Length=" $ AbilityContext.InputContext.MultiTargets.Length $ " ShotsToFire=" $ ShotsToFire $ " ImbueAmmoCharges=" $ ImbueAmmoState.iCharges,,'BDLOG');
                 }
             }
         }
     }
 
     TypicalAbility_FillOutGameState(NewGameState);
-
     return NewGameState;
 }
 
@@ -3882,25 +3865,40 @@ static function FractureRanged_BuildVisualization(XComGameState VisualizeGameSta
         JoinActions.SetName("Join");
     }
 }
+// This is just for localization of the penalty on the unit status via F1 etc.
+
+static function X2AbilityTemplate Warden_BD_LastRitesChargeDummy()
+{
+    local X2AbilityTemplate Template;
+
+    `CREATE_X2ABILITY_TEMPLATE(Template, 'Warden_BD_LastRitesCharge');
+    Template.AbilitySourceName = 'eAbilitySource_Psionic';
+    Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_deathblossom";
+    SetVeryHidden(Template);
+    Template.AbilityToHitCalc = default.DeadEye;
+    Template.AbilityTargetStyle = default.SelfTarget;
+    Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
+
+    return Template;
+}
 
 static function X2AbilityTemplate Warden_BD_LastRites()
 {
     local X2AbilityTemplate                     Template;
     local X2AbilityCost_ActionPoints            ActionPointCost;
-    local X2AbilityCost_Charges                 ChargeCost;
     local X2Condition_UnitValue                 CheckMeleeStance;
     local X2Effect_WardenLastRitesCharge        ChargeEffect;
     local X2Effect_WardenModifyAbilityCharges   BonusSoulBladeCharges;
     local X2AbilityToHitCalc_StandardMelee      StandardMelee;
-	local X2Effect_ApplyWeaponDamage			WeaponDamageEffect;
-	local X2Effect_SetUnitValue					SetFlowFlagEffect;
-	local X2AbilityCooldown						Cooldown;
+    local X2Effect_ApplyWeaponDamage            WeaponDamageEffect;
+    local X2Effect_SetUnitValue                 SetFlowFlagEffect;
+    local X2AbilityCooldown                     Cooldown;
 
     `CREATE_X2ABILITY_TEMPLATE(Template, 'Warden_BD_LastRites');
 
     // # Icon Setup
     Template.AbilitySourceName = 'eAbilitySource_Psionic';
-    Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_deathblossom"; // placeholder
+    Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_deathblossom";
     Template.ShotHUDPriority = 2020;
     Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_AlwaysShow;
     Template.bShowActivation = true;
@@ -3910,18 +3908,9 @@ static function X2AbilityTemplate Warden_BD_LastRites()
     Template.AbilityConfirmSound = "TacticalUI_ActivateAbility";
     Template.CinescriptCameraType = "Ranger_Reaper";
 
-    // # Single mission charge
-    //Charges = new class'X2AbilityCharges';
-   // Charges.InitialCharges = default.LAST_RITES_CHARGES;
-    //Template.AbilityCharges = Charges;
-
-	Cooldown = new class'X2AbilityCooldown';
-	Cooldown.iNumTurns = default.LAST_RITES_COOLDOWN;
-	Template.AbilityCooldown = Cooldown;
-
-    ChargeCost = new class'X2AbilityCost_Charges';
-    ChargeCost.NumCharges = 1;
-    Template.AbilityCosts.AddItem(ChargeCost);
+    Cooldown = new class'X2AbilityCooldown';
+    Cooldown.iNumTurns = default.LAST_RITES_COOLDOWN;
+    Template.AbilityCooldown = Cooldown;
 
     // # Standard action point cost
     ActionPointCost = new class'X2AbilityCost_ActionPoints';
@@ -3936,7 +3925,7 @@ static function X2AbilityTemplate Warden_BD_LastRites()
     Template.AbilityShooterConditions.AddItem(default.LivingShooterProperty);
     Template.AddShooterEffectExclusions();
 
-    // # Moving melee targeting — same framework as SoulBlade
+    // # Moving melee targeting
     StandardMelee = new class'X2AbilityToHitCalc_StandardMelee';
     StandardMelee.bAllowCrit = false;
     Template.AbilityToHitCalc = StandardMelee;
@@ -3949,7 +3938,7 @@ static function X2AbilityTemplate Warden_BD_LastRites()
     Template.AbilityTargetConditions.AddItem(default.LivingHostileTargetProperty);
     Template.AbilityTargetConditions.AddItem(default.MeleeVisibilityCondition);
 
-	Template.AdditionalAbilities.AddItem('Warden_BD_LastRitesRewind');
+    Template.AdditionalAbilities.AddItem('Warden_BD_LastRitesRewind');
     Template.AdditionalAbilities.AddItem('Warden_BD_LastRitesDetonation');
 
     // # Grant LAST_RITES_SOULBLADE_CHARGES additional SoulBlade charges on activation
@@ -3959,36 +3948,34 @@ static function X2AbilityTemplate Warden_BD_LastRites()
     BonusSoulBladeCharges.BuildPersistentEffect(1, true, false, false);
     Template.AddShooterEffect(BonusSoulBladeCharges);
 
-	WeaponDamageEffect = class'X2Ability_GrenadierAbilitySet'.static.ShredderDamageEffect();
-	WeaponDamageEffect.EffectDamageValue.DamageType = 'Psi';
-	WeaponDamageEffect.bBypassShields = true;
-	WeaponDamageEffect.bBypassSustainEffects = true;
-	WeaponDamageEffect.EffectDamageValue.Pierce = 99;
-	WeaponDamageEffect.DamageTypes.Length = 0;
-	WeaponDamageEffect.DamageTypes.AddItem('Psi');
-	WeaponDamageEffect.EffectDamageValue.Damage = default.SOULBLADE_DAMAGE_BONUS;
-	Template.AddTargetEffect(WeaponDamageEffect);
-	
-	 // # Weapon effects
+    WeaponDamageEffect = class'X2Ability_GrenadierAbilitySet'.static.ShredderDamageEffect();
+    WeaponDamageEffect.EffectDamageValue.DamageType = 'Psi';
+    WeaponDamageEffect.bBypassShields = true;
+    WeaponDamageEffect.bBypassSustainEffects = true;
+    WeaponDamageEffect.EffectDamageValue.Pierce = 99;
+    WeaponDamageEffect.DamageTypes.Length = 0;
+    WeaponDamageEffect.DamageTypes.AddItem('Psi');
+    WeaponDamageEffect.EffectDamageValue.Damage = default.SOULBLADE_DAMAGE_BONUS;
+    Template.AddTargetEffect(WeaponDamageEffect);
+
+    // # Weapon effects
     Template.bAllowBonusWeaponEffects = false;
     Template.bSkipMoveStop = true;
     Template.SourceMissSpeech = 'SwordMiss';
 
-    // # Apply the Last Rites charge effect to the target
     ChargeEffect = new class'X2Effect_WardenLastRitesCharge';
     ChargeEffect.EffectName = 'WardenLastRitesCharge';
-    ChargeEffect.BuildPersistentEffect(default.LAST_RITES_DURATION, true, true, false, eGameRule_PlayerTurnEnd);
+    ChargeEffect.BuildPersistentEffect(default.LAST_RITES_DURATION, false, true, false, eGameRule_PlayerTurnEnd);
     ChargeEffect.DuplicateResponse = eDupe_Refresh;
-    ChargeEffect.SetDisplayInfo(ePerkBuff_Penalty, Template.LocFriendlyName,
-    Template.GetMyLongDescription(), Template.IconImage, true, , Template.AbilitySourceName);
+    ChargeEffect.SetDisplayInfo(ePerkBuff_Penalty, Template.LocFriendlyName, Template.GetMyLongDescription(), Template.IconImage, true, , Template.AbilitySourceName);
     Template.AddTargetEffect(ChargeEffect);
-	
-	// Because this ability doesn't grant flow APs, we manually set the flag so it will trigger stance switch on turn end
-	SetFlowFlagEffect = new class'X2Effect_SetUnitValue';
-	SetFlowFlagEffect.UnitName = default.FlowAPGrantedValueName;
-	SetFlowFlagEffect.NewValueToSet = 1;
-	SetFlowFlagEffect.CleanupType = eCleanup_BeginTactical;
-	Template.AddShooterEffect(SetFlowFlagEffect);
+
+    // # Because this ability doesn't grant flow APs, manually set the flag
+    SetFlowFlagEffect = new class'X2Effect_SetUnitValue';
+    SetFlowFlagEffect.UnitName = default.FlowAPGrantedValueName;
+    SetFlowFlagEffect.NewValueToSet = 1;
+    SetFlowFlagEffect.CleanupType = eCleanup_BeginTactical;
+    Template.AddShooterEffect(SetFlowFlagEffect);
 
     Template.BuildNewGameStateFn = TypicalMoveEndAbility_BuildGameState;
     Template.BuildVisualizationFn = TypicalAbility_BuildVisualization;
@@ -3997,8 +3984,8 @@ static function X2AbilityTemplate Warden_BD_LastRites()
     Template.SuperConcealmentLoss = class'X2AbilityTemplateManager'.default.SuperConcealmentStandardShotLoss;
     Template.ChosenActivationIncreasePerUse = class'X2AbilityTemplateManager'.default.StandardShotChosenActivationIncreasePerUse;
     Template.LostSpawnIncreasePerUse = class'X2AbilityTemplateManager'.default.MeleeLostSpawnIncreasePerUse;
-	
-	// # Post activation — trigger the rewind
+
+    // # Post activation — trigger the rewind
     Template.PostActivationEvents.AddItem('LastRitesRewindTrigger');
 
     return Template;
@@ -4043,7 +4030,7 @@ static function X2AbilityTemplate Warden_BD_LastRitesRewind()
 
     Template.ModifyNewContextFn = Rewind_ModifyActivatedAbilityContext;
     Template.BuildNewGameStateFn = class'X2Ability_Cyberus'.static.Teleport_BuildGameState;
-   Template.BuildVisualizationFn = Rewind_BuildVisualization;	
+    Template.BuildVisualizationFn = Rewind_BuildVisualization;	
     Template.CinescriptCameraType = "Cyberus_Teleport";
 
     return Template;
@@ -4113,6 +4100,7 @@ static function X2AbilityTemplate Warden_BD_LastRitesDetonation()
     Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
     Template.BuildVisualizationFn = LastRitesDetonation_BuildVisualization;
 	Template.MergeVisualizationFn = LastRitesMergeVisualization;
+	Template.DamagePreviewFn = LastRitesDamagePreview;
 
     return Template;
 }
@@ -4128,6 +4116,8 @@ static function LastRitesDetonation_BuildVisualization(XComGameState VisualizeGa
     local X2Action_MarkerNamed              JoinAction;
     local array<X2Action>                   ParentActions;
     local int                               ScanAction;
+    local X2Action_PlayEffect               EffectAction;
+    local vector                            TargetLocation;
 
     VisMgr = `XCOMVISUALIZATIONMGR;
     History = `XCOMHISTORY;
@@ -4141,13 +4131,20 @@ static function LastRitesDetonation_BuildVisualization(XComGameState VisualizeGa
         eReturnType_Reference, VisualizeGameState.HistoryIndex);
 
     WaitForFireEvent = X2Action_WaitForAbilityEffect(class'X2Action_WaitForAbilityEffect'.static.AddToVisualizationTree(VisTrack, AbilityContext));
-	ParentActions.Length = 0;
+
+    TargetLocation = History.GetVisualizer(AbilityContext.InputContext.PrimaryTarget.ObjectID).Location;
+
+    EffectAction = X2Action_PlayEffect(class'X2Action_PlayEffect'.static.AddToVisualizationTree(VisTrack, AbilityContext, false, WaitForFireEvent));
+    EffectAction.EffectName = "Anim_Warden_BD_Tide.P_Warden_Psi_Bomb_Explosion";
+    EffectAction.EffectLocation = TargetLocation;
+    EffectAction.bWaitForCompletion = false;
+
+    ParentActions.Length = 0;
     JoinAction = X2Action_MarkerNamed(class'X2Action_MarkerNamed'.static.AddToVisualizationTree(VisTrack, AbilityContext, false, none, ParentActions));
     JoinAction.SetName("Join");
 
     TypicalAbility_BuildVisualization(VisualizeGameState);
 
-    // Reparent all ApplyWeaponDamage actions to fire after the wait
     VisMgr.GetNodesOfType(VisMgr.BuildVisTree, class'X2Action_ApplyWeaponDamageToUnit', NodesToParentToWait);
     for (ScanAction = 0; ScanAction < NodesToParentToWait.Length; ++ScanAction)
     {
@@ -4176,7 +4173,7 @@ static function LastRitesMergeVisualization(X2Action BuildTree, out X2Action Vis
     WaitForFireEvent = X2Action_WaitForAbilityEffect(VisMgr.GetNodeOfType(BuildTree, class'X2Action_WaitForAbilityEffect'));
 
     // Find the ApplyWeaponDamageToUnit on the target that matches the triggering psionic ability
-    VisMgr.GetNodesOfType(VisualizationTree, class'X2Action_ApplyWeaponDamageToUnit', DamageActions, , Context.InputContext.PrimaryTarget.ObjectID);
+    VisMgr.GetNodesOfType(VisualizationTree, class'X2Action_ApplyWeaponDamageToUnit', DamageActions, , Context.InputContext.MultiTargets[0].ObjectID);
 
     for (ScanAction = 0; ScanAction < DamageActions.Length; ++ScanAction)
     {
@@ -4197,6 +4194,126 @@ static function LastRitesMergeVisualization(X2Action BuildTree, out X2Action Vis
     {
         Context.SuperMergeIntoVisualizationTree(BuildTree, VisualizationTree);
     }
+}
+
+function bool LastRitesDamagePreview(XComGameState_Ability AbilityState, StateObjectReference TargetRef, out WeaponDamageValue MinDamagePreview, out WeaponDamageValue MaxDamagePreview, out int AllowsShield)
+{
+    local XComGameStateHistory          History;
+    local XComGameState_Unit            TargetUnit, SourceUnit;
+    local XComGameState_Item            SourceWeapon;
+    local XComGameState_Ability         LastRitesAbilityState;
+    local XComGameState_Effect          EffectState;
+    local StateObjectReference          EffectRef, WardenRef, LastRitesRef;
+    local WeaponDamageValue             BaseDamageValue;
+    local UnitValue                     ChargeCountUV;
+    local int                           ChargeCount, i;
+    local X2AbilityTemplate             AbilityTemplate;
+    local X2Effect_ApplyWeaponDamage    WeaponDamageEffect, PsionicDamageEffect;
+    local bool                          bIsPsionic;
+
+    History = `XCOMHISTORY;
+
+    TargetUnit = XComGameState_Unit(History.GetGameStateForObjectID(TargetRef.ObjectID));
+    if (TargetUnit == none)
+    {
+        return false;
+    }
+
+    // Read stored charge count from target — if zero the effect isn't active
+    TargetUnit.GetUnitValue(class'X2Effect_WardenLastRitesCharge'.default.LastRitesChargeCountValue, ChargeCountUV);
+    ChargeCount = int(ChargeCountUV.fValue);
+
+    if (ChargeCount <= 0)
+    {
+        return false;
+    }
+
+    // Check whether the ability being aimed deals psionic weapon damage
+    AbilityTemplate = AbilityState.GetMyTemplate();
+    for (i = 0; i < AbilityTemplate.AbilityTargetEffects.Length; i++)
+    {
+        WeaponDamageEffect = X2Effect_ApplyWeaponDamage(AbilityTemplate.AbilityTargetEffects[i]);
+        if (WeaponDamageEffect != none && (WeaponDamageEffect.EffectDamageValue.DamageType == 'Psi' || WeaponDamageEffect.DamageTypes.Find('Psi') != INDEX_NONE))
+        {
+            bIsPsionic = true;
+            PsionicDamageEffect = WeaponDamageEffect;
+            break;
+        }
+    }
+
+    if (!bIsPsionic)
+    {
+        for (i = 0; i < AbilityTemplate.AbilityMultiTargetEffects.Length; i++)
+        {
+            WeaponDamageEffect = X2Effect_ApplyWeaponDamage(AbilityTemplate.AbilityMultiTargetEffects[i]);
+            if (WeaponDamageEffect != none && (WeaponDamageEffect.EffectDamageValue.DamageType == 'Psi' || WeaponDamageEffect.DamageTypes.Find('Psi') != INDEX_NONE))
+            {
+                bIsPsionic = true;
+                PsionicDamageEffect = WeaponDamageEffect;
+                break;
+            }
+        }
+    }
+
+    if (!bIsPsionic)
+    {
+        return false;
+    }
+
+    // Find the Warden by locating the LastRitesCharge effect on the target
+    foreach TargetUnit.AffectedByEffects(EffectRef)
+    {
+        EffectState = XComGameState_Effect(History.GetGameStateForObjectID(EffectRef.ObjectID));
+        if (EffectState != none && EffectState.GetX2Effect().EffectName == 'WardenLastRitesCharge')
+        {
+            WardenRef = EffectState.ApplyEffectParameters.SourceStateObjectRef;
+            break;
+        }
+    }
+
+    if (WardenRef.ObjectID <= 0)
+    {
+        return false;
+    }
+
+    SourceUnit = XComGameState_Unit(History.GetGameStateForObjectID(WardenRef.ObjectID));
+    if (SourceUnit == none)
+    {
+        return false;
+    }
+
+    // Get the Warden's sword via her LastRites ability — detonation damage is always based on her sword
+    LastRitesRef = SourceUnit.FindAbility('Warden_BD_LastRites');
+    if (LastRitesRef.ObjectID <= 0)
+    {
+        return false;
+    }
+
+    LastRitesAbilityState = XComGameState_Ability(History.GetGameStateForObjectID(LastRitesRef.ObjectID));
+    if (LastRitesAbilityState == none)
+    {
+        return false;
+    }
+
+    SourceWeapon = LastRitesAbilityState.GetSourceWeapon();
+    if (SourceWeapon != none)
+    {
+        SourceWeapon.GetBaseWeaponDamageValue(TargetUnit, BaseDamageValue);
+    }
+    else
+    {
+        // No source weapon — fall back to flat damage from the psionic effect
+        BaseDamageValue = PsionicDamageEffect.EffectDamageValue;
+    }
+
+    MinDamagePreview.Damage = BaseDamageValue.Damage * ChargeCount;
+    MinDamagePreview.Shred = ChargeCount;
+    MaxDamagePreview.Damage = (BaseDamageValue.Damage + BaseDamageValue.Spread) * ChargeCount;
+    MaxDamagePreview.Shred = ChargeCount;
+
+	`LOG("LastRitesDamagePreview: ChargeCount=" $ ChargeCount $ " BaseDamage=" $ BaseDamageValue.Damage $ " Spread=" $ BaseDamageValue.Spread $ " MinPreview=" $ MinDamagePreview.Damage $ " MaxPreview=" $ MaxDamagePreview.Damage,,'BDLOG');
+
+    return true;
 }
 
 //////// |---------------------| /////////
@@ -5045,46 +5162,136 @@ function Seal_BuildVisualization(XComGameState VisualizeGameState)
 // Rewind Helper
 static simulated function Rewind_ModifyActivatedAbilityContext(XComGameStateContext Context)
 {
-	local XComGameState_Unit UnitState;
-	local XComGameStateContext_Ability AbilityContext;
-	local XComGameStateHistory History;
-	local PathPoint NextPoint, EmptyPoint;
-	local PathingInputData InputData;
-	local XComWorldData World;
-	local vector NewLocation;
-	local TTile NewTileLocation;
+    local XComGameState_Unit            UnitState, PreviousUnitState;
+    local XComGameStateContext_Ability  AbilityContext, PreviousAbilityContext;
+    local XComGameStateHistory          History;
+    local PathPoint                     NextPoint, EmptyPoint;
+    local PathingInputData              InputData;
+    local XComWorldData                 World;
+    local vector                        NewLocation;
+    local TTile                         NewTileLocation;
+    local X2AbilityTemplate             PreviousTemplate;
+    local bool                          bFoundMoveStart, bInsideMoveChain;
+    local name                          ContextName;
 
-	`LOG("LastRitesRewind: ModifyActivatedAbilityContext fired",,'BDLOG');
+    `LOG("Rewind: ModifyActivatedAbilityContext fired",,'BDLOG');
 
-	History = `XCOMHISTORY;
-	World = `XWORLD;
+    History = `XCOMHISTORY;
+    World = `XWORLD;
+    AbilityContext = XComGameStateContext_Ability(Context);
+    UnitState = XComGameState_Unit(History.GetGameStateForObjectID(AbilityContext.InputContext.SourceObject.ObjectID));
 
-	AbilityContext = XComGameStateContext_Ability(Context);	
-	UnitState = XComGameState_Unit(History.GetGameStateForObjectID(AbilityContext.InputContext.SourceObject.ObjectID));
+    `LOG("Rewind: CurrentHistoryIndex=" $ History.GetCurrentHistoryIndex() $ " UnitTile=(" $ UnitState.TileLocation.X $ "," $ UnitState.TileLocation.Y $ "," $ UnitState.TileLocation.Z $ ") TurnStart=(" $ UnitState.TurnStartLocation.X $ "," $ UnitState.TurnStartLocation.Y $ "," $ UnitState.TurnStartLocation.Z $ ")",,'BDLOG');
 
-	// Build the MovementData for the path
-	// First posiiton is the current location
-	InputData.MovementTiles.AddItem(UnitState.TileLocation);
+    NewTileLocation = UnitState.TurnStartLocation;
+    bFoundMoveStart = false;
+    bInsideMoveChain = false;
 
-	NextPoint.Position = World.GetPositionFromTileCoordinates(UnitState.TileLocation);
-	NextPoint.Traversal = eTraversal_Teleport;
-	NextPoint.PathTileIndex = 0;
-	InputData.MovementData.AddItem(NextPoint);
+    PreviousUnitState = XComGameState_Unit(UnitState.GetPreviousVersion());
+    while (PreviousUnitState != none && !bFoundMoveStart)
+    {
+        PreviousAbilityContext = none;
+        PreviousTemplate = none;
+        ContextName = '';
 
-	// Second posiiton is the cursor position
-	NewTileLocation = UnitState.TurnStartLocation;
-	NewLocation = World.GetPositionFromTileCoordinates(NewTileLocation);
+        PreviousAbilityContext = XComGameStateContext_Ability(PreviousUnitState.GetParentGameState().GetContext());
+        if (PreviousAbilityContext != none && PreviousAbilityContext.InputContext.SourceObject.ObjectID != AbilityContext.InputContext.SourceObject.ObjectID)
+        {
+            PreviousAbilityContext = none;
+        }
+        if (PreviousAbilityContext != none)
+        {
+            ContextName = PreviousAbilityContext.InputContext.AbilityTemplateName;
+        }
 
-	NextPoint = EmptyPoint;
-	NextPoint.Position = NewLocation;
-	NextPoint.Traversal = eTraversal_Landing;
-	NextPoint.PathTileIndex = 1;
-	InputData.MovementData.AddItem(NextPoint);
-	InputData.MovementTiles.AddItem(NewTileLocation);
+        `LOG("Rewind WalkBack ContextName=" $ (ContextName != '' ? string(ContextName) : "none") $ " UnitTile=(" $ PreviousUnitState.TileLocation.X $ "," $ PreviousUnitState.TileLocation.Y $ "," $ PreviousUnitState.TileLocation.Z $ ") TargetTile=(" $ UnitState.TileLocation.X $ "," $ UnitState.TileLocation.Y $ "," $ UnitState.TileLocation.Z $ ") bInsideMoveChain=" $ bInsideMoveChain $ " bFoundMoveStart=" $ bFoundMoveStart,,'BDLOG');
 
-    //Now add the path to the input context
-	InputData.MovingUnitRef = UnitState.GetReference();
-	AbilityContext.InputContext.MovementPaths.AddItem(InputData);
+        if (ContextName == 'StandardMove')
+        {
+            bInsideMoveChain = true;
+            if (PreviousUnitState.TileLocation != UnitState.TileLocation)
+            {
+                NewTileLocation = PreviousUnitState.TileLocation;
+            }
+        }
+        else if (ContextName != '')
+        {
+            if (!bInsideMoveChain)
+            {
+                PreviousTemplate = class'XComGameState_Ability'.static.GetMyTemplateManager().FindAbilityTemplate(ContextName);
+                if (PreviousTemplate != none && X2AbilityTarget_MovingMelee(PreviousTemplate.AbilityTargetStyle) != none)
+                {
+                    bInsideMoveChain = true;
+                    if (PreviousUnitState.TileLocation != UnitState.TileLocation)
+                    {
+                        NewTileLocation = PreviousUnitState.TileLocation;
+                    }
+                }
+                else if (PreviousUnitState.TileLocation != UnitState.TileLocation)
+                {
+                    NewTileLocation = PreviousUnitState.TileLocation;
+                    bFoundMoveStart = true;
+                }
+            }
+            else
+            {
+                PreviousTemplate = class'XComGameState_Ability'.static.GetMyTemplateManager().FindAbilityTemplate(ContextName);
+                if (PreviousTemplate != none && X2AbilityTarget_MovingMelee(PreviousTemplate.AbilityTargetStyle) != none)
+                {
+                    if (PreviousUnitState.TileLocation != UnitState.TileLocation)
+                    {
+                        NewTileLocation = PreviousUnitState.TileLocation;
+                    }
+                }
+                else
+                {
+                    if (PreviousUnitState.TileLocation != UnitState.TileLocation)
+                    {
+                        NewTileLocation = PreviousUnitState.TileLocation;
+                    }
+                    bFoundMoveStart = true;
+                }
+            }
+        }
+        else if (bInsideMoveChain)
+        {
+            if (PreviousUnitState.TileLocation != UnitState.TileLocation)
+            {
+                NewTileLocation = PreviousUnitState.TileLocation;
+            }
+        }
+        else if (PreviousUnitState.TileLocation != UnitState.TileLocation)
+        {
+            NewTileLocation = PreviousUnitState.TileLocation;
+            bFoundMoveStart = true;
+        }
+
+        if (PreviousUnitState.TileLocation == UnitState.TurnStartLocation)
+        {
+            bFoundMoveStart = true;
+        }
+
+        PreviousUnitState = XComGameState_Unit(PreviousUnitState.GetPreviousVersion());
+    }
+
+    `LOG("Rewind: Using destination tile (" $ NewTileLocation.X $ "," $ NewTileLocation.Y $ "," $ NewTileLocation.Z $ ")",,'BDLOG');
+
+    InputData.MovementTiles.AddItem(UnitState.TileLocation);
+    NextPoint.Position = World.GetPositionFromTileCoordinates(UnitState.TileLocation);
+    NextPoint.Traversal = eTraversal_Teleport;
+    NextPoint.PathTileIndex = 0;
+    InputData.MovementData.AddItem(NextPoint);
+
+    NewLocation = World.GetPositionFromTileCoordinates(NewTileLocation);
+    NextPoint = EmptyPoint;
+    NextPoint.Position = NewLocation;
+    NextPoint.Traversal = eTraversal_Landing;
+    NextPoint.PathTileIndex = 1;
+    InputData.MovementData.AddItem(NextPoint);
+    InputData.MovementTiles.AddItem(NewTileLocation);
+
+    InputData.MovingUnitRef = UnitState.GetReference();
+    AbilityContext.InputContext.MovementPaths.AddItem(InputData);
 }
 
 // Total combat (defender) helper

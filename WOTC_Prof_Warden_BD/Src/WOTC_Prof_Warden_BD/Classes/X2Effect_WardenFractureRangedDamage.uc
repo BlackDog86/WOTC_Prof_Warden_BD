@@ -5,9 +5,9 @@ simulated protected function OnEffectAdded(const out EffectAppliedData ApplyEffe
     local XComGameState_Unit        SourceUnit;
     local XComGameState_Ability     ImbueAmmoState;
     local StateObjectReference      ImbueAmmoRef;
+    local XComGameState_Unit        TargetUnit;
+    local UnitValue                 AlreadyHitUV;
 
-    // Find source unit - read from History since we only need it
-    // to look up the ImbueAmmo ability reference
     SourceUnit = XComGameState_Unit(
         `XCOMHISTORY.GetGameStateForObjectID(
             ApplyEffectParameters.SourceStateObjectRef.ObjectID));
@@ -18,7 +18,6 @@ simulated protected function OnEffectAdded(const out EffectAppliedData ApplyEffe
         return;
     }
 
-    // Find ImbueAmmo ability ref from the unit
     ImbueAmmoRef = SourceUnit.FindAbility('Warden_BD_ImbueAmmo');
     if (ImbueAmmoRef.ObjectID <= 0)
     {
@@ -26,15 +25,9 @@ simulated protected function OnEffectAdded(const out EffectAppliedData ApplyEffe
         return;
     }
 
-    // Get ImbueAmmo state from NewGameState - this is the shared mutable
-    // object that FractureRanged_BuildGameState pre-modified with +3 charges
-    // and that previous target iterations have already decremented
     ImbueAmmoState = XComGameState_Ability(
         NewGameState.GetGameStateForObjectID(ImbueAmmoRef.ObjectID));
 
-    // If not in NewGameState yet, pull it in - this shouldn't normally
-    // happen since FractureRanged_BuildGameState pre-adds it, but handles
-    // edge cases gracefully
     if (ImbueAmmoState == none)
         ImbueAmmoState = XComGameState_Ability(
             NewGameState.ModifyStateObject(
@@ -46,14 +39,26 @@ simulated protected function OnEffectAdded(const out EffectAppliedData ApplyEffe
         return;
     }
 
-    // If no charges remain, skip this target - no damage applied
+    // Guard against double hits on the same target (primary + multi-target)
+    TargetUnit = XComGameState_Unit(kNewTargetState);
+    if (TargetUnit != none)
+    {
+        TargetUnit.GetUnitValue('BD_FractureRangedHit', AlreadyHitUV);
+        if (AlreadyHitUV.fValue > 0)
+        {
+            `LOG("FractureRangedDamage: Target already hit this activation, skipping",,'BDLOG');
+            return;
+        }
+        TargetUnit = XComGameState_Unit(NewGameState.ModifyStateObject(class'XComGameState_Unit', TargetUnit.ObjectID));
+        TargetUnit.SetUnitFloatValue('BD_FractureRangedHit', 1, eCleanup_BeginTactical);
+    }
+
     if (ImbueAmmoState.iCharges <= 0)
     {
         `LOG("FractureRangedDamage: No charges remaining, skipping target",,'BDLOG');
         return;
     }
 
-    // Consume one charge and apply damage via parent
     ImbueAmmoState.iCharges -= 1;
 
     `LOG("FractureRangedDamage: Charge consumed, " $ ImbueAmmoState.iCharges $ " remaining",,'BDLOG');

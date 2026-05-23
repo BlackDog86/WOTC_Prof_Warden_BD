@@ -31,6 +31,9 @@
     <Content Include="Config\XComWardenSkills.ini">
       <SubType>Content</SubType>
     </Content>
+    <Content Include="Config\XComWOTCLootIndicator_Extended.ini">
+      <SubType>Content</SubType>
+    </Content>
     <Content Include="Config\XComWOTC_CostBasedAbilityColors.ini">
       <SubType>Content</SubType>
     </Content>
@@ -153,9 +156,6 @@
     <Content Include="Src\WOTC_Prof_Warden_BD\Classes\X2Effect_WardenFractureRangedDamage.uc">
       <SubType>Content</SubType>
     </Content>
-    <Content Include="Src\WOTC_Prof_Warden_BD\Classes\X2Effect_WardenKineticArmorDamage.uc">
-      <SubType>Content</SubType>
-    </Content>
     <Content Include="Src\WOTC_Prof_Warden_BD\Classes\X2Effect_WardenLastRitesCharge.uc">
       <SubType>Content</SubType>
     </Content>
@@ -181,9 +181,6 @@
       <SubType>Content</SubType>
     </Content>
     <Content Include="Src\WOTC_Prof_Warden_BD\Classes\X2Effect_WardenCounterDefense.uc">
-      <SubType>Content</SubType>
-    </Content>
-    <Content Include="Src\WOTC_Prof_Warden_BD\Classes\X2Effect_WardenKineticArmor.uc">
       <SubType>Content</SubType>
     </Content>
     <Content Include="Src\WOTC_Prof_Warden_BD\Classes\X2Effect_WardenRangedDamageFocus.uc">

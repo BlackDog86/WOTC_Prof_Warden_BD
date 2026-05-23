@@ -72,11 +72,17 @@ static function EventListenerReturn OnLastRitesTargetDamaged(Object EventData, O
     local XComGameState_Unit                    PlacingUnit;
     local vector                                TargetLoc;
     local array<vector>                         TargetLocs;
+    local UnitValue                             DetonatedUV;
 
     TargetUnit = XComGameState_Unit(EventSource);
     EffectState = XComGameState_Effect(CallbackData);
 
     if (EffectState.ApplyEffectParameters.TargetStateObjectRef.ObjectID != TargetUnit.ObjectID)
+        return ELR_NoInterrupt;
+
+    // Guard against double firing within the same game state submission
+    TargetUnit.GetUnitValue('BD_LastRitesDetonated', DetonatedUV);
+    if (DetonatedUV.fValue > 0)
         return ELR_NoInterrupt;
 
     AbilityContext = XComGameStateContext_Ability(GameState.GetContext());
@@ -143,6 +149,12 @@ static function EventListenerReturn OnLastRitesTargetDamaged(Object EventData, O
 
     `LOG("LastRitesCharge: Detonating against " $ TargetUnit.GetFullName(),,'BDLOG');
 
+    // Set detonation flag before firing so subsequent listener calls see it
+    NewGameState = class'XComGameStateContext_ChangeContainer'.static.CreateChangeState("LastRites Detonation Flag");
+    TargetUnit = XComGameState_Unit(NewGameState.ModifyStateObject(class'XComGameState_Unit', TargetUnit.ObjectID));
+    TargetUnit.SetUnitFloatValue('BD_LastRitesDetonated', 1, eCleanup_BeginTactical);
+    `TACTICALRULES.SubmitGameState(NewGameState);
+
     if (class'XComGameStateContext_Ability'.static.ActivateAbility(Action, 0, TargetLocs, ,,,GameState.HistoryIndex))
     {
         EffectRemovedState = class'XComGameStateContext_EffectRemoved'.static.CreateEffectRemovedContext(EffectState);
@@ -162,6 +174,7 @@ simulated function OnEffectRemoved(const out EffectAppliedData ApplyEffectParame
     local AvailableTarget           Target;
     local vector                    TargetLoc;
     local array<vector>             TargetLocs;
+    local UnitValue                 DetonatedUV;
 
     super.OnEffectRemoved(ApplyEffectParameters, NewGameState, bCleaned, RemovedEffectState);
 
@@ -172,12 +185,18 @@ simulated function OnEffectRemoved(const out EffectAppliedData ApplyEffectParame
     if (TargetUnit == none)
         TargetUnit = XComGameState_Unit(`XCOMHISTORY.GetGameStateForObjectID(ApplyEffectParameters.TargetStateObjectRef.ObjectID));
 
-    DetonationAbilityRef = XComGameState_Unit(`XCOMHISTORY.GetGameStateForObjectID( ApplyEffectParameters.SourceStateObjectRef.ObjectID)).FindAbility('Warden_BD_LastRitesDetonation');
+    if (TargetUnit == none)
+        return;
 
-    if (DetonationAbilityRef.ObjectID <= 0 || TargetUnit == none)
-    {
-		return;
-	}
+    // Don't fire if already detonated this game state submission
+    TargetUnit.GetUnitValue('BD_LastRitesDetonated', DetonatedUV);
+    if (DetonatedUV.fValue > 0)
+        return;
+
+    DetonationAbilityRef = XComGameState_Unit(`XCOMHISTORY.GetGameStateForObjectID(ApplyEffectParameters.SourceStateObjectRef.ObjectID)).FindAbility('Warden_BD_LastRitesDetonation');
+
+    if (DetonationAbilityRef.ObjectID <= 0)
+        return;
 
     Action.AbilityObjectRef = DetonationAbilityRef;
     Action.AvailableCode = 'AA_Success';
@@ -188,9 +207,7 @@ simulated function OnEffectRemoved(const out EffectAppliedData ApplyEffectParame
 
     `LOG("LastRitesCharge: Duration expired, detonating against " $ TargetUnit.GetFullName(),,'BDLOG');
     class'XComGameStateContext_Ability'.static.ActivateAbility(Action, 0, TargetLocs);
-    // No HistoryIndex arg needed — no triggering game state to sync visualization against
 }
-
 defaultproperties
 {
     LastRitesChargeCountValue = "BD_LastRitesChargeCount"

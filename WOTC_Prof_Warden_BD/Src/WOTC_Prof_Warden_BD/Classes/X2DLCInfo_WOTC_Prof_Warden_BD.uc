@@ -5,13 +5,13 @@ var config array<name> IncludeTemplateNames;
 static event OnPostTemplatesCreated()
 {
 	SetupGTSUnlocks();
-	PatchStandardShot();
-	PatchSwordSlice();
+	PatchStandardShot();	
 	PatchReload();
 	PatchHunker();
 	PatchOverwatch();
 	PatchFlowAPAbilities();
 	PatchWrongStanceText();
+	PatchLastRitesChargeDisplayInfo();
 }
 
 static function bool AbilityTagExpandHandler_CH(string InString, out string OutString, Object ParseObj, Object StrategyParseObj, XComGameState GameState)
@@ -84,12 +84,6 @@ static function bool AbilityTagExpandHandler_CH(string InString, out string OutS
 			return true;
 		case 'MIRROR_COOLDOWN':
 			OutString = string(class'X2Ability_Warden'.default.MIRROR_COOLDOWN);
-			return true;
-		case 'KINETIC_ARMOR_PERCENTAGE':
-			OutString = string(class'X2Ability_Warden'.default.KINETIC_ARMOR_SHIELD_HP_PERCENTAGE);
-			return true;
-		case 'KINETICARMOR_COOLDOWN':
-			OutString = string(class'X2Ability_Warden'.default.KINETIC_ARMOR_COOLDOWN);
 			return true;
 		case 'CRUSADER_AIM_BONUS':
 			OutString = string(class'X2Ability_Warden'.default.CRUSADER_AIM_BONUS);
@@ -292,58 +286,6 @@ static function PatchStandardShot()
 	}
 }
 
-static function PatchSwordSlice()
-{
-    local X2AbilityTemplateManager      AbilityTemplateManager;
-    local X2AbilityTemplate             Template;
-    local array<X2DataTemplate>         DifficultyVariants;
-    local X2DataTemplate                DifficultyVariant;
-    local X2AbilityCost_ActionPoints    ActionPointCost;
-    local X2AbilityCost                 Cost;
-
-    AbilityTemplateManager = class'X2AbilityTemplateManager'.static.GetAbilityTemplateManager();
-
-    // Patch SwordSlice - FractureMeleeAP only, unchanged from original
-    AbilityTemplateManager.FindDataTemplateAllDifficulties('SwordSlice', DifficultyVariants);
-    foreach DifficultyVariants(DifficultyVariant)
-    {
-        Template = X2AbilityTemplate(DifficultyVariant);
-        if (Template != none)
-        {
-            foreach Template.AbilityCosts(Cost)
-            {
-                ActionPointCost = X2AbilityCost_ActionPoints(Cost);
-                if (ActionPointCost != none)
-                {
-                    ActionPointCost.AllowedTypes.AddItem(class'X2Ability_Warden'.default.FractureMeleeAP);
-                }
-            }
-        }
-    }
-
-    // Patch NonStandardSlash (base for SoulBlade) 
-    // so SoulBlade can be used with FractureMelee-granted APs,
-    // and gate DoNotConsumeAll on FractureMelee so multi-strike only
-    // works for Wardens who have chosen that ability
-    DifficultyVariants.Length = 0;
-    AbilityTemplateManager.FindDataTemplateAllDifficulties('Warden_BD_NonStandardSlash', DifficultyVariants);
-    foreach DifficultyVariants(DifficultyVariant)
-    {
-        Template = X2AbilityTemplate(DifficultyVariant);
-        if (Template != none)
-        {
-            foreach Template.AbilityCosts(Cost)
-            {
-                ActionPointCost = X2AbilityCost_ActionPoints(Cost);
-                if (ActionPointCost != none)
-                {
-                    ActionPointCost.AllowedTypes.AddItem(class'X2Ability_Warden'.default.FractureMeleeAP);
-                    ActionPointCost.DoNotConsumeAllSoldierAbilities.AddItem('Warden_BD_FractureMelee');
-                }
-            }
-        }
-    }
-}
 static function PatchOverwatch()
 {
     local X2AbilityTemplateManager          AbilityTemplateManager;
@@ -564,6 +506,35 @@ static function PatchWrongStanceText()
             for (j = 0; j < HitModEffect.Modifiers.Length; j++)
                 HitModEffect.Modifiers[j].Modifier.Reason = LocalizedText;
         }
+    }
+}
+
+static function PatchLastRitesChargeDisplayInfo()
+{
+    local X2AbilityTemplateManager          AbilityMgr;
+    local X2AbilityTemplate                 ChargeDisplayTemplate;
+    local X2AbilityTemplate                 LastRitesTemplate;
+    local X2Effect_WardenLastRitesCharge    ChargeEffect;
+    local int                               i;
+
+    AbilityMgr = class'X2AbilityTemplateManager'.static.GetAbilityTemplateManager();
+    ChargeDisplayTemplate = AbilityMgr.FindAbilityTemplate('Warden_BD_LastRitesCharge');
+    LastRitesTemplate = AbilityMgr.FindAbilityTemplate('Warden_BD_LastRites');
+
+    if (ChargeDisplayTemplate == none || LastRitesTemplate == none)
+        return;
+
+    for (i = 0; i < LastRitesTemplate.AbilityTargetEffects.Length; i++)
+    {
+        ChargeEffect = X2Effect_WardenLastRitesCharge(LastRitesTemplate.AbilityTargetEffects[i]);
+        if (ChargeEffect == none) continue;
+
+        ChargeEffect.SetDisplayInfo(ePerkBuff_Penalty,
+            ChargeDisplayTemplate.LocFriendlyName,
+            ChargeDisplayTemplate.GetMyLongDescription(),
+            "img:///UILibrary_XPACK_Common.PerkIcons.UIPerk_HomingMine",
+            true, , LastRitesTemplate.AbilitySourceName);
+        break;
     }
 }
 

@@ -21,8 +21,7 @@ simulated protected function OnEffectAdded(const out EffectAppliedData ApplyEffe
     }
 
     // Get source weapon to read base damage
-    AbilityState = XComGameState_Ability(`XCOMHISTORY.GetGameStateForObjectID(
-        ApplyEffectParameters.AbilityStateObjectRef.ObjectID));
+    AbilityState = XComGameState_Ability(`XCOMHISTORY.GetGameStateForObjectID(ApplyEffectParameters.AbilityStateObjectRef.ObjectID));
     if (AbilityState != none)
     {
         SourceWeapon = AbilityState.GetSourceWeapon();
@@ -38,8 +37,7 @@ simulated protected function OnEffectAdded(const out EffectAppliedData ApplyEffe
     EffectDamageValue.Shred = ChargeCount;
     bIgnoreBaseDamage = true;
 
-    `LOG("LastRitesDamage: Detonating with " $ ChargeCount $ " charges, damage: " 
-        $ EffectDamageValue.Damage,,'BDLOG');
+    `LOG("LastRitesDamage: Detonating with " $ ChargeCount $ " charges, damage: " $ EffectDamageValue.Damage,,'BDLOG');
 
     super.OnEffectAdded(ApplyEffectParameters, kNewTargetState, NewGameState, NewEffectState);
 }
