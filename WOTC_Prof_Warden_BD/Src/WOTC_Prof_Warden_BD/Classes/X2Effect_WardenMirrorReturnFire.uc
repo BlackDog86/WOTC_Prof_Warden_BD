@@ -7,21 +7,22 @@ function WeaponDamageValue GetBonusEffectDamageValue(XComGameState_Ability Abili
 	local int								i;
 
 	If(SourceUnit.IsUnitAffectedByEffectName(class'X2Ability_Warden'.default.MirrorEffectName))
-		{
+	{
 		// Since some damage forms can occur 'after' the activating ability (e.g. grenade blowing up a car) we need to check the whole damageresults array
 		for (i = 0; i < SourceUnit.DamageResults.Length; i++)
+		{
+			LastDamageResult = SourceUnit.DamageResults[i];	
+			`LOG("Array position" @ i @ "Caused damage to unit of" @ LastDamageResult.DamageAmount,,'BDLOG');
+			`LOG("Array position" @ i @ "Removed shield HP of" @ LastDamageResult.ShieldHP,,'BDLOG');
+			`LOG("Array position" @ i @ "had ability context" @ LastDamageResult.Context,,'BDLOG');
+			`LOG("Array position" @ i @ "ability object ID is" @ LastDamageResult.SourceEffect.AbilityStateObjectRef.ObjectID,,'BDLOG');
+			if (LastDamageResult.SourceEffect.AbilityStateObjectRef.ObjectID != 0)		
 			{
-				LastDamageResult = SourceUnit.DamageResults[i];	
-				`LOG("Array position" @ i @ "Caused damage to unit of" @ LastDamageResult.DamageAmount);
-				`LOG("Array position" @ i @ "Removed shield HP of" @ LastDamageResult.ShieldHP);
-				`LOG("Array position" @ i @ "had ability context" @ LastDamageResult.Context);
-				`LOG("Array position" @ i @ "ability object ID is" @ LastDamageResult.SourceEffect.AbilityStateObjectRef.ObjectID);
-				if (LastDamageResult.SourceEffect.AbilityStateObjectRef.ObjectID != 0)		
-					{
-					DamageValue.Damage = LastDamageResult.DamageAmount;			
-					`LOG("Damage to deal is" @ DamageValue.Damage);	
-					}			
-			}
-		Return DamageValue;
+				DamageValue.Damage = LastDamageResult.DamageAmount;			
+				`LOG("Damage to deal is" @ DamageValue.Damage,,'BDLOG');
+				break;
+			}			
 		}
+		Return DamageValue;
+	}
 }

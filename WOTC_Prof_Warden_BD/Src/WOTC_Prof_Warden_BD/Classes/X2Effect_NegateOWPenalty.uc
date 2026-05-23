@@ -8,5 +8,5 @@ function ModifyReactionFireSuccess(XComGameState_Unit UnitState, XComGameState_U
 	StandardAim = UnitState.GetCurrentStat(eStat_Offense);
 	ReactionFireAim = ((1.0f-class'X2AbilityToHitCalc_StandardAim'.default.REACTION_FINALMOD) * StandardAim);
 	
-	Modifier = Round(StandardAim - ReactionFireAim);	
+	Modifier = Round(StandardAim - ReactionFireAim);
 }

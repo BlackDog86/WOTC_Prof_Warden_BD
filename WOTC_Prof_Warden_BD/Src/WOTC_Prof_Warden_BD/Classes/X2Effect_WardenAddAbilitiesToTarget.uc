@@ -24,6 +24,8 @@ simulated protected function OnEffectAdded(const out EffectAppliedData ApplyEffe
 	local X2AbilityTemplate			AbilityTemplate;
 	local name						AbilityName;
 	
+	 `LOG("WardenAddAbilitiesToTarget: OnEffectAdded called for unit" @ XComGameState_Unit(kNewTargetState).GetFullName() @ "Name:" @ NewEffectState.GetMyTemplateName(),,'BDLOG');
+
 	// Get Target's XComGameState_Unit
 	TargetUnit = XComGameState_Unit(kNewTargetState);
 	
@@ -48,6 +50,7 @@ simulated protected function OnEffectAdded(const out EffectAppliedData ApplyEffe
 				{
 					SourceItemRef = InventoryItem.GetReference();
 					bSourceItemRefFound = true;
+					`log("Found source item",,'BDLOG');
 					break;
 				}
 			}
@@ -63,6 +66,7 @@ simulated protected function OnEffectAdded(const out EffectAppliedData ApplyEffe
 				{
 					SourceItemRef = InventoryItem.GetReference();
 					bSourceItemRefFound = true;
+					`log("Found source item REFERENCE",,'BDLOG');
 					break;
 				}
 			}
@@ -90,17 +94,25 @@ simulated protected function OnEffectAdded(const out EffectAppliedData ApplyEffe
 					if (InventoryItem.GetMyTemplateName() == ItemTemplate.DataName || InventoryItem.GetMyTemplateName() == UpgradeItemTemplate.DataName)
 					{
 						SourceItemRef = InventoryItem.GetReference();
+						`log("Found source item REFERENCE FALLBACK",,'BDLOG');
 						break;
-	}	}	}	}	}
+					}	
+				}	
+			}	
+		}	
+	}
 	
 	// Call function to initiate each added ability
 	AbilityTemplateMgr = class'X2AbilityTemplateManager'.static.GetAbilityTemplateManager();
 	foreach AddAbilities(AbilityName)
 	{		
 		AbilityTemplate = AbilityTemplateMgr.FindAbilityTemplate(AbilityName);
-
+		`log("Added ability:" @ AbilityTemplate.DataName,,'BDLOG');
 		if (AbilityTemplate != none)
+		{
 			InitAbility(AbilityTemplate, TargetUnit, NewGameState, SourceItemRef);
+			`log("Added ability:" @ AbilityTemplate.DataName,,'BDLOG');
+		}
 	}
 	super.OnEffectAdded(ApplyEffectParameters, kNewTargetState, NewGameState, NewEffectState);
 }

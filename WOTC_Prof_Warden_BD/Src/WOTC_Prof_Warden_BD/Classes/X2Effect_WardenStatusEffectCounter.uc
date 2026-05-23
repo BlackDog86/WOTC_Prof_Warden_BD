@@ -1,8 +1,7 @@
 class X2Effect_WardenStatusEffectCounter extends X2Effect_Persistent;
 
 simulated protected function OnEffectAdded(const out EffectAppliedData ApplyEffectParameters, XComGameState_BaseObject kNewTargetState, XComGameState NewGameState, XComGameState_Effect NewEffectState)
-{
-	
+{	
 	local StateObjectReference		EffectRef;
 	local XComGameStateHistory		History;
 	local XComGameState_Effect		EffectState;
@@ -20,7 +19,6 @@ simulated protected function OnEffectAdded(const out EffectAppliedData ApplyEffe
 	effectsToCheck.AddItem(class'X2AbilityTemplateManager'.default.BerserkName);
 	effectsToCheck.AddItem(class'X2AbilityTemplateManager'.default.ShatteredName);
 	effectsToCheck.AddItem(class'X2AbilityTemplateManager'.default.StunnedName);
-	effectsToCheck.AddItem(class'X2StatusEffects'.default.UnconsciousName);
 	effectsToCheck.AddItem(class'X2StatusEffects'.default.BurningName);
 	effectsToCheck.AddItem(class'X2StatusEffects'.default.AcidBurningName);
 	effectsToCheck.AddItem(class'X2StatusEffects'.default.PoisonedName);
@@ -41,23 +39,23 @@ simulated protected function OnEffectAdded(const out EffectAppliedData ApplyEffe
 		EffectState = XComGameState_Effect(History.GetGameStateForObjectID(EffectRef.ObjectID));
 		if( EffectState != None )
 		{
-			`log("StatusEffectCounter: Checking effect: " @ EffectState.GetX2Effect().EffectName);
+			`log("StatusEffectCounter: Checking effect: " @ EffectState.GetX2Effect().EffectName,,'BDLOG');
 			If (effectsToCheck.Find(EffectState.GetX2Effect().EffectName) != INDEX_NONE)			
 			{
-			EffectCounter = EffectCounter + 1;
-			`log("StatusEffectCounter: Check Passed: " @ EffectState.GetX2Effect().EffectName @ ":New Counter Value:" @effectCounter);
+				EffectCounter = EffectCounter + EffectState.iTurnsRemaining;
+				`log("StatusEffectCounter: Check Passed: " @ EffectState.GetX2Effect().EffectName @ ":New Counter Value:" @effectCounter);
 			}
 			Else
 			{
-			`log("StatusEffectCounter: Check failed: " @ EffectState.GetX2Effect().EffectName);
+				`log("StatusEffectCounter: Check failed: " @ EffectState.GetX2Effect().EffectName,,'BDLOG');
 			}
 		}						
 	}	
 	NewSourceUnit = XComGameState_Unit(NewGameState.GetGameStateForObjectID(ApplyEffectParameters.SourceStateObjectRef.ObjectID));
 		If (NewSourceUnit != none)
 		{
-		NewSourceUnit.GetUnitValue(class'X2Ability_Warden'.default.ConsumeBonusDamageValue, CurrentConsumeCounter);
-		NewSourceUnit.SetUnitFloatValue(class'X2Ability_Warden'.default.ConsumeBonusDamageValue, CurrentConsumeCounter.fValue + effectCounter);
-		`log("Consume unit value: " @ CurrentConsumeCounter.fValue + effectCounter);
+			NewSourceUnit.GetUnitValue(class'X2Ability_Warden'.default.ConsumeBonusDamageValue, CurrentConsumeCounter);
+			NewSourceUnit.SetUnitFloatValue(class'X2Ability_Warden'.default.ConsumeBonusDamageValue, CurrentConsumeCounter.fValue + effectCounter, eCleanup_BeginTactical);
+			`log("Consume unit value: " @ CurrentConsumeCounter.fValue + effectCounter,,'BDLOG');
 		}
 }

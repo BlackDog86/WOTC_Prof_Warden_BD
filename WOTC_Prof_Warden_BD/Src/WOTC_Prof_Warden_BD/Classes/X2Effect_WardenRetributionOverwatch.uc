@@ -9,9 +9,7 @@ static private function TriggerAssociatedEvent(X2Effect_Persistent PersistentEff
 {
 	local XComGameState_Unit SourceUnit, TargetUnit;
 	local XComGameStateHistory History;
-	local X2EventManager EventManager;
-
-	`Log(string(GetFuncName()));
+	local X2EventManager EventManager;	
 
 	History = `XCOMHISTORY;
 	SourceUnit = XComGameState_Unit(History.GetGameStateForObjectID(ApplyEffectParameters.SourceStateObjectRef.ObjectID));
@@ -27,9 +25,7 @@ function RegisterForEvents(XComGameState_Effect EffectGameState)
 	local XComGameState_Unit SourceUnitState;
 	local XComGameStateHistory History;
 	local Object ListenerObj;
-
-	`Log(string(GetFuncName()));
-
+	
 	History = `XCOMHISTORY;
 	EventMgr = `XEVENTMGR;
 
@@ -52,9 +48,7 @@ static function EventListenerReturn EventHandler(Object EventData, Object EventS
 	local XComGameState NewGameState;
 	local name AbilityName;
 	local XComGameState_Item SourceWeapon;
-
-	`Log(string(GetFuncName()));
-
+	
 	History = `XCOMHISTORY;
 	EventMgr = `XEVENTMGR;
 
@@ -73,7 +67,8 @@ static function EventListenerReturn EventHandler(Object EventData, Object EventS
 		OverwatchRef = UnitState.FindAbility(AbilityName);
 		if (OverwatchRef.ObjectID == 0)
 			continue;
-
+		
+		// Check this logic - AbilityState may not be correct
 		OverwatchState = XComGameState_Ability(History.GetGameStateForObjectID(OverwatchRef.ObjectID));
 		if (AbilityState.SourceWeapon.ObjectID != 0 && AbilityState.SourceWeapon != OverwatchState.SourceWeapon)
 			continue;

@@ -17,35 +17,35 @@ function int GetAttackingDamageModifier(XComGameState_Effect EffectState, XComGa
 	
 	// If the source weapon exists
 	if (SourceWeapon != none)
-		{
+	{
 		//If source weapon is primary, unit is in melee stance & the attack isn't an overwatch shot
 		If(SourceWeapon.InventorySlot == eInvSlot_PrimaryWeapon && int(UV2.fValue) == 1 && AbilityState.GetMyTemplateName() != 'Overwatch')
-				{
-				`log("Unit is using gun in ranged stance");
-				// Fetch the gun focus counter from the unit
-				Attacker.GetUnitValue(class'X2Ability_Warden'.default.GunFocusCounterValueName, UV);
-				BonusDamage = int(UV.fValue) -1;
-				`log("Current value of Ranged Stance Counter is: " @UV.fValue);		
-				
-				// Cap the maximum damage to 3
-				if (BonusDamage > default.FIREARMFOCUS_MAXIMUM_BONUS)
-					{
-					BonusDamage = default.FIREARMFOCUS_MAXIMUM_BONUS;
-					}
-				`log("Adding bonus damage of: " @BonusDamage);
-				//	no game state means it's for damage preview
-				if (NewGameState == none)
-					{				
-					return BonusDamage;
-					}
-				//	only add the bonus damage when the damage effect is applying the weapon's base damage
-				DamageEffect = X2Effect_ApplyWeaponDamage(class'X2Effect'.static.GetX2Effect(AppliedData.EffectRef));
+		{
+			//`log("Unit is using gun in ranged stance",,'BDLOG');
+			// Fetch the gun focus counter from the unit
+			Attacker.GetUnitValue(class'X2Ability_Warden'.default.GunFocusCounterValueName, UV);
+			BonusDamage = int(UV.fValue) -1;
+			//`log("Current value of Ranged Stance Counter is: " @UV.fValue,,'BDLOG');		
 			
-				if (DamageEffect != none && !DamageEffect.bIgnoreBaseDamage)
-					{
-					return BonusDamage;
-					}			
-				}
-		}				
+			// Cap the maximum damage to 3
+			if (BonusDamage > default.FIREARMFOCUS_MAXIMUM_BONUS)
+			{
+				BonusDamage = default.FIREARMFOCUS_MAXIMUM_BONUS;
+			}
+			//`log("Adding bonus damage of: " @BonusDamage,,'BDLOG');
+			//	no game state means it's for damage preview
+			if (NewGameState == none)
+			{				
+				return BonusDamage;
+			}
+			//	only add the bonus damage when the damage effect is applying the weapon's base damage
+			DamageEffect = X2Effect_ApplyWeaponDamage(class'X2Effect'.static.GetX2Effect(AppliedData.EffectRef));
+			
+			if (DamageEffect != none && !DamageEffect.bIgnoreBaseDamage)
+			{
+				return BonusDamage;
+			}			
+		}
+	}				
 	return 0;
 }

@@ -146,6 +146,6 @@ function name TargetAdditiveAnimOnApplyWeaponDamage(XComGameStateContext Context
 
 DefaultProperties
 {
-	EffectName = "DLC_3SacrificeShield"
+	EffectName = "WardenMindWard"
 	DuplicateResponse = eDupe_Ignore
 }

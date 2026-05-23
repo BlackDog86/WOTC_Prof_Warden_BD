@@ -15,7 +15,7 @@ simulated protected function OnEffectAdded(const out EffectAppliedData ApplyEffe
 	NewStatChange.StatType = eStat_ShieldHP;
 	NewStatChange.StatAmount = Round((TargetUnit.GetMaxStat(eStat_HP) * float(class'X2Ability_Warden'.default.KINETIC_ARMOR_SHIELD_HP_PERCENTAGE) / 100.0f));
 	TargetUnit.SetUnitFloatValue(class'X2Ability_Warden'.default.KineticArmorExpendedShields, 0, eCleanup_BeginTactical);
-	`Log("Kinetic Armour Activated: Setting expended shields to 0");
+	`Log("Kinetic Armour Activated: Setting expended shields to 0",,'BDLOG');
 	NewEffectState.StatChanges.AddItem(NewStatChange);
 
 	super.OnEffectAdded(ApplyEffectParameters, kNewTargetState, NewGameState, NewEffectState);
@@ -29,7 +29,7 @@ function int GetDefendingDamageModifier(XComGameState_Effect EffectState, XComGa
 
 	TargetUnit = XComGameState_Unit(TargetDamageable);    
 	InitialShield = TargetUnit.GetMaxStat(eStat_HP) * float(class'X2Ability_Warden'.default.KINETIC_ARMOR_SHIELD_HP_PERCENTAGE) / 100.0f;
-	`Log("Initial shield is: " @InitialShield);
+	`Log("Initial shield is: " @InitialShield,,'BDLOG');
 		
 	If(CurrentDamage != 0) 
 		{		
@@ -38,9 +38,9 @@ function int GetDefendingDamageModifier(XComGameState_Effect EffectState, XComGa
 			TargetUnit.GetUnitValue(class'X2Ability_Warden'.default.KineticArmorBonusDamageValue, UV2);
 
 			ExpendedShieldHP = UV.fValue;
-			`log("ExpendedShieldHP= " @UV2.fValue);		
+			`log("ExpendedShieldHP= " @UV.fValue,,'BDLOG');		
 			CurrentBonusDamageValue = UV2.fValue;
-			`log("CurrentBonusDamageValue= " @UV2.fValue);		
+			`log("CurrentBonusDamageValue= " @UV2.fValue,,'BDLOG');		
 
 			ActiveShieldHP = InitialShield - ExpendedShieldHP;
 				// Calculate the expended amount of shields based on the incoming damage				
@@ -55,8 +55,8 @@ function int GetDefendingDamageModifier(XComGameState_Effect EffectState, XComGa
 				CurrentBonusDamageValue += ActiveShieldHP;
 				}
 						
-			`log("NewExpendedShieldHP: " @NewExpendedShieldHP);
-			`log("NewBonusDamageValue: " @CurrentBonusDamageValue);		
+			`log("NewExpendedShieldHP: " @NewExpendedShieldHP,,'BDLOG');
+			`log("NewBonusDamageValue: " @CurrentBonusDamageValue,,'BDLOG');		
 			
 			// Set the appropriate unitvalues				
 			if (NewGameState != none)
