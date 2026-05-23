@@ -195,7 +195,6 @@ static function array<X2DataTemplate> CreateTemplates()
 	Templates.AddItem(Warden_BD_Mirror());
 	Templates.AddItem(Warden_BD_MirrorReturnFire());
 	Templates.AddItem(Warden_BD_DefenderPassive());	
-	Templates.AddItem(Warden_BD_CrusaderPassive());	
 	Templates.AddItem(Warden_BD_WatcherPassive());
 	Templates.AddItem(Warden_BD_GrantImbueAmmoCharges());
 	Templates.AddItem(Warden_BD_GrantSoulBladeCharges());
@@ -651,41 +650,17 @@ static final function X2AbilityTemplate Warden_BD_EbbAndFlowManual()
 	Template.AbilityToHitCalc = default.DeadEye;
 	Template.AbilityTargetStyle = default.SelfTarget;	
 	Template.AbilityTriggers.AddItem(default.PlayerInputTrigger);
-
-	// Costs an action point (so not available after flow APs are used)
+		
 	ActionPointCost = new class'X2AbilityCost_ActionPoints';
 	ActionPointCost.iNumPoints = 1; 
 	ActionPointCost.AllowedTypes.AddItem(default.SpecialMomentumAP);
 	ActionPointCost.AllowedTypes.AddItem(default.DefenderAP);
-	ActionPointCost.AllowedTypes.AddItem(default.CrusaderAP);
 	ActionPointCost.AllowedTypes.AddItem(default.WatcherAP);
 	ActionPointCost.AllowedTypes.AddItem(default.RageAP);
-	ActionPointCost.AllowedTypes.AddItem(default.ChargeAP);
-	ActionPointCost.AllowedTypes.AddItem(default.DefenderCrusaderAP);
 	ActionPointCost.AllowedTypes.AddItem(default.DefenderWatcherAP);
 	ActionPointCost.AllowedTypes.AddItem(default.DefenderRageAP);
-	ActionPointCost.AllowedTypes.AddItem(default.DefenderChargeAP);
-	ActionPointCost.AllowedTypes.AddItem(default.CrusaderWatcherAP);
-	ActionPointCost.AllowedTypes.AddItem(default.CrusaderRageAP);
-	ActionPointCost.AllowedTypes.AddItem(default.CrusaderChargeAP);
-	ActionPointCost.AllowedTypes.AddItem(default.WatcherRageAP);
-	ActionPointCost.AllowedTypes.AddItem(default.WatcherChargeAP);
-	ActionPointCost.AllowedTypes.AddItem(default.RageChargeAP);
-	ActionPointCost.AllowedTypes.AddItem(default.DefenderCrusaderWatcherAP);
-	ActionPointCost.AllowedTypes.AddItem(default.DefenderCrusaderRageAP);
-	ActionPointCost.AllowedTypes.AddItem(default.DefenderCrusaderChargeAP);
+	ActionPointCost.AllowedTypes.AddItem(default.WatcherRageAP);	
 	ActionPointCost.AllowedTypes.AddItem(default.DefenderWatcherRageAP);
-	ActionPointCost.AllowedTypes.AddItem(default.DefenderWatcherChargeAP);
-	ActionPointCost.AllowedTypes.AddItem(default.DefenderRageChargeAP);
-	ActionPointCost.AllowedTypes.AddItem(default.CrusaderWatcherRageAP);
-	ActionPointCost.AllowedTypes.AddItem(default.CrusaderWatcherChargeAP);
-	ActionPointCost.AllowedTypes.AddItem(default.CrusaderRageChargeAP);
-	ActionPointCost.AllowedTypes.AddItem(default.WatcherRageChargeAP);
-	ActionPointCost.AllowedTypes.AddItem(default.DefenderCrusaderWatcherRageAP);
-	ActionPointCost.AllowedTypes.AddItem(default.DefenderCrusaderWatcherChargeAP);
-	ActionPointCost.AllowedTypes.AddItem(default.DefenderCrusaderRageChargeAP);
-	ActionPointCost.AllowedTypes.AddItem(default.CrusaderWatcherRageChargeAP);
-	ActionPointCost.AllowedTypes.AddItem(default.DefenderCrusaderWatcherRageChargeAP);
 	Template.AbilityCosts.AddItem(ActionPointCost);	
 	
 	// Grant charges to the ability
@@ -811,35 +786,12 @@ static final function X2AbilityTemplate Warden_BD_EbbAndFlowDummy()
 	ActionPointCost.AllowedTypes.Length = 0;
 	ActionPointCost.AllowedTypes.AddItem(default.SpecialMomentumAP);
 	ActionPointCost.AllowedTypes.AddItem(default.DefenderAP);
-	ActionPointCost.AllowedTypes.AddItem(default.CrusaderAP);
 	ActionPointCost.AllowedTypes.AddItem(default.WatcherAP);
 	ActionPointCost.AllowedTypes.AddItem(default.RageAP);
-	ActionPointCost.AllowedTypes.AddItem(default.ChargeAP);
-	ActionPointCost.AllowedTypes.AddItem(default.DefenderCrusaderAP);
 	ActionPointCost.AllowedTypes.AddItem(default.DefenderWatcherAP);
 	ActionPointCost.AllowedTypes.AddItem(default.DefenderRageAP);
-	ActionPointCost.AllowedTypes.AddItem(default.DefenderChargeAP);
-	ActionPointCost.AllowedTypes.AddItem(default.CrusaderWatcherAP);
-	ActionPointCost.AllowedTypes.AddItem(default.CrusaderRageAP);
-	ActionPointCost.AllowedTypes.AddItem(default.CrusaderChargeAP);
-	ActionPointCost.AllowedTypes.AddItem(default.WatcherRageAP);
-	ActionPointCost.AllowedTypes.AddItem(default.WatcherChargeAP);
-	ActionPointCost.AllowedTypes.AddItem(default.RageChargeAP);
-	ActionPointCost.AllowedTypes.AddItem(default.DefenderCrusaderWatcherAP);
-	ActionPointCost.AllowedTypes.AddItem(default.DefenderCrusaderRageAP);
-	ActionPointCost.AllowedTypes.AddItem(default.DefenderCrusaderChargeAP);
+	ActionPointCost.AllowedTypes.AddItem(default.WatcherRageAP);	
 	ActionPointCost.AllowedTypes.AddItem(default.DefenderWatcherRageAP);
-	ActionPointCost.AllowedTypes.AddItem(default.DefenderWatcherChargeAP);
-	ActionPointCost.AllowedTypes.AddItem(default.DefenderRageChargeAP);
-	ActionPointCost.AllowedTypes.AddItem(default.CrusaderWatcherRageAP);
-	ActionPointCost.AllowedTypes.AddItem(default.CrusaderWatcherChargeAP);
-	ActionPointCost.AllowedTypes.AddItem(default.CrusaderRageChargeAP);
-	ActionPointCost.AllowedTypes.AddItem(default.WatcherRageChargeAP);
-	ActionPointCost.AllowedTypes.AddItem(default.DefenderCrusaderWatcherRageAP);
-	ActionPointCost.AllowedTypes.AddItem(default.DefenderCrusaderWatcherChargeAP);
-	ActionPointCost.AllowedTypes.AddItem(default.DefenderCrusaderRageChargeAP);
-	ActionPointCost.AllowedTypes.AddItem(default.CrusaderWatcherRageChargeAP);
-	ActionPointCost.AllowedTypes.AddItem(default.DefenderCrusaderWatcherRageChargeAP);
 	Template.AbilityCosts.AddItem(ActionPointCost);	
 
 	PersistentEffect = new class'X2Effect_Persistent';
@@ -1057,115 +1009,6 @@ static function X2AbilityTemplate Warden_BD_ProficiencyPassives()
 	return Template;
 }
 
-/*
-static final function X2AbilityTemplate Warden_BD_KineticArmor()
-{
-	local X2AbilityTemplate										Template;
-	local X2AbilityCooldown										Cooldown;
-	local X2AbilityCost_ActionPoints							ActionPointCost;
-	local X2Effect_WardenKineticArmor							KineticEffect;
-	local X2Effect_WardenKineticArmorDamage						KineticDamageEffect;
-
-	`CREATE_X2ABILITY_TEMPLATE(Template, 'Warden_BD_KineticArmor');
-	Template.AbilitySourceName = 'eAbilitySource_Psionic';
-	Template.IconImage = "img:///UILibrary_XPACK_Common.PerkIcons.UIPerk_divineArmor";
-	Template.ShotHUDPriority = class'UIUtilities_Tactical'.const.CLASS_CORPORAL_PRIORITY;
-	Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_AlwaysShow;
-	
-	// # Costs and Cooldowns
-	Cooldown = new class'X2AbilityCooldown';
-	Cooldown.iNumTurns = default.KINETIC_ARMOR_COOLDOWN;
-	Template.AbilityCooldown = Cooldown;
-
-	// Action cost for this ability.
-	ActionPointCost = new class'X2AbilityCost_ActionPoints';
-	ActionPointCost.iNumPoints = 1; 
-	ActionPointCost.bConsumeAllPoints = true;
-	ActionPointCost.AllowedTypes.Length = 0;
-
-	// Millions upon millions of points
-	ActionPointCost.AllowedTypes.AddItem(default.SpecialMomentumAP);
-	ActionPointCost.AllowedTypes.AddItem(default.DefenderAP);
-	ActionPointCost.AllowedTypes.AddItem(default.CrusaderAP);
-	ActionPointCost.AllowedTypes.AddItem(default.WatcherAP);
-	ActionPointCost.AllowedTypes.AddItem(default.RageAP);
-	ActionPointCost.AllowedTypes.AddItem(default.ChargeAP);
-	ActionPointCost.AllowedTypes.AddItem(default.DefenderCrusaderAP);
-	ActionPointCost.AllowedTypes.AddItem(default.DefenderWatcherAP);
-	ActionPointCost.AllowedTypes.AddItem(default.DefenderRageAP);
-	ActionPointCost.AllowedTypes.AddItem(default.DefenderChargeAP);
-	ActionPointCost.AllowedTypes.AddItem(default.CrusaderWatcherAP);
-	ActionPointCost.AllowedTypes.AddItem(default.CrusaderRageAP);
-	ActionPointCost.AllowedTypes.AddItem(default.CrusaderChargeAP);
-	ActionPointCost.AllowedTypes.AddItem(default.WatcherRageAP);
-	ActionPointCost.AllowedTypes.AddItem(default.WatcherChargeAP);
-	ActionPointCost.AllowedTypes.AddItem(default.RageChargeAP);
-	ActionPointCost.AllowedTypes.AddItem(default.DefenderCrusaderWatcherAP);
-	ActionPointCost.AllowedTypes.AddItem(default.DefenderCrusaderRageAP);
-	ActionPointCost.AllowedTypes.AddItem(default.DefenderCrusaderChargeAP);
-	ActionPointCost.AllowedTypes.AddItem(default.DefenderWatcherRageAP);
-	ActionPointCost.AllowedTypes.AddItem(default.DefenderWatcherChargeAP);
-	ActionPointCost.AllowedTypes.AddItem(default.DefenderRageChargeAP);
-	ActionPointCost.AllowedTypes.AddItem(default.CrusaderWatcherRageAP);
-	ActionPointCost.AllowedTypes.AddItem(default.CrusaderWatcherChargeAP);
-	ActionPointCost.AllowedTypes.AddItem(default.CrusaderRageChargeAP);
-	ActionPointCost.AllowedTypes.AddItem(default.WatcherRageChargeAP);
-	ActionPointCost.AllowedTypes.AddItem(default.DefenderCrusaderWatcherRageAP);
-	ActionPointCost.AllowedTypes.AddItem(default.DefenderCrusaderWatcherChargeAP);
-	ActionPointCost.AllowedTypes.AddItem(default.DefenderCrusaderRageChargeAP);
-	ActionPointCost.AllowedTypes.AddItem(default.CrusaderWatcherRageChargeAP);
-	ActionPointCost.AllowedTypes.AddItem(default.DefenderCrusaderWatcherRageChargeAP);
-	Template.AbilityCosts.AddItem(ActionPointCost);	
-
-	// # Targeting and Triggering
-	Template.AbilityToHitCalc = default.DeadEye;
-	Template.DisplayTargetHitChance = false;
-	Template.AbilityTargetStyle = default.SelfTarget;	
-
-	// Ability trigger determines how it is activated. In this case - by the user manually.
-	Template.AbilityTriggers.AddItem(default.PlayerInputTrigger);
-	
-	// Set up effect to create new Armor
-	KineticEffect = new class'X2Effect_WardenKineticArmor';
-	KineticEffect.EffectName = default.KineticArmorEffectName;
-	KineticEffect.DuplicateResponse = eDupe_Ignore;
-	Template.AddTargetEffect(KineticEffect);
-
-	// Set up persistent effect for the additional damage
-	KineticDamageEffect = new class'X2Effect_WardenKineticArmorDamage';
-	KineticDamageEffect.EffectName = default.KineticArmorDamageEffectName;
-	KineticDamageEffect.DuplicateResponse = eDupe_Ignore;
-	KineticDamageEffect.BuildPersistentEffect(1, true, false);
-	KineticDamageEffect.SetDisplayInfo(ePerkBuff_Bonus, Template.LocFriendlyName, Template.GetMyLongDescription(), Template.IconImage, true, "", Template.AbilitySourceName);	
-	Template.AddTargetEffect(KineticDamageEffect);
-	
-	Template.ActivationSpeech = 'Nullshield';
-	Template.AbilityConfirmSound = "TacticalUI_ActivateAbility";
-
-	// This will determine if this ability break concealment under default rules
-	// And whether it's eligigible to Covering Fire reaction attacks.
-	Template.Hostility = eHostility_Neutral;
-
-	// This will tell TypicalAbility_BuildVisualization to display a flyover with the ability's LocFlyOverText when it's activated.
-	Template.bShowActivation = true;
-
-	// This will tell TypicalAbility_BuildVisualization to not play an activation animation for this ability. To be changed once we have an animation.
-	Template.bSkipFireAction = false;
-
-	// This function will apply game state changes caused by this ability. Use standard here.
-	Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
-
-	// This function will visualize the ability (change the visual representation of the world caused by this ability). Use standard.
-	Template.BuildVisualizationFn = TypicalAbility_BuildVisualization;
-	Template.CustomSelfFireAnim = 'HL_Shield';
-	// # Other properties
-	// This will determine whether this ability can appear in randomly generated XCOM rows of other soldier classes.
-	// Since this is a niche ability that applies only to melee damage, best not to make it cross-class.
-	Template.bCrossClassEligible = false;
-		
-	return Template;
-}
-*/
 // Rewind
 static function X2AbilityTemplate Warden_BD_Rewind()
 {
@@ -1191,35 +1034,12 @@ static function X2AbilityTemplate Warden_BD_Rewind()
 	//Add all the different action point combos to the array (sorry...)
 	ActionPointCost.AllowedTypes.AddItem(default.SpecialMomentumAP);
 	ActionPointCost.AllowedTypes.AddItem(default.DefenderAP);
-	ActionPointCost.AllowedTypes.AddItem(default.CrusaderAP);
 	ActionPointCost.AllowedTypes.AddItem(default.WatcherAP);
 	ActionPointCost.AllowedTypes.AddItem(default.RageAP);
-	ActionPointCost.AllowedTypes.AddItem(default.ChargeAP);
-	ActionPointCost.AllowedTypes.AddItem(default.DefenderCrusaderAP);
 	ActionPointCost.AllowedTypes.AddItem(default.DefenderWatcherAP);
 	ActionPointCost.AllowedTypes.AddItem(default.DefenderRageAP);
-	ActionPointCost.AllowedTypes.AddItem(default.DefenderChargeAP);
-	ActionPointCost.AllowedTypes.AddItem(default.CrusaderWatcherAP);
-	ActionPointCost.AllowedTypes.AddItem(default.CrusaderRageAP);
-	ActionPointCost.AllowedTypes.AddItem(default.CrusaderChargeAP);
-	ActionPointCost.AllowedTypes.AddItem(default.WatcherRageAP);
-	ActionPointCost.AllowedTypes.AddItem(default.WatcherChargeAP);
-	ActionPointCost.AllowedTypes.AddItem(default.RageChargeAP);
-	ActionPointCost.AllowedTypes.AddItem(default.DefenderCrusaderWatcherAP);
-	ActionPointCost.AllowedTypes.AddItem(default.DefenderCrusaderRageAP);
-	ActionPointCost.AllowedTypes.AddItem(default.DefenderCrusaderChargeAP);
+	ActionPointCost.AllowedTypes.AddItem(default.WatcherRageAP);	
 	ActionPointCost.AllowedTypes.AddItem(default.DefenderWatcherRageAP);
-	ActionPointCost.AllowedTypes.AddItem(default.DefenderWatcherChargeAP);
-	ActionPointCost.AllowedTypes.AddItem(default.DefenderRageChargeAP);
-	ActionPointCost.AllowedTypes.AddItem(default.CrusaderWatcherRageAP);
-	ActionPointCost.AllowedTypes.AddItem(default.CrusaderWatcherChargeAP);
-	ActionPointCost.AllowedTypes.AddItem(default.CrusaderRageChargeAP);
-	ActionPointCost.AllowedTypes.AddItem(default.WatcherRageChargeAP);
-	ActionPointCost.AllowedTypes.AddItem(default.DefenderCrusaderWatcherRageAP);
-	ActionPointCost.AllowedTypes.AddItem(default.DefenderCrusaderWatcherChargeAP);
-	ActionPointCost.AllowedTypes.AddItem(default.DefenderCrusaderRageChargeAP);
-	ActionPointCost.AllowedTypes.AddItem(default.CrusaderWatcherRageChargeAP);
-	ActionPointCost.AllowedTypes.AddItem(default.DefenderCrusaderWatcherRageChargeAP);
 	Template.AbilityCosts.AddItem(ActionPointCost);	
 
 	Template.AbilityToHitCalc = default.DeadEye;
@@ -1440,35 +1260,12 @@ static final function X2AbilityTemplate Warden_BD_Mirror()
 	// Millions upon millions of points
 	ActionPointCost.AllowedTypes.AddItem(default.SpecialMomentumAP);
 	ActionPointCost.AllowedTypes.AddItem(default.DefenderAP);
-	ActionPointCost.AllowedTypes.AddItem(default.CrusaderAP);
 	ActionPointCost.AllowedTypes.AddItem(default.WatcherAP);
 	ActionPointCost.AllowedTypes.AddItem(default.RageAP);
-	ActionPointCost.AllowedTypes.AddItem(default.ChargeAP);
-	ActionPointCost.AllowedTypes.AddItem(default.DefenderCrusaderAP);
 	ActionPointCost.AllowedTypes.AddItem(default.DefenderWatcherAP);
 	ActionPointCost.AllowedTypes.AddItem(default.DefenderRageAP);
-	ActionPointCost.AllowedTypes.AddItem(default.DefenderChargeAP);
-	ActionPointCost.AllowedTypes.AddItem(default.CrusaderWatcherAP);
-	ActionPointCost.AllowedTypes.AddItem(default.CrusaderRageAP);
-	ActionPointCost.AllowedTypes.AddItem(default.CrusaderChargeAP);
-	ActionPointCost.AllowedTypes.AddItem(default.WatcherRageAP);
-	ActionPointCost.AllowedTypes.AddItem(default.WatcherChargeAP);
-	ActionPointCost.AllowedTypes.AddItem(default.RageChargeAP);
-	ActionPointCost.AllowedTypes.AddItem(default.DefenderCrusaderWatcherAP);
-	ActionPointCost.AllowedTypes.AddItem(default.DefenderCrusaderRageAP);
-	ActionPointCost.AllowedTypes.AddItem(default.DefenderCrusaderChargeAP);
+	ActionPointCost.AllowedTypes.AddItem(default.WatcherRageAP);	
 	ActionPointCost.AllowedTypes.AddItem(default.DefenderWatcherRageAP);
-	ActionPointCost.AllowedTypes.AddItem(default.DefenderWatcherChargeAP);
-	ActionPointCost.AllowedTypes.AddItem(default.DefenderRageChargeAP);
-	ActionPointCost.AllowedTypes.AddItem(default.CrusaderWatcherRageAP);
-	ActionPointCost.AllowedTypes.AddItem(default.CrusaderWatcherChargeAP);
-	ActionPointCost.AllowedTypes.AddItem(default.CrusaderRageChargeAP);
-	ActionPointCost.AllowedTypes.AddItem(default.WatcherRageChargeAP);
-	ActionPointCost.AllowedTypes.AddItem(default.DefenderCrusaderWatcherRageAP);
-	ActionPointCost.AllowedTypes.AddItem(default.DefenderCrusaderWatcherChargeAP);
-	ActionPointCost.AllowedTypes.AddItem(default.DefenderCrusaderRageChargeAP);
-	ActionPointCost.AllowedTypes.AddItem(default.CrusaderWatcherRageChargeAP);
-	ActionPointCost.AllowedTypes.AddItem(default.DefenderCrusaderWatcherRageChargeAP);
 	Template.AbilityCosts.AddItem(ActionPointCost);	
 
 	// # Targeting and Triggering
@@ -1568,20 +1365,6 @@ static function X2AbilityTemplate Warden_BD_DefenderPassive()
 	Template = CreatePassiveAbility('Warden_BD_DefenderPassive', "img:///UILibrary_PerkIcons.UIPerk_one_for_all");
 	Template.bCrossClassEligible = false;
 	Template.AbilitySourceName = 'eAbilitySource_psionic';
-	Template.AdditionalAbilities.AddItem('Warden_BD_CrusaderPassive');
-
-	return Template;
-}
-
-// This is now integrated into DefenderPassive (Squire)
-static function X2AbilityTemplate Warden_BD_CrusaderPassive()
-{
-	local X2AbilityTemplate						Template;	
-
-	Template = CreatePassiveAbility('Warden_BD_CrusaderPassive', "img:///UILibrary_XPACK_Common.PerkIcons.UIPerk_chimeraxws");
-	
-	Template.bCrossClassEligible = false;
-	Template.AbilitySourceName = 'eAbilitySource_psionic';
 
 	return Template;
 }
@@ -1630,35 +1413,12 @@ static function X2AbilityTemplate Warden_BD_GrantImbueAmmoCharges()
 	// Millions upon millions of points
 	ActionPointCost.AllowedTypes.AddItem(default.SpecialMomentumAP);
 	ActionPointCost.AllowedTypes.AddItem(default.DefenderAP);
-	ActionPointCost.AllowedTypes.AddItem(default.CrusaderAP);
 	ActionPointCost.AllowedTypes.AddItem(default.WatcherAP);
 	ActionPointCost.AllowedTypes.AddItem(default.RageAP);
-	ActionPointCost.AllowedTypes.AddItem(default.ChargeAP);
-	ActionPointCost.AllowedTypes.AddItem(default.DefenderCrusaderAP);
 	ActionPointCost.AllowedTypes.AddItem(default.DefenderWatcherAP);
 	ActionPointCost.AllowedTypes.AddItem(default.DefenderRageAP);
-	ActionPointCost.AllowedTypes.AddItem(default.DefenderChargeAP);
-	ActionPointCost.AllowedTypes.AddItem(default.CrusaderWatcherAP);
-	ActionPointCost.AllowedTypes.AddItem(default.CrusaderRageAP);
-	ActionPointCost.AllowedTypes.AddItem(default.CrusaderChargeAP);
-	ActionPointCost.AllowedTypes.AddItem(default.WatcherRageAP);
-	ActionPointCost.AllowedTypes.AddItem(default.WatcherChargeAP);
-	ActionPointCost.AllowedTypes.AddItem(default.RageChargeAP);
-	ActionPointCost.AllowedTypes.AddItem(default.DefenderCrusaderWatcherAP);
-	ActionPointCost.AllowedTypes.AddItem(default.DefenderCrusaderRageAP);
-	ActionPointCost.AllowedTypes.AddItem(default.DefenderCrusaderChargeAP);
+	ActionPointCost.AllowedTypes.AddItem(default.WatcherRageAP);	
 	ActionPointCost.AllowedTypes.AddItem(default.DefenderWatcherRageAP);
-	ActionPointCost.AllowedTypes.AddItem(default.DefenderWatcherChargeAP);
-	ActionPointCost.AllowedTypes.AddItem(default.DefenderRageChargeAP);
-	ActionPointCost.AllowedTypes.AddItem(default.CrusaderWatcherRageAP);
-	ActionPointCost.AllowedTypes.AddItem(default.CrusaderWatcherChargeAP);
-	ActionPointCost.AllowedTypes.AddItem(default.CrusaderRageChargeAP);
-	ActionPointCost.AllowedTypes.AddItem(default.WatcherRageChargeAP);
-	ActionPointCost.AllowedTypes.AddItem(default.DefenderCrusaderWatcherRageAP);
-	ActionPointCost.AllowedTypes.AddItem(default.DefenderCrusaderWatcherChargeAP);
-	ActionPointCost.AllowedTypes.AddItem(default.DefenderCrusaderRageChargeAP);
-	ActionPointCost.AllowedTypes.AddItem(default.CrusaderWatcherRageChargeAP);
-	ActionPointCost.AllowedTypes.AddItem(default.DefenderCrusaderWatcherRageChargeAP);
 	Template.AbilityCosts.AddItem(ActionPointCost);	
 
 	// # Targeting and Triggering
@@ -1874,35 +1634,12 @@ static function X2AbilityTemplate Warden_BD_GrantSoulBladeCharges()
 	// Millions upon millions of points
 	ActionPointCost.AllowedTypes.AddItem(default.SpecialMomentumAP);
 	ActionPointCost.AllowedTypes.AddItem(default.DefenderAP);
-	ActionPointCost.AllowedTypes.AddItem(default.CrusaderAP);
 	ActionPointCost.AllowedTypes.AddItem(default.WatcherAP);
 	ActionPointCost.AllowedTypes.AddItem(default.RageAP);
-	ActionPointCost.AllowedTypes.AddItem(default.ChargeAP);
-	ActionPointCost.AllowedTypes.AddItem(default.DefenderCrusaderAP);
 	ActionPointCost.AllowedTypes.AddItem(default.DefenderWatcherAP);
 	ActionPointCost.AllowedTypes.AddItem(default.DefenderRageAP);
-	ActionPointCost.AllowedTypes.AddItem(default.DefenderChargeAP);
-	ActionPointCost.AllowedTypes.AddItem(default.CrusaderWatcherAP);
-	ActionPointCost.AllowedTypes.AddItem(default.CrusaderRageAP);
-	ActionPointCost.AllowedTypes.AddItem(default.CrusaderChargeAP);
-	ActionPointCost.AllowedTypes.AddItem(default.WatcherRageAP);
-	ActionPointCost.AllowedTypes.AddItem(default.WatcherChargeAP);
-	ActionPointCost.AllowedTypes.AddItem(default.RageChargeAP);
-	ActionPointCost.AllowedTypes.AddItem(default.DefenderCrusaderWatcherAP);
-	ActionPointCost.AllowedTypes.AddItem(default.DefenderCrusaderRageAP);
-	ActionPointCost.AllowedTypes.AddItem(default.DefenderCrusaderChargeAP);
+	ActionPointCost.AllowedTypes.AddItem(default.WatcherRageAP);	
 	ActionPointCost.AllowedTypes.AddItem(default.DefenderWatcherRageAP);
-	ActionPointCost.AllowedTypes.AddItem(default.DefenderWatcherChargeAP);
-	ActionPointCost.AllowedTypes.AddItem(default.DefenderRageChargeAP);
-	ActionPointCost.AllowedTypes.AddItem(default.CrusaderWatcherRageAP);
-	ActionPointCost.AllowedTypes.AddItem(default.CrusaderWatcherChargeAP);
-	ActionPointCost.AllowedTypes.AddItem(default.CrusaderRageChargeAP);
-	ActionPointCost.AllowedTypes.AddItem(default.WatcherRageChargeAP);
-	ActionPointCost.AllowedTypes.AddItem(default.DefenderCrusaderWatcherRageAP);
-	ActionPointCost.AllowedTypes.AddItem(default.DefenderCrusaderWatcherChargeAP);
-	ActionPointCost.AllowedTypes.AddItem(default.DefenderCrusaderRageChargeAP);
-	ActionPointCost.AllowedTypes.AddItem(default.CrusaderWatcherRageChargeAP);
-	ActionPointCost.AllowedTypes.AddItem(default.DefenderCrusaderWatcherRageChargeAP);
 	Template.AbilityCosts.AddItem(ActionPointCost);	
 
 	// # Targeting and Triggering
@@ -2086,35 +1823,12 @@ static function X2AbilityTemplate Warden_BD_DefensiveWard()
 	// Sooooooo many poooooiiiinnnnttttssss!
 	ActionPointCost.AllowedTypes.AddItem(default.SpecialMomentumAP);
 	ActionPointCost.AllowedTypes.AddItem(default.DefenderAP);
-	ActionPointCost.AllowedTypes.AddItem(default.CrusaderAP);
 	ActionPointCost.AllowedTypes.AddItem(default.WatcherAP);
 	ActionPointCost.AllowedTypes.AddItem(default.RageAP);
-	ActionPointCost.AllowedTypes.AddItem(default.ChargeAP);
-	ActionPointCost.AllowedTypes.AddItem(default.DefenderCrusaderAP);
 	ActionPointCost.AllowedTypes.AddItem(default.DefenderWatcherAP);
 	ActionPointCost.AllowedTypes.AddItem(default.DefenderRageAP);
-	ActionPointCost.AllowedTypes.AddItem(default.DefenderChargeAP);
-	ActionPointCost.AllowedTypes.AddItem(default.CrusaderWatcherAP);
-	ActionPointCost.AllowedTypes.AddItem(default.CrusaderRageAP);
-	ActionPointCost.AllowedTypes.AddItem(default.CrusaderChargeAP);
-	ActionPointCost.AllowedTypes.AddItem(default.WatcherRageAP);
-	ActionPointCost.AllowedTypes.AddItem(default.WatcherChargeAP);
-	ActionPointCost.AllowedTypes.AddItem(default.RageChargeAP);
-	ActionPointCost.AllowedTypes.AddItem(default.DefenderCrusaderWatcherAP);
-	ActionPointCost.AllowedTypes.AddItem(default.DefenderCrusaderRageAP);
-	ActionPointCost.AllowedTypes.AddItem(default.DefenderCrusaderChargeAP);
+	ActionPointCost.AllowedTypes.AddItem(default.WatcherRageAP);	
 	ActionPointCost.AllowedTypes.AddItem(default.DefenderWatcherRageAP);
-	ActionPointCost.AllowedTypes.AddItem(default.DefenderWatcherChargeAP);
-	ActionPointCost.AllowedTypes.AddItem(default.DefenderRageChargeAP);
-	ActionPointCost.AllowedTypes.AddItem(default.CrusaderWatcherRageAP);
-	ActionPointCost.AllowedTypes.AddItem(default.CrusaderWatcherChargeAP);
-	ActionPointCost.AllowedTypes.AddItem(default.CrusaderRageChargeAP);
-	ActionPointCost.AllowedTypes.AddItem(default.WatcherRageChargeAP);
-	ActionPointCost.AllowedTypes.AddItem(default.DefenderCrusaderWatcherRageAP);
-	ActionPointCost.AllowedTypes.AddItem(default.DefenderCrusaderWatcherChargeAP);
-	ActionPointCost.AllowedTypes.AddItem(default.DefenderCrusaderRageChargeAP);
-	ActionPointCost.AllowedTypes.AddItem(default.CrusaderWatcherRageChargeAP);
-	ActionPointCost.AllowedTypes.AddItem(default.DefenderCrusaderWatcherRageChargeAP);
 	Template.AbilityCosts.AddItem(ActionPointCost);	
 
 	Cooldown = new class'X2AbilityCooldown';
@@ -2331,38 +2045,14 @@ static final function X2AbilityTemplate Warden_BD_FlowFocusPassive()
     ActionPointCost.iNumPoints = 1;
     ActionPointCost.bFreeCost = true;
     ActionPointCost.AllowedTypes.Length = 0;
-    ActionPointCost.AllowedTypes.AddItem(default.SpecialMomentumAP);
-    ActionPointCost.AllowedTypes.AddItem(default.DefenderAP);
-    ActionPointCost.AllowedTypes.AddItem(default.CrusaderAP);
-    ActionPointCost.AllowedTypes.AddItem(default.WatcherAP);
-    ActionPointCost.AllowedTypes.AddItem(default.RageAP);
-    ActionPointCost.AllowedTypes.AddItem(default.ChargeAP);
-    ActionPointCost.AllowedTypes.AddItem(default.DefenderCrusaderAP);
-    ActionPointCost.AllowedTypes.AddItem(default.DefenderWatcherAP);
-    ActionPointCost.AllowedTypes.AddItem(default.DefenderRageAP);
-    ActionPointCost.AllowedTypes.AddItem(default.DefenderChargeAP);
-    ActionPointCost.AllowedTypes.AddItem(default.CrusaderWatcherAP);
-    ActionPointCost.AllowedTypes.AddItem(default.CrusaderRageAP);
-    ActionPointCost.AllowedTypes.AddItem(default.CrusaderChargeAP);
-    ActionPointCost.AllowedTypes.AddItem(default.WatcherRageAP);
-    ActionPointCost.AllowedTypes.AddItem(default.WatcherChargeAP);
-    ActionPointCost.AllowedTypes.AddItem(default.RageChargeAP);
-    ActionPointCost.AllowedTypes.AddItem(default.DefenderCrusaderWatcherAP);
-    ActionPointCost.AllowedTypes.AddItem(default.DefenderCrusaderRageAP);
-    ActionPointCost.AllowedTypes.AddItem(default.DefenderCrusaderChargeAP);
-    ActionPointCost.AllowedTypes.AddItem(default.DefenderWatcherRageAP);
-    ActionPointCost.AllowedTypes.AddItem(default.DefenderWatcherChargeAP);
-    ActionPointCost.AllowedTypes.AddItem(default.DefenderRageChargeAP);
-    ActionPointCost.AllowedTypes.AddItem(default.CrusaderWatcherRageAP);
-    ActionPointCost.AllowedTypes.AddItem(default.CrusaderWatcherChargeAP);
-    ActionPointCost.AllowedTypes.AddItem(default.CrusaderRageChargeAP);
-    ActionPointCost.AllowedTypes.AddItem(default.WatcherRageChargeAP);
-    ActionPointCost.AllowedTypes.AddItem(default.DefenderCrusaderWatcherRageAP);
-    ActionPointCost.AllowedTypes.AddItem(default.DefenderCrusaderWatcherChargeAP);
-    ActionPointCost.AllowedTypes.AddItem(default.DefenderCrusaderRageChargeAP);
-    ActionPointCost.AllowedTypes.AddItem(default.DefenderWatcherRageChargeAP);
-    ActionPointCost.AllowedTypes.AddItem(default.CrusaderWatcherRageChargeAP);
-    ActionPointCost.AllowedTypes.AddItem(default.DefenderCrusaderWatcherRageChargeAP);
+	ActionPointCost.AllowedTypes.AddItem(default.SpecialMomentumAP);
+	ActionPointCost.AllowedTypes.AddItem(default.DefenderAP);
+	ActionPointCost.AllowedTypes.AddItem(default.WatcherAP);
+	ActionPointCost.AllowedTypes.AddItem(default.RageAP);
+	ActionPointCost.AllowedTypes.AddItem(default.DefenderWatcherAP);
+	ActionPointCost.AllowedTypes.AddItem(default.DefenderRageAP);
+	ActionPointCost.AllowedTypes.AddItem(default.WatcherRageAP);	
+	ActionPointCost.AllowedTypes.AddItem(default.DefenderWatcherRageAP);
     Template.AbilityCosts.AddItem(ActionPointCost);
 
     // Targeting
@@ -2679,35 +2369,12 @@ static function X2AbilityTemplate Warden_BD_Fissure()
 	// Sooooooo many poooooiiiinnnnttttssss!
 	ActionPointCost.AllowedTypes.AddItem(default.SpecialMomentumAP);
 	ActionPointCost.AllowedTypes.AddItem(default.DefenderAP);
-	ActionPointCost.AllowedTypes.AddItem(default.CrusaderAP);
 	ActionPointCost.AllowedTypes.AddItem(default.WatcherAP);
 	ActionPointCost.AllowedTypes.AddItem(default.RageAP);
-	ActionPointCost.AllowedTypes.AddItem(default.ChargeAP);
-	ActionPointCost.AllowedTypes.AddItem(default.DefenderCrusaderAP);
 	ActionPointCost.AllowedTypes.AddItem(default.DefenderWatcherAP);
 	ActionPointCost.AllowedTypes.AddItem(default.DefenderRageAP);
-	ActionPointCost.AllowedTypes.AddItem(default.DefenderChargeAP);
-	ActionPointCost.AllowedTypes.AddItem(default.CrusaderWatcherAP);
-	ActionPointCost.AllowedTypes.AddItem(default.CrusaderRageAP);
-	ActionPointCost.AllowedTypes.AddItem(default.CrusaderChargeAP);
-	ActionPointCost.AllowedTypes.AddItem(default.WatcherRageAP);
-	ActionPointCost.AllowedTypes.AddItem(default.WatcherChargeAP);
-	ActionPointCost.AllowedTypes.AddItem(default.RageChargeAP);
-	ActionPointCost.AllowedTypes.AddItem(default.DefenderCrusaderWatcherAP);
-	ActionPointCost.AllowedTypes.AddItem(default.DefenderCrusaderRageAP);
-	ActionPointCost.AllowedTypes.AddItem(default.DefenderCrusaderChargeAP);
+	ActionPointCost.AllowedTypes.AddItem(default.WatcherRageAP);	
 	ActionPointCost.AllowedTypes.AddItem(default.DefenderWatcherRageAP);
-	ActionPointCost.AllowedTypes.AddItem(default.DefenderWatcherChargeAP);
-	ActionPointCost.AllowedTypes.AddItem(default.DefenderRageChargeAP);
-	ActionPointCost.AllowedTypes.AddItem(default.CrusaderWatcherRageAP);
-	ActionPointCost.AllowedTypes.AddItem(default.CrusaderWatcherChargeAP);
-	ActionPointCost.AllowedTypes.AddItem(default.CrusaderRageChargeAP);
-	ActionPointCost.AllowedTypes.AddItem(default.WatcherRageChargeAP);
-	ActionPointCost.AllowedTypes.AddItem(default.DefenderCrusaderWatcherRageAP);
-	ActionPointCost.AllowedTypes.AddItem(default.DefenderCrusaderWatcherChargeAP);
-	ActionPointCost.AllowedTypes.AddItem(default.DefenderCrusaderRageChargeAP);
-	ActionPointCost.AllowedTypes.AddItem(default.CrusaderWatcherRageChargeAP);
-	ActionPointCost.AllowedTypes.AddItem(default.DefenderCrusaderWatcherRageChargeAP);
 	Template.AbilityCosts.AddItem(ActionPointCost);	
 
 	Cooldown = new class'X2AbilityCooldown';
@@ -2861,35 +2528,12 @@ static function X2DataTemplate Warden_BD_Tide()
 	// If I had a doller for every action point I granted....I'd be able to afford XCOM3 when it comes out.
 	ActionPointCost.AllowedTypes.AddItem(default.SpecialMomentumAP);
 	ActionPointCost.AllowedTypes.AddItem(default.DefenderAP);
-	ActionPointCost.AllowedTypes.AddItem(default.CrusaderAP);
 	ActionPointCost.AllowedTypes.AddItem(default.WatcherAP);
 	ActionPointCost.AllowedTypes.AddItem(default.RageAP);
-	ActionPointCost.AllowedTypes.AddItem(default.ChargeAP);
-	ActionPointCost.AllowedTypes.AddItem(default.DefenderCrusaderAP);
 	ActionPointCost.AllowedTypes.AddItem(default.DefenderWatcherAP);
 	ActionPointCost.AllowedTypes.AddItem(default.DefenderRageAP);
-	ActionPointCost.AllowedTypes.AddItem(default.DefenderChargeAP);
-	ActionPointCost.AllowedTypes.AddItem(default.CrusaderWatcherAP);
-	ActionPointCost.AllowedTypes.AddItem(default.CrusaderRageAP);
-	ActionPointCost.AllowedTypes.AddItem(default.CrusaderChargeAP);
-	ActionPointCost.AllowedTypes.AddItem(default.WatcherRageAP);
-	ActionPointCost.AllowedTypes.AddItem(default.WatcherChargeAP);
-	ActionPointCost.AllowedTypes.AddItem(default.RageChargeAP);
-	ActionPointCost.AllowedTypes.AddItem(default.DefenderCrusaderWatcherAP);
-	ActionPointCost.AllowedTypes.AddItem(default.DefenderCrusaderRageAP);
-	ActionPointCost.AllowedTypes.AddItem(default.DefenderCrusaderChargeAP);
+	ActionPointCost.AllowedTypes.AddItem(default.WatcherRageAP);	
 	ActionPointCost.AllowedTypes.AddItem(default.DefenderWatcherRageAP);
-	ActionPointCost.AllowedTypes.AddItem(default.DefenderWatcherChargeAP);
-	ActionPointCost.AllowedTypes.AddItem(default.DefenderRageChargeAP);
-	ActionPointCost.AllowedTypes.AddItem(default.CrusaderWatcherRageAP);
-	ActionPointCost.AllowedTypes.AddItem(default.CrusaderWatcherChargeAP);
-	ActionPointCost.AllowedTypes.AddItem(default.CrusaderRageChargeAP);
-	ActionPointCost.AllowedTypes.AddItem(default.WatcherRageChargeAP);
-	ActionPointCost.AllowedTypes.AddItem(default.DefenderCrusaderWatcherRageAP);
-	ActionPointCost.AllowedTypes.AddItem(default.DefenderCrusaderWatcherChargeAP);
-	ActionPointCost.AllowedTypes.AddItem(default.DefenderCrusaderRageChargeAP);
-	ActionPointCost.AllowedTypes.AddItem(default.CrusaderWatcherRageChargeAP);
-	ActionPointCost.AllowedTypes.AddItem(default.DefenderCrusaderWatcherRageChargeAP);
 	Template.AbilityCosts.AddItem(ActionPointCost);	
 	
 	Cooldown = new class'X2AbilityCooldown';
@@ -2995,35 +2639,12 @@ static function X2DataTemplate Warden_BD_Consume()
 	// Points Ahoy!
 	ActionPointCost.AllowedTypes.AddItem(default.SpecialMomentumAP);
 	ActionPointCost.AllowedTypes.AddItem(default.DefenderAP);
-	ActionPointCost.AllowedTypes.AddItem(default.CrusaderAP);
 	ActionPointCost.AllowedTypes.AddItem(default.WatcherAP);
 	ActionPointCost.AllowedTypes.AddItem(default.RageAP);
-	ActionPointCost.AllowedTypes.AddItem(default.ChargeAP);
-	ActionPointCost.AllowedTypes.AddItem(default.DefenderCrusaderAP);
 	ActionPointCost.AllowedTypes.AddItem(default.DefenderWatcherAP);
 	ActionPointCost.AllowedTypes.AddItem(default.DefenderRageAP);
-	ActionPointCost.AllowedTypes.AddItem(default.DefenderChargeAP);
-	ActionPointCost.AllowedTypes.AddItem(default.CrusaderWatcherAP);
-	ActionPointCost.AllowedTypes.AddItem(default.CrusaderRageAP);
-	ActionPointCost.AllowedTypes.AddItem(default.CrusaderChargeAP);
-	ActionPointCost.AllowedTypes.AddItem(default.WatcherRageAP);
-	ActionPointCost.AllowedTypes.AddItem(default.WatcherChargeAP);
-	ActionPointCost.AllowedTypes.AddItem(default.RageChargeAP);
-	ActionPointCost.AllowedTypes.AddItem(default.DefenderCrusaderWatcherAP);
-	ActionPointCost.AllowedTypes.AddItem(default.DefenderCrusaderRageAP);
-	ActionPointCost.AllowedTypes.AddItem(default.DefenderCrusaderChargeAP);
+	ActionPointCost.AllowedTypes.AddItem(default.WatcherRageAP);	
 	ActionPointCost.AllowedTypes.AddItem(default.DefenderWatcherRageAP);
-	ActionPointCost.AllowedTypes.AddItem(default.DefenderWatcherChargeAP);
-	ActionPointCost.AllowedTypes.AddItem(default.DefenderRageChargeAP);
-	ActionPointCost.AllowedTypes.AddItem(default.CrusaderWatcherRageAP);
-	ActionPointCost.AllowedTypes.AddItem(default.CrusaderWatcherChargeAP);
-	ActionPointCost.AllowedTypes.AddItem(default.CrusaderRageChargeAP);
-	ActionPointCost.AllowedTypes.AddItem(default.WatcherRageChargeAP);
-	ActionPointCost.AllowedTypes.AddItem(default.DefenderCrusaderWatcherRageAP);
-	ActionPointCost.AllowedTypes.AddItem(default.DefenderCrusaderWatcherChargeAP);
-	ActionPointCost.AllowedTypes.AddItem(default.DefenderCrusaderRageChargeAP);
-	ActionPointCost.AllowedTypes.AddItem(default.CrusaderWatcherRageChargeAP);
-	ActionPointCost.AllowedTypes.AddItem(default.DefenderCrusaderWatcherRageChargeAP);
 	Template.AbilityCosts.AddItem(ActionPointCost);	
 	
 	Cooldown = new class'X2AbilityCooldown';
@@ -3209,36 +2830,12 @@ static function X2AbilityTemplate Warden_BD_Charge()
 	ActionPointCost.AllowedTypes.Length = 0;
 	ActionPointCost.AllowedTypes.AddItem(default.SpecialMomentumAP);
 	ActionPointCost.AllowedTypes.AddItem(default.DefenderAP);
-	ActionPointCost.AllowedTypes.AddItem(default.CrusaderAP);
 	ActionPointCost.AllowedTypes.AddItem(default.WatcherAP);
 	ActionPointCost.AllowedTypes.AddItem(default.RageAP);
-	ActionPointCost.AllowedTypes.AddItem(default.ChargeAP);
-	ActionPointCost.AllowedTypes.AddItem(default.DefenderCrusaderAP);
 	ActionPointCost.AllowedTypes.AddItem(default.DefenderWatcherAP);
 	ActionPointCost.AllowedTypes.AddItem(default.DefenderRageAP);
-	ActionPointCost.AllowedTypes.AddItem(default.DefenderChargeAP);
-	ActionPointCost.AllowedTypes.AddItem(default.CrusaderWatcherAP);
-	ActionPointCost.AllowedTypes.AddItem(default.CrusaderRageAP);
-	ActionPointCost.AllowedTypes.AddItem(default.CrusaderChargeAP);
-	ActionPointCost.AllowedTypes.AddItem(default.WatcherRageAP);
-	ActionPointCost.AllowedTypes.AddItem(default.WatcherChargeAP);
-	ActionPointCost.AllowedTypes.AddItem(default.RageChargeAP);
-	ActionPointCost.AllowedTypes.AddItem(default.DefenderCrusaderWatcherAP);
-	ActionPointCost.AllowedTypes.AddItem(default.DefenderCrusaderRageAP);
-	ActionPointCost.AllowedTypes.AddItem(default.DefenderCrusaderChargeAP);
+	ActionPointCost.AllowedTypes.AddItem(default.WatcherRageAP);	
 	ActionPointCost.AllowedTypes.AddItem(default.DefenderWatcherRageAP);
-	ActionPointCost.AllowedTypes.AddItem(default.DefenderWatcherChargeAP);
-	ActionPointCost.AllowedTypes.AddItem(default.DefenderRageChargeAP);
-	ActionPointCost.AllowedTypes.AddItem(default.CrusaderWatcherRageAP);
-	ActionPointCost.AllowedTypes.AddItem(default.CrusaderWatcherChargeAP);
-	ActionPointCost.AllowedTypes.AddItem(default.CrusaderRageChargeAP);
-	ActionPointCost.AllowedTypes.AddItem(default.WatcherRageChargeAP);
-	ActionPointCost.AllowedTypes.AddItem(default.DefenderCrusaderWatcherRageAP);
-	ActionPointCost.AllowedTypes.AddItem(default.DefenderCrusaderWatcherChargeAP);
-	ActionPointCost.AllowedTypes.AddItem(default.DefenderCrusaderRageChargeAP);
-	ActionPointCost.AllowedTypes.AddItem(default.DefenderWatcherRageChargeAP);
-	ActionPointCost.AllowedTypes.AddItem(default.CrusaderWatcherRageChargeAP);
-	ActionPointCost.AllowedTypes.AddItem(default.DefenderCrusaderWatcherRageChargeAP);
 	Template.AbilityCosts.AddItem(ActionPointCost);
 
 	// # Targeting and Triggering
@@ -3338,35 +2935,12 @@ static function X2AbilityTemplate Warden_BD_Retribution()
 	// MAXIMUM POINTS.
 	ActionPointCost.AllowedTypes.AddItem(default.SpecialMomentumAP);
 	ActionPointCost.AllowedTypes.AddItem(default.DefenderAP);
-	ActionPointCost.AllowedTypes.AddItem(default.CrusaderAP);
 	ActionPointCost.AllowedTypes.AddItem(default.WatcherAP);
 	ActionPointCost.AllowedTypes.AddItem(default.RageAP);
-	ActionPointCost.AllowedTypes.AddItem(default.ChargeAP);
-	ActionPointCost.AllowedTypes.AddItem(default.DefenderCrusaderAP);
 	ActionPointCost.AllowedTypes.AddItem(default.DefenderWatcherAP);
 	ActionPointCost.AllowedTypes.AddItem(default.DefenderRageAP);
-	ActionPointCost.AllowedTypes.AddItem(default.DefenderChargeAP);
-	ActionPointCost.AllowedTypes.AddItem(default.CrusaderWatcherAP);
-	ActionPointCost.AllowedTypes.AddItem(default.CrusaderRageAP);
-	ActionPointCost.AllowedTypes.AddItem(default.CrusaderChargeAP);
-	ActionPointCost.AllowedTypes.AddItem(default.WatcherRageAP);
-	ActionPointCost.AllowedTypes.AddItem(default.WatcherChargeAP);
-	ActionPointCost.AllowedTypes.AddItem(default.RageChargeAP);
-	ActionPointCost.AllowedTypes.AddItem(default.DefenderCrusaderWatcherAP);
-	ActionPointCost.AllowedTypes.AddItem(default.DefenderCrusaderRageAP);
-	ActionPointCost.AllowedTypes.AddItem(default.DefenderCrusaderChargeAP);
+	ActionPointCost.AllowedTypes.AddItem(default.WatcherRageAP);	
 	ActionPointCost.AllowedTypes.AddItem(default.DefenderWatcherRageAP);
-	ActionPointCost.AllowedTypes.AddItem(default.DefenderWatcherChargeAP);
-	ActionPointCost.AllowedTypes.AddItem(default.DefenderRageChargeAP);
-	ActionPointCost.AllowedTypes.AddItem(default.CrusaderWatcherRageAP);
-	ActionPointCost.AllowedTypes.AddItem(default.CrusaderWatcherChargeAP);
-	ActionPointCost.AllowedTypes.AddItem(default.CrusaderRageChargeAP);
-	ActionPointCost.AllowedTypes.AddItem(default.WatcherRageChargeAP);
-	ActionPointCost.AllowedTypes.AddItem(default.DefenderCrusaderWatcherRageAP);
-	ActionPointCost.AllowedTypes.AddItem(default.DefenderCrusaderWatcherChargeAP);
-	ActionPointCost.AllowedTypes.AddItem(default.DefenderCrusaderRageChargeAP);
-	ActionPointCost.AllowedTypes.AddItem(default.CrusaderWatcherRageChargeAP);
-	ActionPointCost.AllowedTypes.AddItem(default.DefenderCrusaderWatcherRageChargeAP);
 	Template.AbilityCosts.AddItem(ActionPointCost);	
 
 	Cooldown = new class'X2AbilityCooldown';
@@ -4364,35 +3938,12 @@ static function X2AbilityTemplate Warden_BD_Brand()
 	ActionPointCost.AllowedTypes.Length = 0;
 	ActionPointCost.AllowedTypes.AddItem(default.SpecialMomentumAP);
 	ActionPointCost.AllowedTypes.AddItem(default.DefenderAP);
-	ActionPointCost.AllowedTypes.AddItem(default.CrusaderAP);
 	ActionPointCost.AllowedTypes.AddItem(default.WatcherAP);
 	ActionPointCost.AllowedTypes.AddItem(default.RageAP);
-	ActionPointCost.AllowedTypes.AddItem(default.ChargeAP);
-	ActionPointCost.AllowedTypes.AddItem(default.DefenderCrusaderAP);
 	ActionPointCost.AllowedTypes.AddItem(default.DefenderWatcherAP);
 	ActionPointCost.AllowedTypes.AddItem(default.DefenderRageAP);
-	ActionPointCost.AllowedTypes.AddItem(default.DefenderChargeAP);
-	ActionPointCost.AllowedTypes.AddItem(default.CrusaderWatcherAP);
-	ActionPointCost.AllowedTypes.AddItem(default.CrusaderRageAP);
-	ActionPointCost.AllowedTypes.AddItem(default.CrusaderChargeAP);
-	ActionPointCost.AllowedTypes.AddItem(default.WatcherRageAP);
-	ActionPointCost.AllowedTypes.AddItem(default.WatcherChargeAP);
-	ActionPointCost.AllowedTypes.AddItem(default.RageChargeAP);
-	ActionPointCost.AllowedTypes.AddItem(default.DefenderCrusaderWatcherAP);
-	ActionPointCost.AllowedTypes.AddItem(default.DefenderCrusaderRageAP);
-	ActionPointCost.AllowedTypes.AddItem(default.DefenderCrusaderChargeAP);
+	ActionPointCost.AllowedTypes.AddItem(default.WatcherRageAP);	
 	ActionPointCost.AllowedTypes.AddItem(default.DefenderWatcherRageAP);
-	ActionPointCost.AllowedTypes.AddItem(default.DefenderWatcherChargeAP);
-	ActionPointCost.AllowedTypes.AddItem(default.DefenderRageChargeAP);
-	ActionPointCost.AllowedTypes.AddItem(default.CrusaderWatcherRageAP);
-	ActionPointCost.AllowedTypes.AddItem(default.CrusaderWatcherChargeAP);
-	ActionPointCost.AllowedTypes.AddItem(default.CrusaderRageChargeAP);
-	ActionPointCost.AllowedTypes.AddItem(default.WatcherRageChargeAP);
-	ActionPointCost.AllowedTypes.AddItem(default.DefenderCrusaderWatcherRageAP);
-	ActionPointCost.AllowedTypes.AddItem(default.DefenderCrusaderWatcherChargeAP);
-	ActionPointCost.AllowedTypes.AddItem(default.DefenderCrusaderRageChargeAP);
-	ActionPointCost.AllowedTypes.AddItem(default.CrusaderWatcherRageChargeAP);
-	ActionPointCost.AllowedTypes.AddItem(default.DefenderCrusaderWatcherRageChargeAP);
 	Template.AbilityCosts.AddItem(ActionPointCost);
 
 	Template.AbilityTargetConditions.AddItem(default.LivingHostileUnitOnlyProperty);
@@ -4470,35 +4021,12 @@ static final function X2AbilityTemplate Warden_BD_Pillar()
 	ActionPointCost.AllowedTypes.Length = 0;
 	ActionPointCost.AllowedTypes.AddItem(default.SpecialMomentumAP);
 	ActionPointCost.AllowedTypes.AddItem(default.DefenderAP);
-	ActionPointCost.AllowedTypes.AddItem(default.CrusaderAP);
 	ActionPointCost.AllowedTypes.AddItem(default.WatcherAP);
 	ActionPointCost.AllowedTypes.AddItem(default.RageAP);
-	ActionPointCost.AllowedTypes.AddItem(default.ChargeAP);
-	ActionPointCost.AllowedTypes.AddItem(default.DefenderCrusaderAP);
 	ActionPointCost.AllowedTypes.AddItem(default.DefenderWatcherAP);
 	ActionPointCost.AllowedTypes.AddItem(default.DefenderRageAP);
-	ActionPointCost.AllowedTypes.AddItem(default.DefenderChargeAP);
-	ActionPointCost.AllowedTypes.AddItem(default.CrusaderWatcherAP);
-	ActionPointCost.AllowedTypes.AddItem(default.CrusaderRageAP);
-	ActionPointCost.AllowedTypes.AddItem(default.CrusaderChargeAP);
-	ActionPointCost.AllowedTypes.AddItem(default.WatcherRageAP);
-	ActionPointCost.AllowedTypes.AddItem(default.WatcherChargeAP);
-	ActionPointCost.AllowedTypes.AddItem(default.RageChargeAP);
-	ActionPointCost.AllowedTypes.AddItem(default.DefenderCrusaderWatcherAP);
-	ActionPointCost.AllowedTypes.AddItem(default.DefenderCrusaderRageAP);
-	ActionPointCost.AllowedTypes.AddItem(default.DefenderCrusaderChargeAP);
+	ActionPointCost.AllowedTypes.AddItem(default.WatcherRageAP);	
 	ActionPointCost.AllowedTypes.AddItem(default.DefenderWatcherRageAP);
-	ActionPointCost.AllowedTypes.AddItem(default.DefenderWatcherChargeAP);
-	ActionPointCost.AllowedTypes.AddItem(default.DefenderRageChargeAP);
-	ActionPointCost.AllowedTypes.AddItem(default.CrusaderWatcherRageAP);
-	ActionPointCost.AllowedTypes.AddItem(default.CrusaderWatcherChargeAP);
-	ActionPointCost.AllowedTypes.AddItem(default.CrusaderRageChargeAP);
-	ActionPointCost.AllowedTypes.AddItem(default.WatcherRageChargeAP);
-	ActionPointCost.AllowedTypes.AddItem(default.DefenderCrusaderWatcherRageAP);
-	ActionPointCost.AllowedTypes.AddItem(default.DefenderCrusaderWatcherChargeAP);
-	ActionPointCost.AllowedTypes.AddItem(default.DefenderCrusaderRageChargeAP);
-	ActionPointCost.AllowedTypes.AddItem(default.CrusaderWatcherRageChargeAP);
-	ActionPointCost.AllowedTypes.AddItem(default.DefenderCrusaderWatcherRageChargeAP);
 	Template.AbilityCosts.AddItem(ActionPointCost);
 
 	Cooldown = new class'X2AbilityCooldown';
@@ -4558,35 +4086,12 @@ static function X2AbilityTemplate Warden_BD_Inspire()
 	ActionPointCost.AllowedTypes.Length = 0;
 	ActionPointCost.AllowedTypes.AddItem(default.SpecialMomentumAP);
 	ActionPointCost.AllowedTypes.AddItem(default.DefenderAP);
-	ActionPointCost.AllowedTypes.AddItem(default.CrusaderAP);
 	ActionPointCost.AllowedTypes.AddItem(default.WatcherAP);
 	ActionPointCost.AllowedTypes.AddItem(default.RageAP);
-	ActionPointCost.AllowedTypes.AddItem(default.ChargeAP);
-	ActionPointCost.AllowedTypes.AddItem(default.DefenderCrusaderAP);
 	ActionPointCost.AllowedTypes.AddItem(default.DefenderWatcherAP);
 	ActionPointCost.AllowedTypes.AddItem(default.DefenderRageAP);
-	ActionPointCost.AllowedTypes.AddItem(default.DefenderChargeAP);
-	ActionPointCost.AllowedTypes.AddItem(default.CrusaderWatcherAP);
-	ActionPointCost.AllowedTypes.AddItem(default.CrusaderRageAP);
-	ActionPointCost.AllowedTypes.AddItem(default.CrusaderChargeAP);
-	ActionPointCost.AllowedTypes.AddItem(default.WatcherRageAP);
-	ActionPointCost.AllowedTypes.AddItem(default.WatcherChargeAP);
-	ActionPointCost.AllowedTypes.AddItem(default.RageChargeAP);
-	ActionPointCost.AllowedTypes.AddItem(default.DefenderCrusaderWatcherAP);
-	ActionPointCost.AllowedTypes.AddItem(default.DefenderCrusaderRageAP);
-	ActionPointCost.AllowedTypes.AddItem(default.DefenderCrusaderChargeAP);
+	ActionPointCost.AllowedTypes.AddItem(default.WatcherRageAP);	
 	ActionPointCost.AllowedTypes.AddItem(default.DefenderWatcherRageAP);
-	ActionPointCost.AllowedTypes.AddItem(default.DefenderWatcherChargeAP);
-	ActionPointCost.AllowedTypes.AddItem(default.DefenderRageChargeAP);
-	ActionPointCost.AllowedTypes.AddItem(default.CrusaderWatcherRageAP);
-	ActionPointCost.AllowedTypes.AddItem(default.CrusaderWatcherChargeAP);
-	ActionPointCost.AllowedTypes.AddItem(default.CrusaderRageChargeAP);
-	ActionPointCost.AllowedTypes.AddItem(default.WatcherRageChargeAP);
-	ActionPointCost.AllowedTypes.AddItem(default.DefenderCrusaderWatcherRageAP);
-	ActionPointCost.AllowedTypes.AddItem(default.DefenderCrusaderWatcherChargeAP);
-	ActionPointCost.AllowedTypes.AddItem(default.DefenderCrusaderRageChargeAP);
-	ActionPointCost.AllowedTypes.AddItem(default.CrusaderWatcherRageChargeAP);
-	ActionPointCost.AllowedTypes.AddItem(default.DefenderCrusaderWatcherRageChargeAP);
 	Template.AbilityCosts.AddItem(ActionPointCost);
 
 	Cooldown = new class'X2AbilityCooldown';
@@ -4664,35 +4169,12 @@ static function X2AbilityTemplate Warden_BD_Fuse()
 	ActionPointCost.AllowedTypes.Length = 0;
 	ActionPointCost.AllowedTypes.AddItem(default.SpecialMomentumAP);
 	ActionPointCost.AllowedTypes.AddItem(default.DefenderAP);
-	ActionPointCost.AllowedTypes.AddItem(default.CrusaderAP);
 	ActionPointCost.AllowedTypes.AddItem(default.WatcherAP);
 	ActionPointCost.AllowedTypes.AddItem(default.RageAP);
-	ActionPointCost.AllowedTypes.AddItem(default.ChargeAP);
-	ActionPointCost.AllowedTypes.AddItem(default.DefenderCrusaderAP);
 	ActionPointCost.AllowedTypes.AddItem(default.DefenderWatcherAP);
 	ActionPointCost.AllowedTypes.AddItem(default.DefenderRageAP);
-	ActionPointCost.AllowedTypes.AddItem(default.DefenderChargeAP);
-	ActionPointCost.AllowedTypes.AddItem(default.CrusaderWatcherAP);
-	ActionPointCost.AllowedTypes.AddItem(default.CrusaderRageAP);
-	ActionPointCost.AllowedTypes.AddItem(default.CrusaderChargeAP);
-	ActionPointCost.AllowedTypes.AddItem(default.WatcherRageAP);
-	ActionPointCost.AllowedTypes.AddItem(default.WatcherChargeAP);
-	ActionPointCost.AllowedTypes.AddItem(default.RageChargeAP);
-	ActionPointCost.AllowedTypes.AddItem(default.DefenderCrusaderWatcherAP);
-	ActionPointCost.AllowedTypes.AddItem(default.DefenderCrusaderRageAP);
-	ActionPointCost.AllowedTypes.AddItem(default.DefenderCrusaderChargeAP);
+	ActionPointCost.AllowedTypes.AddItem(default.WatcherRageAP);	
 	ActionPointCost.AllowedTypes.AddItem(default.DefenderWatcherRageAP);
-	ActionPointCost.AllowedTypes.AddItem(default.DefenderWatcherChargeAP);
-	ActionPointCost.AllowedTypes.AddItem(default.DefenderRageChargeAP);
-	ActionPointCost.AllowedTypes.AddItem(default.CrusaderWatcherRageAP);
-	ActionPointCost.AllowedTypes.AddItem(default.CrusaderWatcherChargeAP);
-	ActionPointCost.AllowedTypes.AddItem(default.CrusaderRageChargeAP);
-	ActionPointCost.AllowedTypes.AddItem(default.WatcherRageChargeAP);
-	ActionPointCost.AllowedTypes.AddItem(default.DefenderCrusaderWatcherRageAP);
-	ActionPointCost.AllowedTypes.AddItem(default.DefenderCrusaderWatcherChargeAP);
-	ActionPointCost.AllowedTypes.AddItem(default.DefenderCrusaderRageChargeAP);
-	ActionPointCost.AllowedTypes.AddItem(default.CrusaderWatcherRageChargeAP);
-	ActionPointCost.AllowedTypes.AddItem(default.DefenderCrusaderWatcherRageChargeAP);
 	Template.AbilityCosts.AddItem(ActionPointCost);
 
 	Template.AbilityTriggers.AddItem(default.PlayerInputTrigger);
@@ -4852,76 +4334,26 @@ static final function EventListenerReturn SpecialAPTrigger_EventListenerFn(Objec
 // Composite AP Helper
 static function name GetCompositeAPType(XComGameState_Unit UnitState)
 {
-    local bool bDefender, bCrusader, bWatcher, bRage, bCharge;
+    local bool bDefender, bWatcher, bRage;
 
     bDefender = UnitState.HasSoldierAbility('Warden_BD_DefenderPassive');
-    bCrusader = UnitState.HasSoldierAbility('Warden_BD_CrusaderPassive');
     bWatcher  = UnitState.HasSoldierAbility('Warden_BD_WatcherPassive');
     bRage     = UnitState.HasSoldierAbility('Warden_BD_RagePassive');
-    bCharge   = UnitState.HasSoldierAbility('Warden_BD_Charge');
 
-    if (bDefender && bCrusader && bWatcher && bRage && bCharge)
-        return default.DefenderCrusaderWatcherRageChargeAP;
-    else if (bDefender && bCrusader && bWatcher && bRage)
-        return default.DefenderCrusaderWatcherRageAP;
-    else if (bDefender && bCrusader && bWatcher && bCharge)
-        return default.DefenderCrusaderWatcherChargeAP;
-    else if (bDefender && bCrusader && bRage && bCharge)
-        return default.DefenderCrusaderRageChargeAP;
-    else if (bDefender && bWatcher && bRage && bCharge)
-        return default.DefenderWatcherRageChargeAP;
-    else if (bCrusader && bWatcher && bRage && bCharge)
-        return default.CrusaderWatcherRageChargeAP;
-    else if (bDefender && bCrusader && bWatcher)
-        return default.DefenderCrusaderWatcherAP;
-    else if (bDefender && bCrusader && bRage)
-        return default.DefenderCrusaderRageAP;
-    else if (bDefender && bCrusader && bCharge)
-        return default.DefenderCrusaderChargeAP;
-    else if (bDefender && bWatcher && bRage)
-        return default.DefenderWatcherRageAP;
-    else if (bDefender && bWatcher && bCharge)
-        return default.DefenderWatcherChargeAP;
-    else if (bDefender && bRage && bCharge)
-        return default.DefenderRageChargeAP;
-    else if (bCrusader && bWatcher && bRage)
-        return default.CrusaderWatcherRageAP;
-    else if (bCrusader && bWatcher && bCharge)
-        return default.CrusaderWatcherChargeAP;
-    else if (bCrusader && bRage && bCharge)
-        return default.CrusaderRageChargeAP;
-    else if (bWatcher && bRage && bCharge)
-        return default.WatcherRageChargeAP;
-    else if (bDefender && bCrusader)
-        return default.DefenderCrusaderAP;
+    if (bDefender && bWatcher && bRage)
+		return default.DefenderWatcherRageAP;			
     else if (bDefender && bWatcher)
         return default.DefenderWatcherAP;
     else if (bDefender && bRage)
-        return default.DefenderRageAP;
-    else if (bDefender && bCharge)
-        return default.DefenderChargeAP;
-    else if (bCrusader && bWatcher)
-        return default.CrusaderWatcherAP;
-    else if (bCrusader && bRage)
-        return default.CrusaderRageAP;
-    else if (bCrusader && bCharge)
-        return default.CrusaderChargeAP;
+		return default.DefenderRageAP;
     else if (bWatcher && bRage)
         return default.WatcherRageAP;
-    else if (bWatcher && bCharge)
-        return default.WatcherChargeAP;
-    else if (bRage && bCharge)
-        return default.RageChargeAP;
     else if (bDefender)
-        return default.DefenderAP;
-    else if (bCrusader)
-        return default.CrusaderAP;
+        return default.DefenderAP;  
     else if (bWatcher)
         return default.WatcherAP;
     else if (bRage)
         return default.RageAP;
-    else if (bCharge)
-        return default.ChargeAP;
     else
         return default.SpecialMomentumAP;
 }

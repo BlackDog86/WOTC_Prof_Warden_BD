@@ -169,12 +169,6 @@ LocLongDescription="Throwing grenades & using items grants <font color='#8f3fbf'
 LocHelpText="Throwing grenades & using items grants <font color='#8f3fbf'>flow</font> action points. Hunker can be used from <font color='#8f3fbf'>flow</font> action points. Passive."
 LocFlyOverText="Squire"
 
-[Warden_BD_CrusaderPassive X2AbilityTemplate]
-LocFriendlyName="Crusader"
-LocLongDescription="Hidden - combined with squire (used to grant flow from hunker)"
-LocHelpText="Hidden - combined with squire (used to grant flow from hunker)"
-LocFlyOverText="Crusader"
-
 [Warden_BD_WatcherPassive X2AbilityTemplate]
 LocFriendlyName="Night Watchman"
 LocLongDescription="Overwatch can be used from <font color='#8f3fbf'>flow</font> action points & the aim penalty is removed. Passive."
