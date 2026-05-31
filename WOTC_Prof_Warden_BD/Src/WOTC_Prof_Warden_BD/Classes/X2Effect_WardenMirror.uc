@@ -51,17 +51,19 @@ static function EventListenerReturn OnUnitTookDamage(Object EventData, Object Ev
 {
     local XComGameState_Unit                TargetUnit;
     local XComGameState_Unit                AttackerUnit;
+    local XComGameState_Unit                WardenUnit;
     local XComGameState_Effect              EffectState;
     local XComGameState_Ability             ReturnFireAbility;
     local StateObjectReference              ReturnFireAbilityRef;
     local XComGameStateContext_Ability      AbilityContext;
     local bool                              bWasGrazed;
     local int                               i;
-	local XComGameState_Player				Player;
+    local int                               DamageToStore;
+    local XComGameState_Player              Player;
 
     TargetUnit = XComGameState_Unit(EventSource);
     EffectState = XComGameState_Effect(CallbackData);
-	Player = XComGameState_Player(`XCOMHISTORY.GetGameStateForObjectID(TargetUnit.ControllingPlayer.ObjectID));
+    Player = XComGameState_Player(`XCOMHISTORY.GetGameStateForObjectID(TargetUnit.ControllingPlayer.ObjectID));
 
     // Only fire for the unit this effect is applied to
     if (EffectState.ApplyEffectParameters.TargetStateObjectRef.ObjectID != TargetUnit.ObjectID)
@@ -69,7 +71,7 @@ static function EventListenerReturn OnUnitTookDamage(Object EventData, Object Ev
 
     AbilityContext = XComGameStateContext_Ability(GameState.GetContext());
     if (AbilityContext == none)
-        return ELR_NoInterrupt; // Handled by GetDefendingDamageModifier
+        return ELR_NoInterrupt;
 
     // Check primary target hit result
     bWasGrazed = (AbilityContext.ResultContext.HitResult == eHit_Graze);
@@ -91,22 +93,49 @@ static function EventListenerReturn OnUnitTookDamage(Object EventData, Object Ev
     if (!bWasGrazed)
         return ELR_NoInterrupt;
 
-    // Check unit conditions
-    if (TargetUnit.IsImpaired() || TargetUnit.IsBurning() || TargetUnit.IsPanicked())
+    // Find the Warden via the effect's source reference
+    WardenUnit = XComGameState_Unit(`XCOMHISTORY.GetGameStateForObjectID(EffectState.ApplyEffectParameters.SourceStateObjectRef.ObjectID));
+
+    if (WardenUnit == none)
     {
-        `LOG("Mirror not returning fire - unit impaired/burning/panicked",,'BDLOG');
+        `LOG("Mirror not returning fire - Warden unit not found",,'BDLOG');
         `XEVENTMGR.TriggerEvent('MirrorManualTick', Player, TargetUnit, GameState);
         return ELR_NoInterrupt;
     }
 
+    // Check Warden unit conditions
+    if (WardenUnit.IsImpaired() || WardenUnit.IsBurning() || WardenUnit.IsPanicked())
+    {
+        `LOG("Mirror not returning fire - Warden impaired/burning/panicked",,'BDLOG');
+        `XEVENTMGR.TriggerEvent('MirrorManualTick', Player, TargetUnit, GameState);
+        return ELR_NoInterrupt;
+    }
+
+    // Store pre-armor damage (DamageAmount + MitigationAmount) for return fire
+    // This is post-graze but pre-armor, divided by GRAZE_DMG_MULT in GetBonusEffectDamageValue
+    // if MIRROR_RETURN_FULL_DAMAGE is set
+    for (i = 0; i < TargetUnit.DamageResults.Length; i++)
+    {
+        if (TargetUnit.DamageResults[i].SourceEffect.AbilityStateObjectRef.ObjectID != 0)
+        {
+            DamageToStore = TargetUnit.DamageResults[i].DamageAmount + TargetUnit.DamageResults[i].MitigationAmount;
+            `LOG("Mirror storing pre-armor damage: " $ DamageToStore,,'BDLOG');
+            break;
+        }
+    }
+    WardenUnit.SetUnitFloatValue('BD_MirrorReturnFireDamage', DamageToStore, eCleanup_BeginTactical);
+
     // Find the return fire ability on the Warden
-    ReturnFireAbilityRef = TargetUnit.FindAbility('Warden_BD_MirrorReturnFire');
-    ReturnFireAbility = XComGameState_Ability(
-        `XCOMHISTORY.GetGameStateForObjectID(ReturnFireAbilityRef.ObjectID));
+    ReturnFireAbilityRef = WardenUnit.FindAbility('Warden_BD_MirrorReturnFire');
+    ReturnFireAbility = XComGameState_Ability(`XCOMHISTORY.GetGameStateForObjectID(ReturnFireAbilityRef.ObjectID));
 
     // Get the attacker from the ability context
-    AttackerUnit = XComGameState_Unit(
-        `XCOMHISTORY.GetGameStateForObjectID(AbilityContext.InputContext.SourceObject.ObjectID));
+    AttackerUnit = XComGameState_Unit(GameState.GetGameStateForObjectID(AbilityContext.InputContext.SourceObject.ObjectID));
+
+    if (AttackerUnit == none)
+    {
+        AttackerUnit = XComGameState_Unit(`XCOMHISTORY.GetGameStateForObjectID(AbilityContext.InputContext.SourceObject.ObjectID));
+    }
 
     if (ReturnFireAbility == none || AttackerUnit == none)
     {
@@ -115,7 +144,7 @@ static function EventListenerReturn OnUnitTookDamage(Object EventData, Object Ev
         return ELR_NoInterrupt;
     }
 
-    `LOG("Mirror triggering return fire against " $ AttackerUnit.GetFullName(),,'BDLOG');
+    `LOG("Mirror triggering return fire from Warden against " $ AttackerUnit.GetFullName(),,'BDLOG');
     ReturnFireAbility.AbilityTriggerAgainstSingleTarget(AttackerUnit.GetReference(), false);
     `XEVENTMGR.TriggerEvent('MirrorManualTick', Player, TargetUnit, GameState);
 

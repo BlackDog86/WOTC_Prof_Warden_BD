@@ -123,21 +123,14 @@ static function EventListenerReturn OnLastRitesTargetDamaged(Object EventData, O
     if (!bWasPsionic)
         return ELR_NoInterrupt;
 
-    // Check unit conditions
-    if (TargetUnit.IsImpaired() || TargetUnit.IsBurning() || TargetUnit.IsPanicked())
-    {
-        `LOG("LastRitesCharge: Not detonating - unit impaired/burning/panicked",,'BDLOG');
-        return ELR_NoInterrupt;
-    }
-
     // Find the placing unit and detonation ability
     PlacingUnit = XComGameState_Unit(`XCOMHISTORY.GetGameStateForObjectID(
         EffectState.ApplyEffectParameters.SourceStateObjectRef.ObjectID));
 
-    if (PlacingUnit == none)
+	if (PlacingUnit == none)
         return ELR_NoInterrupt;
 
-    Action.AbilityObjectRef = PlacingUnit.FindAbility('Warden_BD_LastRitesDetonation');
+	Action.AbilityObjectRef = PlacingUnit.FindAbility('Warden_BD_LastRitesDetonation');
     if (Action.AbilityObjectRef.ObjectID == 0)
         return ELR_NoInterrupt;
 

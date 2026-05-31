@@ -11,37 +11,38 @@ function int GetAttackingDamageModifier(XComGameState_Effect EffectState, XComGa
 
 	SourceWeapon = AbilityState.GetSourceWeapon();
 	Attacker.GetUnitValue(class'X2Ability_Warden'.default.MeleeStanceValueName, UV2);
-	
+	//`log("MeleeDamageFocus GetAttackingDamageModifier Fired before ifblock",,'BDLOG');
 	// If the source weapon exists
 	if (SourceWeapon != none)
-		{
+	{
+		//`log("MeleeDamageFocus GetAttackingDamageModifier Fired",,'BDLOG');
 		//If source weapon is secondary and unit is in melee stance
 		If(SourceWeapon.InventorySlot == eInvSlot_SecondaryWeapon && int(UV2.fValue) == 1)
-				{
-				//`log("Unit is using sword from melee stance - grant bonus damage:",,'BDLOG');
-				// Fetch the sword focus counter from the unit
-				Attacker.GetUnitValue(class'X2Ability_Warden'.default.MeleeFocusCounterValueName, UV);
-				BonusDamage = int(UV.fValue);
-				//`log("Current value of Melee Stance Counter is: " @UV.fValue,,'BDLOG');			
-				// Cap the maximum damage to 3
-				if (BonusDamage > default.MELEEFOCUS_MAXIMUM_BONUS)
-					{
-					BonusDamage = default.MELEEFOCUS_MAXIMUM_BONUS;
-					}
-				//`log("Adding bonus damage of: " @BonusDamage,,'BDLOG');
-				//	no game state means it's for damage preview
-				if (NewGameState == none)
-					{				
-					return BonusDamage;
-					}
-				//	only add the bonus damage when the damage effect is applying the weapon's base damage
-				DamageEffect = X2Effect_ApplyWeaponDamage(class'X2Effect'.static.GetX2Effect(AppliedData.EffectRef));
+		{
+			//`log("Unit is using sword from melee stance - grant bonus damage:",,'BDLOG');
+			// Fetch the sword focus counter from the unit
+			Attacker.GetUnitValue(class'X2Ability_Warden'.default.MeleeFocusCounterValueName, UV);
+			BonusDamage = int(UV.fValue) - 1;
+			//`log("Current value of Melee Stance Counter is: " @UV.fValue,,'BDLOG');			
+			// Cap the maximum damage to 3
+			if (BonusDamage > default.MELEEFOCUS_MAXIMUM_BONUS)
+			{
+				BonusDamage = default.MELEEFOCUS_MAXIMUM_BONUS;
+			}
+			`log("Adding bonus damage of: " @BonusDamage,,'BDLOG');
+			//	no game state means it's for damage preview
+			if (NewGameState == none)
+			{				
+				return BonusDamage;
+			}
+			//	only add the bonus damage when the damage effect is applying the weapon's base damage
+			DamageEffect = X2Effect_ApplyWeaponDamage(class'X2Effect'.static.GetX2Effect(AppliedData.EffectRef));
 			
-				if (DamageEffect != none && !DamageEffect.bIgnoreBaseDamage)
-					{
-					return BonusDamage;
-					}			
-				}
-		}				
+			if (DamageEffect != none && !DamageEffect.bIgnoreBaseDamage)
+			{
+				return BonusDamage;
+			}			
+		}
+	}				
 	return 0;
 }

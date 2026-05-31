@@ -34,15 +34,6 @@ static function bool AbilityTagExpandHandler_CH(string InString, out string OutS
 		case 'MELEESTANCE_III_MOBILITY_BONUS':
 			OutString = string(class'X2Ability_Warden'.default.MELEESTANCE_III_MOBILITY_BONUS);
 			return true;
-		case 'MELEESTANCE_I_MELEE_DR':
-			OutString = string(class'X2Ability_Warden'.default.MELEESTANCE_I_MELEE_DR);
-			return true;
-		case 'MELEESTANCE_II_MELEE_DR':
-			OutString = string(class'X2Ability_Warden'.default.MELEESTANCE_II_MELEE_DR);
-			return true;
-		case 'MELEESTANCE_III_MELEE_DR':
-			OutString = string(class'X2Ability_Warden'.default.MELEESTANCE_III_MELEE_DR);
-			return true;
 		case 'WARDENSSWORD_AIM_I_BONUS':
 			OutString = string(class'X2Ability_Warden'.default.WARDENSSWORD_AIM_I_BONUS);
 			return true;
@@ -85,23 +76,14 @@ static function bool AbilityTagExpandHandler_CH(string InString, out string OutS
 		case 'MIRROR_COOLDOWN':
 			OutString = string(class'X2Ability_Warden'.default.MIRROR_COOLDOWN);
 			return true;
-		case 'CRUSADER_AIM_BONUS':
-			OutString = string(class'X2Ability_Warden'.default.CRUSADER_AIM_BONUS);
-			return true;
-		case 'CRUSADER_CRIT_BONUS':
-			OutString = string(class'X2Ability_Warden'.default.CRUSADER_CRIT_BONUS);
+		case 'MOMENTUM_COOLDOWN':
+			OutString = string(class'X2Ability_Warden'.default.MOMENTUM_COOLDOWN);
 			return true;
 		case 'IMBUEAMMO_DAMAGE_BONUS':
 			OutString = string(class'X2Ability_Warden'.default.IMBUEAMMO_DAMAGE_BONUS);
 			return true;
-		case 'IMBUEAMMO_COOLDOWN':
-			OutString = string(class'X2Ability_Warden'.default.IMBUEAMMO_COOLDOWN);
-			return true;
 		case 'SOULBLADE_DAMAGE_BONUS':
 			OutString = string(class'X2Ability_Warden'.default.SOULBLADE_DAMAGE_BONUS);
-			return true;
-		case 'SOULBLADE_COOLDOWN':
-			OutString = string(class'X2Ability_Warden'.default.SOULBLADE_COOLDOWN);
 			return true;
 		case 'SOULBLADE_INITIAL_CHARGES':
 			OutString = string(class'X2Ability_Warden'.default.SOULBLADE_INITIAL_CHARGES);
@@ -124,7 +106,7 @@ static function bool AbilityTagExpandHandler_CH(string InString, out string OutS
 		case 'MELEEFOCUS_MAXIMUM_BONUS':
 			OutString = string(class'X2Effect_WardenMeleeDamageFocus'.default.MELEEFOCUS_MAXIMUM_BONUS);
 			return true;
-		case 'COUNTER_NUMBER_OF_ATTACKS':
+		case 'MAX_COUNTERATTACKS_ALLOWED':
 			OutString = string(class'X2Ability_Warden'.default.MAX_COUNTERATTACKS_ALLOWED);
 			return true;
 		case 'FISSURE_COOLDOWN':
@@ -180,6 +162,9 @@ static function bool AbilityTagExpandHandler_CH(string InString, out string OutS
 			return true;
 		case 'BRAND_OFFENSE_STAT_BONUS':
 			OutString = string(class'X2Ability_Warden'.default.BRAND_OFFENSE_STAT_BONUS);
+			return true;
+		case 'BRAND_COOLDOWN':
+			OutString = string(class'X2Ability_Warden'.default.BRAND_COOLDOWN);
 			return true;
 		case 'BRAND_DAMAGE_BONUS':
 			OutString = string(class'X2Ability_Warden'.default.BRAND_DAMAGE_BONUS);
@@ -301,7 +286,7 @@ static function PatchOverwatch()
 					ActionPointCost.AllowedTypes.AddItem(class 'X2Ability_Warden'.default.WatcherAP);
 					ActionPointCost.AllowedTypes.AddItem(class 'X2Ability_Warden'.default.DefenderWatcherAP);
 					ActionPointCost.AllowedTypes.AddItem(class 'X2Ability_Warden'.default.WatcherRageAP);
-					ActionPointCost.AllowedTypes.AddItem(class 'X2Ability_Warden'.default.DefenderCrusaderWatcherAP);					
+					ActionPointCost.AllowedTypes.AddItem(class 'X2Ability_Warden'.default.DefenderWatcherRageAP);					
 				}
 			}
 		}
@@ -398,11 +383,12 @@ static function PatchFlowAPAbilities()
     AbilitiesToPatch.AddItem('Warden_BD_Pillar');
     AbilitiesToPatch.AddItem('Warden_BD_Inspire');
     AbilitiesToPatch.AddItem('Warden_BD_Fuse');
-    AbilitiesToPatch.AddItem('Warden_BD_FractureMelee');
     AbilitiesToPatch.AddItem('Warden_BD_EbbAndFlowDummy');
 	AbilitiesToPatch.AddItem('Warden_BD_EbbAndFlowManual');
     AbilitiesToPatch.AddItem('Warden_BD_GrantImbueAmmoCharges');
     AbilitiesToPatch.AddItem('Warden_BD_GrantSoulBladeCharges');
+	AbilitiesToPatch.AddItem('Warden_BD_Momentum');
+	AbilitiesToPatch.AddItem('Warden_BD_FlowFocusPassive');
 
     AbilityTemplateManager = class'X2AbilityTemplateManager'.static.GetAbilityTemplateManager();
 
