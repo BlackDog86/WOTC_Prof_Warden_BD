@@ -174,9 +174,6 @@
     <Content Include="Src\WOTC_Prof_Warden_BD\Classes\X2Effect_WardenMeleeDamageFocus.uc">
       <SubType>Content</SubType>
     </Content>
-    <Content Include="Src\WOTC_Prof_Warden_BD\Classes\X2Effect_WardenMindWard.uc">
-      <SubType>Content</SubType>
-    </Content>
     <Content Include="Src\WOTC_Prof_Warden_BD\Classes\X2Effect_WardenMirror.uc">
       <SubType>Content</SubType>
     </Content>

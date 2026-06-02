@@ -60,6 +60,7 @@ static function EventListenerReturn OnUnitTookDamage(Object EventData, Object Ev
     local int                               i;
     local int                               DamageToStore;
     local XComGameState_Player              Player;
+    local UnitValue                         LastReturnFireAttackUV;
 
     TargetUnit = XComGameState_Unit(EventSource);
     EffectState = XComGameState_Effect(CallbackData);
@@ -111,9 +112,14 @@ static function EventListenerReturn OnUnitTookDamage(Object EventData, Object Ev
         return ELR_NoInterrupt;
     }
 
+    // Prevent double firing from the same attack when multiple Mirror instances are active
+    WardenUnit.GetUnitValue('BD_MirrorLastReturnFireAttack', LastReturnFireAttackUV);
+    if (int(LastReturnFireAttackUV.fValue) == GameState.HistoryIndex)
+        return ELR_NoInterrupt;
+
+    WardenUnit.SetUnitFloatValue('BD_MirrorLastReturnFireAttack', GameState.HistoryIndex, eCleanup_BeginTurn);
+
     // Store pre-armor damage (DamageAmount + MitigationAmount) for return fire
-    // This is post-graze but pre-armor, divided by GRAZE_DMG_MULT in GetBonusEffectDamageValue
-    // if MIRROR_RETURN_FULL_DAMAGE is set
     for (i = 0; i < TargetUnit.DamageResults.Length; i++)
     {
         if (TargetUnit.DamageResults[i].SourceEffect.AbilityStateObjectRef.ObjectID != 0)
@@ -123,7 +129,7 @@ static function EventListenerReturn OnUnitTookDamage(Object EventData, Object Ev
             break;
         }
     }
-    WardenUnit.SetUnitFloatValue('BD_MirrorReturnFireDamage', DamageToStore, eCleanup_BeginTactical);
+    WardenUnit.SetUnitFloatValue('BD_MirrorReturnFireDamage', DamageToStore, eCleanup_BeginTurn);
 
     // Find the return fire ability on the Warden
     ReturnFireAbilityRef = WardenUnit.FindAbility('Warden_BD_MirrorReturnFire');

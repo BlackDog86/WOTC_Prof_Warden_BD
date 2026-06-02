@@ -1332,7 +1332,7 @@ static function X2AbilityTemplate Warden_BD_NonStandardShot( Name AbilityName='W
 	}
 	Template.bAllowAmmoEffects = true; // 	
 	Template.bAllowBonusWeaponEffects = true;
-
+	
 	// Weapon Upgrade Compatibility
 	Template.bAllowFreeFireWeaponUpgrade = false;                        // Flag that permits action to become 'free action' via 'Hair Trigger' or similar upgrade / effects
 
@@ -4290,6 +4290,10 @@ static function EventListenerReturn BattleRhythm_Melee_EventListenerFn(Object Ev
     if (KillingAbility == none)
         return ELR_NoInterrupt;
 
+	// Ensure the kill was made by the Warden who owns this ability
+	if (KillingAbility.OwnerStateObject.ObjectID != ThisAbility.OwnerStateObject.ObjectID)
+        return ELR_NoInterrupt;
+
     SourceWeapon = KillingAbility.GetSourceWeapon();
     if (SourceWeapon == none || SourceWeapon.InventorySlot != eInvSlot_SecondaryWeapon)
         return ELR_NoInterrupt;
@@ -4310,6 +4314,10 @@ static function EventListenerReturn BattleRhythm_Ranged_EventListenerFn(Object E
 
     KillingAbility = XComGameState_Ability(EventData);
     if (KillingAbility == none)
+        return ELR_NoInterrupt;
+
+	// Ensure the kill was made by the Warden who owns this ability
+	if (KillingAbility.OwnerStateObject.ObjectID != ThisAbility.OwnerStateObject.ObjectID)
         return ELR_NoInterrupt;
 
     SourceWeapon = KillingAbility.GetSourceWeapon();
