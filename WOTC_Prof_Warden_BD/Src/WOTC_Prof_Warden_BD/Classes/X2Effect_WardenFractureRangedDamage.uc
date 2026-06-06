@@ -14,14 +14,14 @@ simulated protected function OnEffectAdded(const out EffectAppliedData ApplyEffe
 
     if (SourceUnit == none)
     {
-        `LOG("FractureRangedDamage: SourceUnit not found, skipping",,'BDLOG');
+        //`log("FractureRangedDamage: SourceUnit not found, skipping",,'BDLOG');
         return;
     }
 
     ImbueAmmoRef = SourceUnit.FindAbility('Warden_BD_ImbueAmmo');
     if (ImbueAmmoRef.ObjectID <= 0)
     {
-        `LOG("FractureRangedDamage: ImbueAmmo ability not found, skipping",,'BDLOG');
+        //`log("FractureRangedDamage: ImbueAmmo ability not found, skipping",,'BDLOG');
         return;
     }
 
@@ -35,7 +35,7 @@ simulated protected function OnEffectAdded(const out EffectAppliedData ApplyEffe
 
     if (ImbueAmmoState == none)
     {
-        `LOG("FractureRangedDamage: Could not get mutable ImbueAmmo state, skipping",,'BDLOG');
+        //`log("FractureRangedDamage: Could not get mutable ImbueAmmo state, skipping",,'BDLOG');
         return;
     }
 
@@ -46,7 +46,7 @@ simulated protected function OnEffectAdded(const out EffectAppliedData ApplyEffe
         TargetUnit.GetUnitValue('BD_FractureRangedHit', AlreadyHitUV);
         if (AlreadyHitUV.fValue > 0)
         {
-            `LOG("FractureRangedDamage: Target already hit this activation, skipping",,'BDLOG');
+            //`log("FractureRangedDamage: Target already hit this activation, skipping",,'BDLOG');
             return;
         }
         TargetUnit = XComGameState_Unit(NewGameState.ModifyStateObject(class'XComGameState_Unit', TargetUnit.ObjectID));
@@ -55,13 +55,13 @@ simulated protected function OnEffectAdded(const out EffectAppliedData ApplyEffe
 
     if (ImbueAmmoState.iCharges <= 0)
     {
-        `LOG("FractureRangedDamage: No charges remaining, skipping target",,'BDLOG');
+        //`log("FractureRangedDamage: No charges remaining, skipping target",,'BDLOG');
         return;
     }
 
     ImbueAmmoState.iCharges -= 1;
 
-    `LOG("FractureRangedDamage: Charge consumed, " $ ImbueAmmoState.iCharges $ " remaining",,'BDLOG');
+    //`log("FractureRangedDamage: Charge consumed, " $ ImbueAmmoState.iCharges $ " remaining",,'BDLOG');
 
     super.OnEffectAdded(ApplyEffectParameters, kNewTargetState,
         NewGameState, NewEffectState);

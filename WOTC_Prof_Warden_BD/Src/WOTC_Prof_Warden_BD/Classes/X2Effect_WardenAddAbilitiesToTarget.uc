@@ -24,7 +24,7 @@ simulated protected function OnEffectAdded(const out EffectAppliedData ApplyEffe
 	local X2AbilityTemplate			AbilityTemplate;
 	local name						AbilityName;
 	
-	 `LOG("WardenAddAbilitiesToTarget: OnEffectAdded called for unit" @ XComGameState_Unit(kNewTargetState).GetFullName() @ "Name:" @ NewEffectState.GetMyTemplateName(),,'BDLOG');
+	 //`log("WardenAddAbilitiesToTarget: OnEffectAdded called for unit" @ XComGameState_Unit(kNewTargetState).GetFullName() @ "Name:" @ NewEffectState.GetMyTemplateName(),,'BDLOG');
 
 	// Get Target's XComGameState_Unit
 	TargetUnit = XComGameState_Unit(kNewTargetState);
@@ -50,7 +50,7 @@ simulated protected function OnEffectAdded(const out EffectAppliedData ApplyEffe
 				{
 					SourceItemRef = InventoryItem.GetReference();
 					bSourceItemRefFound = true;
-					`log("Found source item",,'BDLOG');
+					//`log("Found source item",,'BDLOG');
 					break;
 				}
 			}
@@ -66,7 +66,7 @@ simulated protected function OnEffectAdded(const out EffectAppliedData ApplyEffe
 				{
 					SourceItemRef = InventoryItem.GetReference();
 					bSourceItemRefFound = true;
-					`log("Found source item REFERENCE",,'BDLOG');
+					//`log("Found source item REFERENCE",,'BDLOG');
 					break;
 				}
 			}
@@ -94,7 +94,7 @@ simulated protected function OnEffectAdded(const out EffectAppliedData ApplyEffe
 					if (InventoryItem.GetMyTemplateName() == ItemTemplate.DataName || InventoryItem.GetMyTemplateName() == UpgradeItemTemplate.DataName)
 					{
 						SourceItemRef = InventoryItem.GetReference();
-						`log("Found source item REFERENCE FALLBACK",,'BDLOG');
+						//`log("Found source item REFERENCE FALLBACK",,'BDLOG');
 						break;
 					}	
 				}	
@@ -107,11 +107,11 @@ simulated protected function OnEffectAdded(const out EffectAppliedData ApplyEffe
 	foreach AddAbilities(AbilityName)
 	{		
 		AbilityTemplate = AbilityTemplateMgr.FindAbilityTemplate(AbilityName);
-		`log("Added ability:" @ AbilityTemplate.DataName,,'BDLOG');
+		//`log("Added ability:" @ AbilityTemplate.DataName,,'BDLOG');
 		if (AbilityTemplate != none)
 		{
 			InitAbility(AbilityTemplate, TargetUnit, NewGameState, SourceItemRef);
-			`log("Added ability:" @ AbilityTemplate.DataName,,'BDLOG');
+			//`log("Added ability:" @ AbilityTemplate.DataName,,'BDLOG');
 		}
 	}
 	super.OnEffectAdded(ApplyEffectParameters, kNewTargetState, NewGameState, NewEffectState);

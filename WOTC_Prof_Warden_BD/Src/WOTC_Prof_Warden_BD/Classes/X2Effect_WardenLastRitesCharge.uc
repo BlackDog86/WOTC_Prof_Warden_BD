@@ -15,7 +15,7 @@ simulated protected function OnEffectAdded(const out EffectAppliedData ApplyEffe
 	SourceUnit = XComGameState_Unit(NewGameState.GetGameStateForObjectID(
         ApplyEffectParameters.SourceStateObjectRef.ObjectID));
     
-	`log("Target Unit:" @ TargetUnit.GetMyTemplateName() @ "Source Unit:" @ SourceUnit.GetMyTemplateName());
+	//`log("Target Unit:" @ TargetUnit.GetMyTemplateName() @ "Source Unit:" @ SourceUnit.GetMyTemplateName());
 	if (SourceUnit == none)
         SourceUnit = XComGameState_Unit(`XCOMHISTORY.GetGameStateForObjectID(
             ApplyEffectParameters.SourceStateObjectRef.ObjectID));
@@ -38,7 +38,7 @@ simulated protected function OnEffectAdded(const out EffectAppliedData ApplyEffe
 		}
     }
 
-    `LOG("LastRitesCharge: Storing " $ ChargeCount $ " charges on target" @ TargetUnit.GetMyTemplateName(),,'BDLOG');
+    //`log("LastRitesCharge: Storing " $ ChargeCount $ " charges on target" @ TargetUnit.GetMyTemplateName(),,'BDLOG');
 	TargetUnit.SetUnitFloatValue(default.LastRitesChargeCountValue, ChargeCount, eCleanup_BeginTactical);
 }
 
@@ -140,7 +140,7 @@ static function EventListenerReturn OnLastRitesTargetDamaged(Object EventData, O
     Action.AvailableTargets.AddItem(Target);
     TargetLocs.AddItem(TargetLoc);
 
-    `LOG("LastRitesCharge: Detonating against " $ TargetUnit.GetFullName(),,'BDLOG');
+    //`log("LastRitesCharge: Detonating against " $ TargetUnit.GetFullName(),,'BDLOG');
 
     // Set detonation flag before firing so subsequent listener calls see it
     NewGameState = class'XComGameStateContext_ChangeContainer'.static.CreateChangeState("LastRites Detonation Flag");
@@ -198,7 +198,7 @@ simulated function OnEffectRemoved(const out EffectAppliedData ApplyEffectParame
     Action.AvailableTargets.AddItem(Target);
     TargetLocs.AddItem(TargetLoc);
 
-    `LOG("LastRitesCharge: Duration expired, detonating against " $ TargetUnit.GetFullName(),,'BDLOG');
+    //`log("LastRitesCharge: Duration expired, detonating against " $ TargetUnit.GetFullName(),,'BDLOG');
     class'XComGameStateContext_Ability'.static.ActivateAbility(Action, 0, TargetLocs);
 }
 defaultproperties

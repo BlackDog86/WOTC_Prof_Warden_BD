@@ -139,6 +139,9 @@ static function bool AbilityTagExpandHandler_CH(string InString, out string OutS
 		case 'CHARGE_COOLDOWN':
 			OutString = string(class'X2Ability_Warden'.default.CHARGE_COOLDOWN);
 			return true;
+		case 'BATTLE_RHYTHM_MAX_CHARGES':
+			OutString = string(class'X2Ability_Warden'.default.BATTLE_RHYTHM_MAX_CHARGES);
+			return true;
 		case 'RETRIBUTION_COOLDOWN':
 			OutString = string(class'X2Ability_Warden'.default.RETRIBUTION_COOLDOWN);
 			return true;
@@ -172,7 +175,7 @@ static function bool AbilityTagExpandHandler_CH(string InString, out string OutS
 		case 'BRAND_EMPOWERED_CRIT_DAMAGE_BONUS':
 			OutString = string(class'X2Ability_Warden'.default.BRAND_CRIT_DAMAGE_BONUS);
 			return true;
-		case 'PILLLAR_NUMBER_OF_TURNS':
+		case 'PILLAR_NUMBER_OF_TURNS':
 			OutString = string(class'X2Ability_Warden'.default.PILLAR_DURATION);
 			return true;
 		case 'PILLAR_COOLDOWN':

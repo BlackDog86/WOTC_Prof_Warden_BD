@@ -39,7 +39,7 @@ function int GetDefendingDamageModifier(XComGameState_Effect EffectState, XComGa
     if (AbilityContext == none)
     {
         TargetUnit = XComGameState_Unit(TargetDamageable);
-        `LOG("Mirror absorbing no-context damage of " $ CurrentDamage,,'BDLOG');
+        //`log("Mirror absorbing no-context damage of " $ CurrentDamage,,'BDLOG');
         `XEVENTMGR.TriggerEvent('MirrorManualTick', TargetUnit, TargetUnit, NewGameState);
         return -CurrentDamage;
     }
@@ -99,7 +99,7 @@ static function EventListenerReturn OnUnitTookDamage(Object EventData, Object Ev
 
     if (WardenUnit == none)
     {
-        `LOG("Mirror not returning fire - Warden unit not found",,'BDLOG');
+        //`log("Mirror not returning fire - Warden unit not found",,'BDLOG');
         `XEVENTMGR.TriggerEvent('MirrorManualTick', Player, TargetUnit, GameState);
         return ELR_NoInterrupt;
     }
@@ -107,7 +107,7 @@ static function EventListenerReturn OnUnitTookDamage(Object EventData, Object Ev
     // Check Warden unit conditions
     if (WardenUnit.IsImpaired() || WardenUnit.IsBurning() || WardenUnit.IsPanicked())
     {
-        `LOG("Mirror not returning fire - Warden impaired/burning/panicked",,'BDLOG');
+        //`log("Mirror not returning fire - Warden impaired/burning/panicked",,'BDLOG');
         `XEVENTMGR.TriggerEvent('MirrorManualTick', Player, TargetUnit, GameState);
         return ELR_NoInterrupt;
     }
@@ -125,7 +125,7 @@ static function EventListenerReturn OnUnitTookDamage(Object EventData, Object Ev
         if (TargetUnit.DamageResults[i].SourceEffect.AbilityStateObjectRef.ObjectID != 0)
         {
             DamageToStore = TargetUnit.DamageResults[i].DamageAmount + TargetUnit.DamageResults[i].MitigationAmount;
-            `LOG("Mirror storing pre-armor damage: " $ DamageToStore,,'BDLOG');
+            //`log("Mirror storing pre-armor damage: " $ DamageToStore,,'BDLOG');
             break;
         }
     }
@@ -145,12 +145,12 @@ static function EventListenerReturn OnUnitTookDamage(Object EventData, Object Ev
 
     if (ReturnFireAbility == none || AttackerUnit == none)
     {
-        `LOG("Mirror not returning fire - ability or attacker not found",,'BDLOG');
+        //`log("Mirror not returning fire - ability or attacker not found",,'BDLOG');
         `XEVENTMGR.TriggerEvent('MirrorManualTick', Player, TargetUnit, GameState);
         return ELR_NoInterrupt;
     }
 
-    `LOG("Mirror triggering return fire from Warden against " $ AttackerUnit.GetFullName(),,'BDLOG');
+    //`log("Mirror triggering return fire from Warden against " $ AttackerUnit.GetFullName(),,'BDLOG');
     ReturnFireAbility.AbilityTriggerAgainstSingleTarget(AttackerUnit.GetReference(), false);
     `XEVENTMGR.TriggerEvent('MirrorManualTick', Player, TargetUnit, GameState);
 

@@ -29,7 +29,7 @@ function int GetAttackingDamageModifier(XComGameState_Effect EffectState, XComGa
 			{
 				BonusDamage = default.MELEEFOCUS_MAXIMUM_BONUS;
 			}
-			`log("Adding bonus damage of: " @BonusDamage,,'BDLOG');
+			//`log("Adding bonus damage of: " @BonusDamage,,'BDLOG');
 			//	no game state means it's for damage preview
 			if (NewGameState == none)
 			{				

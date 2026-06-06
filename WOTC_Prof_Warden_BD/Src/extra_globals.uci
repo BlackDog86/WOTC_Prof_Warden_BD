@@ -1,4 +1,4 @@
-`define AMLOG(msg) `LOG(GetFuncName() @ `msg, /* class'WOTC_Prof_Warden_BD_Defaults'.default.VERSION_CFG > class'WOTC_Prof_Warden_BD_MCMScreen'.default.VERSION_CFG ? class'WOTC_Prof_Warden_BD_Defaults'.default.DEBUG_LOGGING : class'WOTC_Prof_Warden_BD_MCMScreen'.default.DEBUG_LOGGING */, 'WOTC_Prof_Warden_BD')
+`define AMLOG(msg) //`log(GetFuncName() @ `msg, /* class'WOTC_Prof_Warden_BD_Defaults'.default.VERSION_CFG > class'WOTC_Prof_Warden_BD_MCMScreen'.default.VERSION_CFG ? class'WOTC_Prof_Warden_BD_Defaults'.default.DEBUG_LOGGING : class'WOTC_Prof_Warden_BD_MCMScreen'.default.DEBUG_LOGGING */, 'WOTC_Prof_Warden_BD')
 
 `define CAPS(VarName) class'UIUtilities_Text'.static.CapsCheckForGermanScharfesS(`VarName)
 

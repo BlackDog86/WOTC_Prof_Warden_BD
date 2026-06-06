@@ -99,8 +99,8 @@ BrandedFriendlyName = "Branded"
 
 [Warden_BD_Stances X2AbilityTemplate]
 LocFriendlyName="Stances"
-LocLongDescription="Gain a <font color='#8f3fbf'>flow</font> action point by carrying out a turn-ending attack in the correct stance. <font color='#0058CA'>Melee stance</font> grants bonus sword aim and mobility, at the expense of a small aim penalty with firearms. <font color='#CA7200'>Ranged stance</font> grants reduced enemy defense from cover and a critical hit bonus, at the expense of a small aim penalty when using melee weapons."
-LocHelpText="Gain a <font color='#8f3fbf'>flow</font> action point by carrying out a turn-ending attack in the correct stance. <font color='#0058CA'>Melee stance</font> grants bonus sword aim and mobility, at the expense of a small aim penalty with firearms. <font color='#CA7200'>Ranged stance</font> grants reduced enemy defense from cover and a critical hit bonus, at the expense of a small aim penalty when using melee weapons."
+LocLongDescription="Gain a <font color='#8f3fbf'>flow</font> action point by carrying out a turn-ending attack in the correct stance. Gain bonus sword aim and mobility in <font color='#0058CA'>Melee stance</font> and reduced enemy defense from cover and a critical hit bonus in <font color='#CA7200'>Ranged stance</font>. Receive an aim penalty of -<Ability:RANGEDSTANCE_AIM_PENALTY> when attacking using an incorrect stance / weapon combination."
+LocHelpText="Gain a <font color='#8f3fbf'>flow</font> action point by carrying out a turn-ending attack in the correct stance. Gain bonus sword aim and mobility in <font color='#0058CA'>Melee stance</font> and reduced enemy defense from cover and a critical hit bonus in <font color='#CA7200'>Ranged stance</font>. Receive an aim penalty of -<Ability:RANGEDSTANCE_AIM_PENALTY> when attacking using an incorrect stance / weapon combination."
 LocFlyOverText="Stances"
 
 [Warden_BD_MeleeStance X2AbilityTemplate]
@@ -159,8 +159,8 @@ LocFlyOverText="Blink"
 
 [Warden_BD_Mirror X2AbilityTemplate]
 LocFriendlyName="Reflective Barrier"
-LocLongDescription="Create an elemental barrier on the Warden or an ally, which degrades the next <font color='#CA7200'><Ability:MIRROR_NUMBER_OF_ATTACKS/></font> incoming hits to grazes. Direct attacks on the barrier provide an opening for the Warden to return the damage psionically to the attacker. Uses a <font color='#8f3fbf'>flow</font> action point. <font color='#CA7200'><Ability:MIRROR_COOLDOWN/></font>-turn cooldown."
-LocHelpText="Create an elemental barrier on the Warden or an ally, which degrades the next <font color='#CA7200'><Ability:MIRROR_NUMBER_OF_ATTACKS/></font> incoming hits to grazes. Direct attacks on the barrier provide an opening for the Warden to return the damage psionically to the attacker. Uses a <font color='#8f3fbf'>flow</font> action point. <font color='#CA7200'><Ability:MIRROR_COOLDOWN/></font>-turn cooldown."
+LocLongDescription="Create an elemental barrier on the Warden or an ally, which degrades the next <font color='#CA7200'><Ability:MIRROR_NUMBER_OF_ATTACKS/></font> incoming hits to grazes. Direct attacks on the barrier allow the Warden to return the damage psionically to the attacker. Uses a <font color='#8f3fbf'>flow</font> action point. <font color='#CA7200'><Ability:MIRROR_COOLDOWN/></font>-turn cooldown."
+LocHelpText="Create an elemental barrier on the Warden or an ally, which degrades the next <font color='#CA7200'><Ability:MIRROR_NUMBER_OF_ATTACKS/></font> incoming hits to grazes. Direct attacks on the barrier barrier allow the Warden to return the damage psionically to the attacker. Uses a <font color='#8f3fbf'>flow</font> action point. <font color='#CA7200'><Ability:MIRROR_COOLDOWN/></font>-turn cooldown."
 LocFlyOverText="Reflective Barrier"
 
 [Warden_BD_Momentum X2AbilityTemplate]
@@ -201,26 +201,26 @@ LocFlyOverText="Non-standard slash"
 
 [Warden_BD_GrantImbueAmmoCharges X2AbilityTemplate]
 LocFriendlyName="Create Astral Bullet"
-LocLongDescription="Grants <font color='#CA7200'><Ability:IMBUEAMMO_INITIAL_CHARGES/></font> psionically enhanced bullet at the start of each mission, and the ability to create additional bullets by using a <font color='#8f3fbf'>flow</font> action point. Firing the bullets requires <font color='#CA7200'>Ranged stance</font> and a standard action point but does not require standard ammo. The bullets deal +<font color='#CA7200'><Ability:IMBUEAMMO_DAMAGE_BONUS/></font> base damage, ignore armor & shields and can kill sustained units, but cannot critically hit."
-LocHelpText="Grants <font color='#CA7200'><Ability:IMBUEAMMO_INITIAL_CHARGES/></font> psionically enhanced bullet at the start of each mission, and the ability to create additional bullets by using a <font color='#8f3fbf'>flow</font> action point. Firing the bullets requires <font color='#CA7200'>Ranged stance</font> and a standard action point but does not require standard ammo. The bullets deal +<font color='#CA7200'><Ability:IMBUEAMMO_DAMAGE_BONUS/></font> base damage, ignore armor & shields and can kill sustained units, but cannot critically hit."
+LocLongDescription="Grants <font color='#CA7200'><Ability:IMBUEAMMO_INITIAL_CHARGES/></font> psionically enhanced bullet at the start of each mission, and the ability to create additional bullets by using a <font color='#8f3fbf'>flow</font> action point. Firing the bullets requires <font color='#CA7200'>Ranged stance</font> and a standard action point but does not require standard ammo. The bullets deal +<font color='#CA7200'><Ability:IMBUEAMMO_DAMAGE_BONUS/></font> base damage, ignore armor & shields and prevents units entering sustain, if killed. It cannot critically hit."
+LocHelpText="Grants <font color='#CA7200'><Ability:IMBUEAMMO_INITIAL_CHARGES/></font> psionically enhanced bullet at the start of each mission, and the ability to create additional bullets by using a <font color='#8f3fbf'>flow</font> action point. Firing the bullets requires <font color='#CA7200'>Ranged stance</font> and a standard action point but does not require standard ammo. The bullets deal +<font color='#CA7200'><Ability:IMBUEAMMO_DAMAGE_BONUS/></font> base damage, ignore armor & shields and prevents units entering sustain, if killed. It cannot critically hit."
 LocFlyOverText="Create Astral Bullet"
 
 [Warden_BD_GrantSoulBladeCharges X2AbilityTemplate]
 LocFriendlyName="Charge Soul-Blade"
-LocLongDescription="Grants <font color='#CA7200'><Ability:SOULBLADE_INITIAL_CHARGES/></font> psionically enhanced strike(s) and the ability to channel energy into the Warden's sword. Use a <font color='#8f3fbf'>flow</font> action point to create an additional charged attack which can be used on the next turn. The attack deals +<font color='#CA7200'><Ability:SOULBLADE_DAMAGE_BONUS/></font> base damage, ignores armor & shields and can kill sustained units, but cannot critically hit. The attack requires <font color='#0058CA'>Melee stance</font>."
-LocHelpText=Grants <font color='#CA7200'><Ability:SOULBLADE_INITIAL_CHARGES/></font> psionically enhanced strike(s) and the ability to channel energy into the Warden's sword. Use a <font color='#8f3fbf'>flow</font> action point to create an additional charged attack which can be used on the next turn. The attack deals +<font color='#CA7200'><Ability:SOULBLADE_DAMAGE_BONUS/></font> base damage, ignores armor & shields and can kill sustained units, but cannot critically hit. The attack requires <font color='#0058CA'>Melee stance</font>."
+LocLongDescription="Grants <font color='#CA7200'><Ability:SOULBLADE_INITIAL_CHARGES/></font> psionically enhanced strike(s) and the ability to channel energy into the Warden's sword. Use a <font color='#8f3fbf'>flow</font> action point to create an additional charged attack which can be used on the next turn. The attack deals +<font color='#CA7200'><Ability:SOULBLADE_DAMAGE_BONUS/></font> base damage, ignores armor & shields and prevents units entering sustain, if killed. It cannot critically hit. The attack requires <font color='#0058CA'>Melee stance</font>."
+LocHelpText=Grants <font color='#CA7200'><Ability:SOULBLADE_INITIAL_CHARGES/></font> psionically enhanced strike(s) and the ability to channel energy into the Warden's sword. Use a <font color='#8f3fbf'>flow</font> action point to create an additional charged attack which can be used on the next turn. The attack deals +<font color='#CA7200'><Ability:SOULBLADE_DAMAGE_BONUS/></font> base damage, ignores armor & shields and prevents units entering sustain, if killed. The attack requires <font color='#0058CA'>Melee stance</font>."
 LocFlyOverText="Soul-Blade"
 
 [Warden_BD_ImbueAmmo X2AbilityTemplate]
 LocFriendlyName="Fire Astral Bullet"
-LocLongDescription="Fire a psionic bullet at an enemy. The attack deals +<font color='#CA7200'><Ability:IMBUEAMMO_DAMAGE_BONUS/></font> base damage, ignores armor & shields and bypasses sustained units but cannot critically hit. Requires <font color='#CA7200'>Ranged stance</font>."
-LocHelpText="Fire a psionic bullet at an enemy. The attack deals +<font color='#CA7200'><Ability:IMBUEAMMO_DAMAGE_BONUS/></font> base damage, ignores armor & shields and bypasses sustained units but cannot critically hit. Requires <font color='#CA7200'>Ranged stance</font>."
+LocLongDescription="Fire a psionic bullet at an enemy. The attack deals +<font color='#CA7200'><Ability:IMBUEAMMO_DAMAGE_BONUS/></font> base damage, ignores armor & shields and prevents units entering sustain, if killed. It cannot critically hit. Requires <font color='#CA7200'>Ranged stance</font>."
+LocHelpText="Fire a psionic bullet at an enemy. The attack deals +<font color='#CA7200'><Ability:IMBUEAMMO_DAMAGE_BONUS/></font> base damage, ignores armor & shields and and prevents units entering sustain, if killed. It cannot critically hit. Requires <font color='#CA7200'>Ranged stance</font>."
 LocFlyOverText="Fire Astral Bullet"
 
 [Warden_BD_SoulBlade X2AbilityTemplate]
 LocFriendlyName="Soul-Blade Attack"
-LocLongDescription="Perform a psionically enhanced sword attack. The attack does +<font color='#CA7200'><Ability:SOULBLADE_DAMAGE_BONUS/></font> base damage, ignores armor & shields and bypasses sustained units but cannot critically hit. Requires <font color='#0058CA'>Melee stance</font>."
-LocHelpText="Perform a psionically enhanced sword attack. The attack does +<font color='#CA7200'><Ability:SOULBLADE_DAMAGE_BONUS/></font> base damage, ignores armor & shields and bypasses sustained units but cannot critically hit. Requires <font color='#0058CA'>Melee stance</font>."
+LocLongDescription="Perform a psionically enhanced sword attack. The attack does +<font color='#CA7200'><Ability:SOULBLADE_DAMAGE_BONUS/></font> base damage, ignores armor & shields and prevents units entering sustain, if killed. It cannot critically hit. Requires <font color='#0058CA'>Melee stance</font>."
+LocHelpText="Perform a psionically enhanced sword attack. The attack does +<font color='#CA7200'><Ability:SOULBLADE_DAMAGE_BONUS/></font> base damage, ignores armor & shields and prevents units entering sustain, if killed. It cannot critically hit. Requires <font color='#0058CA'>Melee stance</font>."
 LocFlyOverText="Soul-Blade Attack"
 
 [Warden_BD_DefensiveWard X2AbilityTemplate]
@@ -231,26 +231,26 @@ LocFlyOverText="Sigil of Destruction"
 
 [Warden_BD_BattleRhythm X2AbilityTemplate]
 LocFriendlyName="Battle Rhythm"
-LocLongDescription="Killing an enemy in <font color='#0058CA'>Melee stance</font> grants a free Astral Bullet. Killing an enemy in <font color='#CA7200'>Ranged stance</font> grants a free Soul Blade Strike. Passive."
-LocHelpText="Killing an enemy in <font color='#0058CA'>Melee stance</font> grants a free Astral Bullet. Killing an enemy in <font color='#CA7200'>Ranged stance</font> grants a free Soul Blade Strike. Passive."
+LocLongDescription="Killing an enemy in <font color='#0058CA'>Melee stance</font> grants a free Astral Bullet. Killing an enemy in <font color='#CA7200'>Ranged stance</font> grants a free Soul Blade Strike. Can trigger a maximum of <font color='#CA7200'><Ability:BATTLE_RHYTHM_MAX_CHARGES/></font> times per turn. Passive."
+LocHelpText="Killing an enemy in <font color='#0058CA'>Melee stance</font> grants a free Astral Bullet. Killing an enemy in <font color='#CA7200'>Ranged stance</font> grants a free Soul Blade Strike. Can trigger a maximum of <font color='#CA7200'><Ability:BATTLE_RHYTHM_MAX_CHARGES/></font> times per turn. Passive."
 LocFlyOverText="Battle Rhythm"
 
 [Warden_BD_BattleRhythm_Melee X2AbilityTemplate]
 LocFriendlyName="Battle Rhythm"
-LocLongDescription="Killing an enemy in <font color='#0058CA'>Melee stance</font> grants a free Astral Bullet. Killing an enemy in <font color='#CA7200'>Ranged stance</font> grants a free Soul Blade Strike. Passive."
-LocHelpText="Killing an enemy in <font color='#0058CA'>Melee stance</font> grants a free Astral Bullet. Killing an enemy in <font color='#CA7200'>Ranged stance</font> grants a free Soul Blade Strike. Passive."
+LocLongDescription="Killing an enemy in <font color='#0058CA'>Melee stance</font> grants a free Astral Bullet. Killing an enemy in <font color='#CA7200'>Ranged stance</font> grants a free Soul Blade Strike. Can trigger a maximum of <font color='#CA7200'><Ability:BATTLE_RHYTHM_MAX_CHARGES/></font> times per turn. Passive."
+LocHelpText="Killing an enemy in <font color='#0058CA'>Melee stance</font> grants a free Astral Bullet. Killing an enemy in <font color='#CA7200'>Ranged stance</font> grants a free Soul Blade Strike. Can trigger a maximum of <font color='#CA7200'><Ability:BATTLE_RHYTHM_MAX_CHARGES/></font> times per turn. Passive."
 LocFlyOverText="Battle Rhythm"
 
 [Warden_BD_BattleRhythm_Ranged X2AbilityTemplate]
 LocFriendlyName="Battle Rhythm"
-LocLongDescription="Killing an enemy in <font color='#0058CA'>Melee stance</font> grants a free Astral Bullet. Killing an enemy in <font color='#CA7200'>Ranged stance</font> grants a free Soul Blade Strike. Passive."
-LocHelpText="Killing an enemy in <font color='#0058CA'>Melee stance</font> grants a free Astral Bullet. Killing an enemy in <font color='#CA7200'>Ranged stance</font> grants a free Soul Blade Strike. Passive."
+LocLongDescription="Killing an enemy in <font color='#0058CA'>Melee stance</font> grants a free Astral Bullet. Killing an enemy in <font color='#CA7200'>Ranged stance</font> grants a free Soul Blade Strike. Can trigger a maximum of <font color='#CA7200'><Ability:BATTLE_RHYTHM_MAX_CHARGES/></font> times per turn. Passive."
+LocHelpText="Killing an enemy in <font color='#0058CA'>Melee stance</font> grants a free Astral Bullet. Killing an enemy in <font color='#CA7200'>Ranged stance</font> grants a free Soul Blade Strike. Can trigger a maximum of <font color='#CA7200'><Ability:BATTLE_RHYTHM_MAX_CHARGES/></font> times per turn. Passive."
 LocFlyOverText="Battle Rhythm"
 
 [Warden_BD_StanceUnity X2AbilityTemplate]
 LocFriendlyName="Stance Unity"
-LocLongDescription="Each stance switch adds +1 damage to all subsequent attacks made in the correct stance (Up to a maximum of +<Ability:MELEEFOCUS_MAXIMUM_BONUS/>)."
-LocHelpText="Each stance switch adds +1 damage to all subsequent attacks made in the correct stance (Up to a maximum of +<Ability:MELEEFOCUS_MAXIMUM_BONUS/>)."
+LocLongDescription="Each stance switch adds +<font color='#CA7200'>1</font> damage to all subsequent attacks made in the correct stance (Up to a maximum of +<font color='#CA7200'><Ability:MELEEFOCUS_MAXIMUM_BONUS/></font>)."
+LocHelpText="Each stance switch adds +<font color='#CA7200'>1</font> damage to all subsequent attacks made in the correct stance (Up to a maximum of +<font color='#CA7200'><Ability:MELEEFOCUS_MAXIMUM_BONUS/></font>)."
 LocFlyOverText="Stance Unity"
 
 [Warden_BD_Combatives X2AbilityTemplate]
@@ -291,14 +291,14 @@ LocFlyOverText="Warden's Rage"
 
 [Warden_BD_FractureRanged X2AbilityTemplate]
 LocFriendlyName="Astral Barrage"
-LocLongDescription="Gain <font color='#CA7200'><Ability:FRACTURE_RANGED_BULLET_CHARGES/></font> Astral Bullets. Fire Astral Bullets at all enemies in Line of Sight until stacks (or targets) are exhausted. <font color='#CA7200'><Ability:FRACTURE_RANGED_COOLDOWN/></font>-turn cooldown. Uses standard action points. Resets bonuses gained from Stance Unity. Requires <font color='#CA7200'>Ranged stance</font>."
-LocHelpText="Gain <font color='#CA7200'><Ability:FRACTURE_RANGED_BULLET_CHARGES/></font> Astral Bullets. Fire Astral Bullets at all enemies in Line of Sight until stacks (or targets) are exhausted. <font color='#CA7200'><Ability:FRACTURE_RANGED_COOLDOWN/></font>-turn cooldown. Resets bonuses gained from Stance Unity. Uses standard action points. Requires <font color='#CA7200'>Ranged stance</font>."
+LocLongDescription="Gain <font color='#CA7200'><Ability:FRACTURE_RANGED_BULLET_CHARGES/></font> Astral Bullets. Fire Astral Bullets at all enemies in Line of Sight until stacks (or targets) are exhausted. <font color='#CA7200'><Ability:FRACTURE_RANGED_COOLDOWN/></font>-turn cooldown. Uses standard action points. Resets bonuses gained from Stance Unity. Requires <font color='#CA7200'>Ranged stance</font>. Also grants the Astral Bullet ability, if not present already."
+LocHelpText="Gain <font color='#CA7200'><Ability:FRACTURE_RANGED_BULLET_CHARGES/></font> Astral Bullets. Fire Astral Bullets at all enemies in Line of Sight until stacks (or targets) are exhausted. <font color='#CA7200'><Ability:FRACTURE_RANGED_COOLDOWN/></font>-turn cooldown. Resets bonuses gained from Stance Unity. Uses standard action points. Requires <font color='#CA7200'>Ranged stance</font>. Also grants the Astral Bullet ability, if not present already."
 LocFlyOverText="Fracture"
 
 [Warden_BD_LastRites X2AbilityTemplate]
 LocFriendlyName="Last Rites"
-LocHelpText="Gain <font color='#CA7200'><Ability:LAST_RITES_SOULBLADE_CHARGES/></font> soul-blade charges. Thrust your blade into an enemy and snap it off, leaving behind a fragment of your sword's energy. Teleport back to the turn start position. The fragment detonates in <font color='#CA7200'><Ability:LAST_RITES_DURATION/></font> turns, or on the next instance of psionic damage, dealing damage equal to that of all charges deposited. <font color='#CA7200'><Ability:LAST_RITES_COOLDOWN/></font>-turn cooldown.  Resets bonuses gained from Stance Unity. Uses standard action points. Requires <font color='#0058CA'>Melee stance</font>."
-LocLongDescription="Gain <font color='#CA7200'><Ability:LAST_RITES_SOULBLADE_CHARGES/></font> soul-blade charges. Thrust your blade into an enemy and snap it off, leaving behind a fragment of your sword's energy. Teleport back to the turn start position. The fragment detonates in <font color='#CA7200'><Ability:LAST_RITES_DURATION/></font> turns, or on the next instance of psionic damage, dealing damage equal to that of all charges deposited. <font color='#CA7200'><Ability:LAST_RITES_COOLDOWN/></font>-turn cooldown.  Resets bonuses gained from Stance Unity. Uses standard action points. Requires <font color='#0058CA'>Melee stance</font>."
+LocHelpText="Gain <font color='#CA7200'><Ability:LAST_RITES_SOULBLADE_CHARGES/></font> soul-blade charges. Thrust your blade into an enemy and snap it off, leaving behind a fragment of your sword's energy. Teleport back to the turn start position. The fragment detonates in <font color='#CA7200'><Ability:LAST_RITES_DURATION/></font> turns, or on the next instance of psionic damage, dealing damage equal to that of all charges deposited. <font color='#CA7200'><Ability:LAST_RITES_COOLDOWN/></font>-turn cooldown.  Resets bonuses gained from Stance Unity. Uses standard action points. Requires <font color='#0058CA'>Melee stance</font>. Grants the Soul-Blade ability, if not present already."
+LocLongDescription="Gain <font color='#CA7200'><Ability:LAST_RITES_SOULBLADE_CHARGES/></font> soul-blade charges. Thrust your blade into an enemy and snap it off, leaving behind a fragment of your sword's energy. Teleport back to the turn start position. The fragment detonates in <font color='#CA7200'><Ability:LAST_RITES_DURATION/></font> turns, or on the next instance of psionic damage, dealing damage equal to that of all charges deposited. <font color='#CA7200'><Ability:LAST_RITES_COOLDOWN/></font>-turn cooldown.  Resets bonuses gained from Stance Unity. Uses standard action points. Requires <font color='#0058CA'>Melee stance</font>. Grants the Soul-Blade ability, if not present already."
 LocFlyOverText="Last Rites"
 
 [Warden_BD_LastRitesRewind X2AbilityTemplate]

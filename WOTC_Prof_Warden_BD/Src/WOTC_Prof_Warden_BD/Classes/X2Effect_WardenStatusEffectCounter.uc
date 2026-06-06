@@ -39,15 +39,15 @@ simulated protected function OnEffectAdded(const out EffectAppliedData ApplyEffe
 		EffectState = XComGameState_Effect(History.GetGameStateForObjectID(EffectRef.ObjectID));
 		if( EffectState != None )
 		{
-			`log("StatusEffectCounter: Checking effect: " @ EffectState.GetX2Effect().EffectName,,'BDLOG');
+			//`log("StatusEffectCounter: Checking effect: " @ EffectState.GetX2Effect().EffectName,,'BDLOG');
 			If (effectsToCheck.Find(EffectState.GetX2Effect().EffectName) != INDEX_NONE)			
 			{
 				EffectCounter = EffectCounter + EffectState.iTurnsRemaining;
-				`log("StatusEffectCounter: Check Passed: " @ EffectState.GetX2Effect().EffectName @ ":New Counter Value:" @effectCounter);
+				//`log("StatusEffectCounter: Check Passed: " @ EffectState.GetX2Effect().EffectName @ ":New Counter Value:" @effectCounter);
 			}
 			Else
 			{
-				`log("StatusEffectCounter: Check failed: " @ EffectState.GetX2Effect().EffectName,,'BDLOG');
+				//`log("StatusEffectCounter: Check failed: " @ EffectState.GetX2Effect().EffectName,,'BDLOG');
 			}
 		}						
 	}	
@@ -56,6 +56,6 @@ simulated protected function OnEffectAdded(const out EffectAppliedData ApplyEffe
 		{
 			NewSourceUnit.GetUnitValue(class'X2Ability_Warden'.default.ConsumeBonusDamageValue, CurrentConsumeCounter);
 			NewSourceUnit.SetUnitFloatValue(class'X2Ability_Warden'.default.ConsumeBonusDamageValue, CurrentConsumeCounter.fValue + effectCounter, eCleanup_BeginTactical);
-			`log("Consume unit value: " @ CurrentConsumeCounter.fValue + effectCounter,,'BDLOG');
+			//`log("Consume unit value: " @ CurrentConsumeCounter.fValue + effectCounter,,'BDLOG');
 		}
 }

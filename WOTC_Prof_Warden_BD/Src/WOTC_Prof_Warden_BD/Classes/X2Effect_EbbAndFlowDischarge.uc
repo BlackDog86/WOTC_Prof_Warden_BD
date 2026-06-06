@@ -7,7 +7,7 @@ function WeaponDamageValue GetBonusEffectDamageValue(XComGameState_Ability Abili
 
     PsiDamage = int(SourceUnit.GetCurrentStat(eStat_PsiOffense) / 20);
 
-    `LOG("EbbAndFlowDischarge: PsiOffense=" $ SourceUnit.GetCurrentStat(eStat_PsiOffense) $ " Damage=" $ PsiDamage,,'BDLOG');
+    //`log("EbbAndFlowDischarge: PsiOffense=" $ SourceUnit.GetCurrentStat(eStat_PsiOffense) $ " Damage=" $ PsiDamage,,'BDLOG');
 
     DamageValue.Damage = PsiDamage;
 

@@ -10,6 +10,8 @@ var const name	MeleeFocusCounterValueName;
 var const name	NumberOfCounterAttacksValueName;
 var const name	ConsumeBonusDamageValue;
 var const name	FractureRangedShotsFired;
+var const name	BattleRhythmRangedGrants;
+var const name	BattleRhythmMeleeGrants;
 
 //Effect Names
 var const name	MeleeStanceHitEffectName;
@@ -122,6 +124,7 @@ var config int	RETRIBUTION_RADIUS_METERS;
 var config int	RETRIBUTION_RANGE;
 
 // Major
+var config int	BATTLE_RHYTHM_MAX_CHARGES;
 var config int	FLOWFOCUS_COOLDOWN;
 
 // Colonel
@@ -492,7 +495,7 @@ static final function X2AbilityTemplate Warden_BD_RangedStance()
 
 	ClearUnitValueEffect2 = new Class'X2Effect_ClearUnitValue';
 	ClearUnitValueEffect2.UnitValueName = default.FlowAPGrantedValueName;
-	`Log("I just cleared the Flow AP unitvalue from ranged stance",,'BDLOG');
+	//`log("I just cleared the Flow AP unitvalue from ranged stance",,'BDLOG');
 	Template.AddTargetEffect(ClearUnitValueEffect2);
 
 	// # State and Visualization
@@ -614,7 +617,7 @@ static final function X2AbilityTemplate Warden_BD_MeleeStance()
 
 	ClearUnitValueEffect2 = new Class'X2Effect_ClearUnitValue';
 	ClearUnitValueEffect2.UnitValueName = default.FlowAPGrantedValueName;
-	`Log("I just cleared the Flow AP unitvalue from melee stance",,'BDLOG');
+	//`log("I just cleared the Flow AP unitvalue from melee stance",,'BDLOG');
 	Template.AddTargetEffect(ClearUnitValueEffect2);
 	
 	// # State and Visualization	
@@ -638,6 +641,7 @@ static final function X2AbilityTemplate Warden_BD_WrongStancePenalties()
 	local X2Condition_Unitvalue									CheckMeleeStance;
 	local X2Condition_Unitvalue									CheckRangedStance;
 	local X2Effect_Persistent									IconEffect;
+	local X2AbilityTrigger_EventListener						PenaltyCheckTrigger; 
 
 	`CREATE_X2ABILITY_TEMPLATE(Template, 'Warden_BD_WrongStancePenalties');		
 		
@@ -645,7 +649,7 @@ static final function X2AbilityTemplate Warden_BD_WrongStancePenalties()
 	Template.AbilitySourceName = 'eAbilitySource_Psionic';
 	Template.IconImage = "img:///UILibrary_XPACK_Common.PerkIcons.UIPerk_partingsilk";
 	SetHidden(Template);
-
+	
 	// # Targeting and Triggering
 	Template.AbilityToHitCalc = default.DeadEye;
 	Template.AbilityTargetStyle = default.SelfTarget;	
@@ -656,24 +660,33 @@ static final function X2AbilityTemplate Warden_BD_WrongStancePenalties()
 	// # Shooter Conditions
 	Template.AbilityShooterConditions.AddItem(default.LivingShooterProperty);
 
-	// If we're in melee stance
-	CheckMeleeStance = new Class'X2Condition_Unitvalue';
-	CheckMeleeStance.AddCheckValue(default.MeleeStanceValueName,1,eCheck_Exact);
-
-	// Display the localisation on the passive icon at all times  (not gated by conditions)
+	//Display the localisation on the passive icon at all times  (not gated by conditions)
 	IconEffect = new class'X2Effect_Persistent';
 	IconEffect.BuildPersistentEffect(1, true, false);
 	IconEffect.SetDisplayInfo(ePerkBuff_Penalty, Template.LocFriendlyName, Template.GetMyLongDescription(), Template.IconImage, true, , Template.AbilitySourceName);
+	IconEffect.DuplicateResponse = eDupe_Ignore;
 	IconEffect.EffectName = 'WardenWrongStancePenalties';
 	Template.AddTargetEffect(IconEffect);
+
+	PenaltyCheckTrigger = new class'X2AbilityTrigger_EventListener';
+	PenaltyCheckTrigger.ListenerData.EventID = 'PenaltyTrigger';
+	PenaltyCheckTrigger.ListenerData.Deferral = ELD_OnStateSubmitted;
+	PenaltyCheckTrigger.ListenerData.Filter = eFilter_Unit;
+	PenaltyCheckTrigger.ListenerData.Priority = 50;
+	PenaltyCheckTrigger.ListenerData.EventFn = class'XComGameState_Ability'.static.AbilityTriggerEventListener_Self;
+	Template.AbilityTriggers.AddItem(PenaltyCheckTrigger);
+
+	// If we're in melee stance
+	CheckMeleeStance = new Class'X2Condition_Unitvalue';
+	CheckMeleeStance.AddCheckValue(default.MeleeStanceValueName,1,eCheck_Exact);
 
 	// Apply a flat aim penalty if we're trying to make a ranged attack 
 	AimPenaltyEffect = new class'X2Effect_ToHitModifier';
 	AimPenaltyEffect.EffectName = default.WardenMeleeStanceAimPenalty;
 	AimPenaltyEffect.BuildPersistentEffect(1, true, false, false, eGameRule_PlayerTurnEnd);
 	AimPenaltyEffect.AddEffectHitModifier(eHit_Success, -default.MELEESTANCE_AIM_PENALTY, Template.LocFriendlyName,, false, true, true, true);
-	AimPenaltyEffect.SetDisplayInfo(ePerkBuff_Penalty, Template.LocFriendlyName, Template.GetMyLongDescription(), Template.IconImage, true, , Template.AbilitySourceName);
-	AimPenaltyEffect.DuplicateResponse = eDupe_Ignore;
+	AimPenaltyEffect.SetDisplayInfo(ePerkBuff_Penalty, Template.LocFriendlyName, Template.GetMyLongDescription(), Template.IconImage, false, , Template.AbilitySourceName);
+	AimPenaltyEffect.DuplicateResponse = eDupe_Refresh;
 	AimPenaltyEffect.TargetConditions.AddItem(CheckMeleeStance);
 	Template.AddTargetEffect(AimPenaltyEffect);
 
@@ -686,13 +699,13 @@ static final function X2AbilityTemplate Warden_BD_WrongStancePenalties()
 	AimPenaltyEffect.EffectName = default.WardenRangedStanceAimPenalty;
 	AimPenaltyEffect.BuildPersistentEffect(1, true, false, false, eGameRule_PlayerTurnEnd);
 	AimPenaltyEffect.AddEffectHitModifier(eHit_Success, -default.RANGEDSTANCE_AIM_PENALTY, Template.LocFriendlyName,, true, false, true, true);
-	AimPenaltyEffect.SetDisplayInfo(ePerkBuff_Penalty, Template.LocFriendlyName, Template.GetMyLongDescription(), Template.IconImage, true, , Template.AbilitySourceName);
-	AimPenaltyEffect.DuplicateResponse = eDupe_Ignore;
+	AimPenaltyEffect.SetDisplayInfo(ePerkBuff_Penalty, Template.LocFriendlyName, Template.GetMyLongDescription(), Template.IconImage, false, , Template.AbilitySourceName);
+	AimPenaltyEffect.DuplicateResponse = eDupe_Refresh;
 	AimPenaltyEffect.TargetConditions.AddItem(CheckRangedStance);
 	Template.AddTargetEffect(AimPenaltyEffect);
 
 	// # State and Visualization	
-	//Template.CustomSelfFireAnim = 'HL_Stance';
+	// Template.CustomSelfFireAnim = 'HL_Stance';
 	Template.Hostility = eHostility_Neutral;
 	Template.bShowActivation = false;
 	Template.bSkipFireAction = true;
@@ -708,8 +721,8 @@ static final function X2AbilityTemplate Warden_BD_WrongStancePenalties()
 static final function X2AbilityTemplate Warden_BD_EbbandFlow()
 {
 	local X2AbilityTemplate										Template;
-	local X2Effect_TriggerEvent									TriggerMeleeEvent;
-	local X2Effect_TriggerEvent									TriggerRangedEvent;
+	local X2Effect_TriggerEvent									TriggerMeleeEvent, TriggerMeleeEvent2;
+	local X2Effect_TriggerEvent									TriggerRangedEvent, TriggerRangedEvent2;
 	local X2Condition_Unitvalue									CheckMeleeStance;
 	local X2Condition_Unitvalue									CheckRangedStance;
 	local X2Condition_Unitvalue									CheckFlowAPsGranted;
@@ -765,6 +778,11 @@ static final function X2AbilityTemplate Warden_BD_EbbandFlow()
 	TriggerRangedEvent.TargetConditions.AddItem(CheckMeleeStance);
 	Template.AddTargetEffect(TriggerRangedEvent);
 
+	TriggerRangedEvent2 = new Class'X2Effect_TriggerEvent';
+	TriggerRangedEvent2.TriggerEventName = 'TriggerPenalty';
+	TriggerRangedEvent2.TargetConditions.AddItem(CheckMeleeStance);
+	Template.AddTargetEffect(TriggerRangedEvent2);
+
 	// Check if we're in ranged stance
 	CheckRangedStance = new Class'X2Condition_Unitvalue';
 	CheckRangedStance.AddCheckValue(default.RangedStanceValueName,1,eCheck_Exact);
@@ -779,9 +797,14 @@ static final function X2AbilityTemplate Warden_BD_EbbandFlow()
 
 	// Then trigger melee stance 
 	TriggerMeleeEvent = new Class'X2Effect_TriggerEvent';
-	TriggerMeleeEvent.TriggerEventName = 'TriggerMeleeStance';	
+	TriggerMeleeEvent.TriggerEventName = 'TriggerMeleeStance';
 	TriggerMeleeEvent.TargetConditions.AddItem(CheckRangedStance);
 	Template.AddTargetEffect(TriggerMeleeEvent);
+
+	TriggerMeleeEvent2 = new Class'X2Effect_TriggerEvent';
+	TriggerMeleeEvent2.TriggerEventName = 'TriggerPenalty';
+	TriggerMeleeEvent2.TargetConditions.AddItem(CheckRangedStance);
+	Template.AddTargetEffect(TriggerMeleeEvent2);
 
 	// TODO: Figure out more fitting confirm sound or use standard.
 	Template.Hostility = eHostility_Neutral;
@@ -791,7 +814,6 @@ static final function X2AbilityTemplate Warden_BD_EbbandFlow()
 	Template.BuildVisualizationFn = TypicalAbility_BuildVisualization;	
 
 	return Template;
-
 }
 
 // This ability is the 'Ebb & Flow' ability displayed on the ability bar - we use the main ability for triggering end of turn stance switch
@@ -857,8 +879,8 @@ static final function X2AbilityTemplate Warden_BD_EbbAndFlowManual()
 	local X2AbilityCost_ActionPoints							ActionPointCost;	
 	local X2AbilityCost_Charges									ChargeCost;
 	local X2AbilityCharges										Charges;
-	local X2Effect_TriggerEvent									TriggerMeleeEvent;
-	local X2Effect_TriggerEvent									TriggerRangedEvent;
+	local X2Effect_TriggerEvent									TriggerMeleeEvent, TriggerMeleeEvent2;
+	local X2Effect_TriggerEvent									TriggerRangedEvent, TriggerRangedEvent2;
 	local X2Condition_Unitvalue									CheckMeleeStance;
 	local X2Condition_Unitvalue									CheckRangedStance;
 	local X2Effect_RemoveEffects								RemoveMeleeEffects, RemoveRangedEffects;
@@ -915,6 +937,11 @@ static final function X2AbilityTemplate Warden_BD_EbbAndFlowManual()
 	TriggerRangedEvent.TargetConditions.AddItem(CheckMeleeStance);
 	Template.AddTargetEffect(TriggerRangedEvent);
 
+	TriggerRangedEvent2 = new Class'X2Effect_TriggerEvent';
+	TriggerRangedEvent2.TriggerEventName = 'PenaltyTrigger';
+	TriggerRangedEvent2.TargetConditions.AddItem(CheckMeleeStance);
+	Template.AddTargetEffect(TriggerRangedEvent2);
+
 	// Check if we're in ranged stance
 	CheckRangedStance = new Class'X2Condition_Unitvalue';
 	CheckRangedStance.AddCheckValue(default.RangedStanceValueName,1,eCheck_Exact);
@@ -929,10 +956,15 @@ static final function X2AbilityTemplate Warden_BD_EbbAndFlowManual()
 
 	// Then trigger melee stance 
 	TriggerMeleeEvent = new Class'X2Effect_TriggerEvent';
-	TriggerMeleeEvent.TriggerEventName = 'TriggerMeleeStance';	
+	TriggerMeleeEvent.TriggerEventName = 'TriggerMeleeStance';
 	TriggerMeleeEvent.TargetConditions.AddItem(CheckRangedStance);
 	Template.AddTargetEffect(TriggerMeleeEvent);
 
+	TriggerMeleeEvent2 = new Class'X2Effect_TriggerEvent';
+	TriggerMeleeEvent2.TriggerEventName = 'PenaltyTrigger';
+	TriggerMeleeEvent2.TargetConditions.AddItem(CheckRangedStance);
+	Template.AddTargetEffect(TriggerMeleeEvent2);
+	
 	// TODO: Figure out more fitting confirm sound or use standard.
 	Template.Hostility = eHostility_Neutral;
 	Template.bShowActivation = false;
@@ -1005,7 +1037,7 @@ static function X2AbilityTemplate Warden_BD_EbbAndFlowDischarge()
     Template.CinescriptCameraType = "Psionic_FireAtUnit";
     Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
     Template.BuildVisualizationFn = TypicalAbility_BuildVisualization;
-
+	
 	SetFireAnim(Template, 'HL_Volt');
 	Template.ActionFireClass = class'X2Action_Fire_Volt';
 
@@ -1115,6 +1147,7 @@ static final function X2AbilityTemplate Warden_BD_Mirror()
 	TargetCondition = new class'X2Condition_UnitProperty';
 	TargetCondition.ExcludeAlive=false;
 	TargetCondition.ExcludeDead=true;
+	TargetCondition.ExcludeCivilian = true;
 	TargetCondition.ExcludeFriendlyToSource=false;
 	TargetCondition.ExcludeHostileToSource=true;
 	TargetCondition.TreatMindControlledSquadmateAsHostile=true;
@@ -1199,7 +1232,7 @@ Static final function X2AbilityTemplate Warden_BD_MirrorReturnFire()
 	DamageEffect.bBypassShields = true;
 	DamageEffect.bIgnoreArmor = true;
 	Template.AddTargetEffect(DamageEffect);
-	Template.CustomFireAnim = 'HL_Brand_Volley';
+	Template.CustomFireAnim = 'HL_Brand';
 	Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
 	Template.BuildVisualizationFn = TypicalAbility_BuildVisualization;
 	Template.CinescriptCameraType = "Psionic_FireAtUnit";
@@ -1253,6 +1286,9 @@ static function X2AbilityTemplate Warden_BD_GrantImbueAmmoCharges()
 
 	// Ability trigger determines how it is activated. In this case - by the user manually.
 	Template.AbilityTriggers.AddItem(default.PlayerInputTrigger);
+
+	// Prevent duplication by astral barrage	
+	Template.bUniqueSource = true;
 
 	// Grant an additional charge
 	BonusCharges = new class 'X2Effect_WardenModifyAbilityCharges';
@@ -1310,8 +1346,10 @@ static function X2AbilityTemplate Warden_BD_NonStandardShot( Name AbilityName='W
 	VisibilityCondition.bRequireGameplayVisible = true;
 	VisibilityCondition.bAllowSquadsight = true;
 	Template.AbilityTargetConditions.AddItem(VisibilityCondition);
+
 	// Can't target dead; Can't target friendlies
 	Template.AbilityTargetConditions.AddItem(default.LivingHostileTargetProperty);
+	
 	// Can't shoot while dead
 	Template.AbilityShooterConditions.AddItem(default.LivingShooterProperty);
 	// Only at single targets that are in range.
@@ -1374,19 +1412,18 @@ static function X2AbilityTemplate Warden_BD_NonStandardShot( Name AbilityName='W
 	return Template;	
 }
 
-static function X2AbilityTemplate Warden_BD_ImbueAmmo() {
-	local X2AbilityTemplate					Template;
-	local X2Effect_ApplyWeaponDamage		WeaponDamageEffect;
-	local X2AbilityCharges					Charges;
-	local X2AbilityCost_Charges				ChargeCost;
-	local X2Effect_Knockback				KnockbackEffect;
-	local X2Condition_Unitvalue				CheckStance;
-	local array<name>						SkipExclusions;
+static function X2AbilityTemplate Warden_BD_ImbueAmmo() 
+{
+	local X2AbilityTemplate						Template;
+	local X2Effect_ApplyWeaponDamage			WeaponDamageEffect;
+	local X2AbilityCharges						Charges;
+	local X2AbilityCost_Charges					ChargeCost;
+	local X2Effect_Knockback					KnockbackEffect;
+	local X2Condition_Unitvalue					CheckStance;
+	local array<name>							SkipExclusions;
 
 	Template = Warden_BD_NonStandardShot('Warden_BD_ImbueAmmo', "img:///UILibrary_PerkIcons.UIPerk_bulletshred");
 	Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_AlwaysShow;
-	Template.HideErrors.AddItem('AA_CannotAfford_Charges');
-	Template.HideErrors.AddItem('AA_CannotAfford_ActionPoints');
 	Template.ShotHUDPriority = 2007;
 
 	Charges = new class'X2AbilityCharges';
@@ -1396,12 +1433,12 @@ static function X2AbilityTemplate Warden_BD_ImbueAmmo() {
 	ChargeCost = new class'X2AbilityCost_Charges';
 	ChargeCost.NumCharges = 1;
 	Template.AbilityCosts.AddItem(ChargeCost);
+
 	Template.ActivationSpeech = 'DeadEye';
+	Template.bUniqueSource = true;
 
 	WeaponDamageEffect = class'X2Ability_GrenadierAbilitySet'.static.ShredderDamageEffect();
 	WeaponDamageEffect.EffectDamageValue.DamageType = 'Psi';
-	// Need some way of displaying the psi flyover for this shot instead of the normal one 
-	//WeaponDamageEffect.bIgnoreWeaponBaseDamageTypeForFlyover = true;
 	WeaponDamageEffect.bBypassShields = true;
 	WeaponDamageEffect.bBypassSustainEffects = true;
 	WeaponDamageEffect.EnvironmentalDamageAmount = default.IMBUEAMMO_ENVDAMAGE;
@@ -1410,7 +1447,7 @@ static function X2AbilityTemplate Warden_BD_ImbueAmmo() {
 	WeaponDamageEffect.DamageTypes.Length=0;
 	WeaponDamageEffect.DamageTypes.AddItem('Psi');
 	Template.AddTargetEffect(WeaponDamageEffect);
-	
+
 	KnockbackEffect = new class'X2Effect_Knockback';
 	KnockbackEffect.OnlyOnDeath = false;
 	KnockbackEffect.KnockbackDistance = 2;
@@ -1418,11 +1455,10 @@ static function X2AbilityTemplate Warden_BD_ImbueAmmo() {
 
 	// # Shooter Conditions - Unit must be in ranged stance to activate the ability
 	CheckStance = new Class'X2Condition_Unitvalue';
-	CheckStance.AddCheckValue(default.RangedStanceValueName,1,eCheck_Exact);
+	CheckStance.AddCheckValue(default.RangedStanceValueName, 1, eCheck_Exact);
 	Template.AbilityShooterConditions.AddItem(CheckStance);	
 	Template.AbilityShooterConditions.AddItem(default.LivingShooterProperty);
 	Template.AddShooterEffectExclusions();
-
 	Template.CinescriptCameraType = "StandardGunFiring";
 	SetFireAnim(Template, 'FF_FireImbuedAmmo');
 
@@ -1472,7 +1508,10 @@ static function X2AbilityTemplate Warden_BD_GrantSoulBladeCharges()
 	// # Targeting and Triggering
 	Template.AbilityToHitCalc = default.DeadEye;
 	Template.DisplayTargetHitChance = false;
-	Template.AbilityTargetStyle = default.SelfTarget;	
+	Template.AbilityTargetStyle = default.SelfTarget;
+	
+	// Prevent duplication by last rites	
+	Template.bUniqueSource = true;
 
 	// Ability trigger determines how it is activated. In this case - by the user manually.
 	Template.AbilityTriggers.AddItem(default.PlayerInputTrigger);
@@ -1592,6 +1631,8 @@ static function X2AbilityTemplate Warden_BD_SoulBlade()
 	ChargeCost.NumCharges = default.SOULBLADE_INITIAL_CHARGES;
 	Template.AbilityCosts.AddItem(ChargeCost);
 	Template.ActivationSpeech = 'RunAndGun';
+
+	Template.bUniqueSource = true;
 
 	// Damage Effect
 	WeaponDamageEffect = class'X2Ability_GrenadierAbilitySet'.static.ShredderDamageEffect();
@@ -1737,7 +1778,7 @@ static function X2DataTemplate Warden_BD_Tide()
 	ActionPointCost.iNumPoints = 1; 
 	ActionPointCost.bConsumeAllPoints = true;
 	ActionPointCost.AllowedTypes.Length = 0;
-	// If I had a doller for every action point I granted....I'd be able to afford XCOM3 when it comes out.
+	// If I had a dollar for every action point I granted....I'd be able to afford XCOM3 when it comes out.
 	ActionPointCost.AllowedTypes.AddItem(default.SpecialMomentumAP);
 	ActionPointCost.AllowedTypes.AddItem(default.DefenderAP);
 	ActionPointCost.AllowedTypes.AddItem(default.WatcherAP);
@@ -1755,9 +1796,13 @@ static function X2DataTemplate Warden_BD_Tide()
 	//Can't use while dead
 	Template.AbilityShooterConditions.AddItem(default.LivingShooterProperty);
 	Template.AddShooterEffectExclusions();
+	
 	// Add dead eye to guarantee
 	Template.AbilityToHitCalc = default.DeadEye;
 	Template.AbilityTargetStyle = default.SelfTarget;
+
+	// No friendly fire warning (doesn't target them)
+	Template.bFriendlyFireWarning = false;
 
 	// Multi target
 	MultiTarget = new class'X2AbilityMultiTarget_Radius';
@@ -2468,6 +2513,8 @@ static function X2AbilityTemplate Warden_BD_Retribution_Stage2()
 	LivingTargetCondition.FailOnNonUnits = true;
 	Template.AbilityMultiTargetConditions.AddItem(LivingTargetCondition);
 
+	Template.bFriendlyFireWarning = false;
+
 	RadiusMultiTarget = new class'X2AbilityMultiTarget_Radius';
 	RadiusMultiTarget.fTargetRadius = default.RETRIBUTION_RADIUS_METERS;
 	RadiusMultiTarget.bIgnoreBlockingCover = true;
@@ -2511,18 +2558,18 @@ static function X2AbilityTemplate Warden_BD_StanceUnity()
 
     Template = CreatePassiveAbility('Warden_BD_StanceUnity', "img:///Warden_BD_PerkIcons.UIPerk_WardenEbb");
     Template.bCrossClassEligible = false;
-    Template.AbilitySourceName = 'eAbilitySource_Psionic';
+    Template.AbilitySourceName = 'eAbilitySource_Psionic';	
 
-    // Ranged damage focus — stacks on ranged attacks in ranged stance
+	// Ranged damage focus — stacks on ranged attacks in ranged stance
     RangedFocusEffect = new class'X2Effect_WardenRangedDamageFocus';
     RangedFocusEffect.BuildPersistentEffect(1, true, false);
-    RangedFocusEffect.SetDisplayInfo(ePerkBuff_Bonus, Template.LocFriendlyName, Template.GetMyLongDescription(), Template.IconImage, true, "", Template.AbilitySourceName);
+    RangedFocusEffect.SetDisplayInfo(ePerkBuff_Bonus, Template.LocFriendlyName, Template.GetMyLongDescription(), Template.IconImage, false, "", Template.AbilitySourceName);
     Template.AddTargetEffect(RangedFocusEffect);
 
     // Melee damage focus — stacks on melee attacks in melee stance
     MeleeFocusEffect = new class'X2Effect_WardenMeleeDamageFocus';
     MeleeFocusEffect.BuildPersistentEffect(1, true, false);
-    MeleeFocusEffect.SetDisplayInfo(ePerkBuff_Bonus, Template.LocFriendlyName, Template.GetMyLongDescription(), Template.IconImage, true, "", Template.AbilitySourceName);
+    MeleeFocusEffect.SetDisplayInfo(ePerkBuff_Bonus, Template.LocFriendlyName, Template.GetMyLongDescription(), Template.IconImage, false, "", Template.AbilitySourceName);
     Template.AddTargetEffect(MeleeFocusEffect);
 
     return Template;
@@ -2530,27 +2577,17 @@ static function X2AbilityTemplate Warden_BD_StanceUnity()
 
 static function X2AbilityTemplate Warden_BD_BattleRhythm()
 {
-    local X2AbilityTemplate Template;
+    local X2AbilityTemplate		Template;
 
-    `CREATE_X2ABILITY_TEMPLATE(Template, 'Warden_BD_BattleRhythm');
-
-    Template.AbilitySourceName = 'eAbilitySource_Psionic';
-    Template.IconImage = "img:///UILibrary_XPACK_Common.PerkIcons.UIPerk_innerfocus";
-    Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_NeverShow;
-    Template.bIsPassive = true;
-    Template.bDontDisplayInAbilitySummary = false;
-    Template.AbilityToHitCalc = default.DeadEye;
-    Template.AbilityTargetStyle = default.SelfTarget;
-    Template.Hostility = eHostility_Neutral;
+	Template = CreatePassiveAbility('Warden_BD_BattleRhythm', "img:///UILibrary_XPACK_Common.PerkIcons.UIPerk_innerfocus");
     Template.bCrossClassEligible = false;
-    Template.bSkipFireAction = true;
-    Template.bShowActivation = false;	
-
+    Template.AbilitySourceName = 'eAbilitySource_Psionic';	
+	
     Template.AdditionalAbilities.AddItem('Warden_BD_BattleRhythm_Melee');
     Template.AdditionalAbilities.AddItem('Warden_BD_BattleRhythm_Ranged');
 
-    Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
-    Template.BuildVisualizationFn = TypicalAbility_BuildVisualization;
+   // Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
+   // Template.BuildVisualizationFn = TypicalAbility_BuildVisualization;
 
     return Template;
 }
@@ -2583,10 +2620,9 @@ static function X2AbilityTemplate Warden_BD_BattleRhythm_Melee()
     Template.AbilityTriggers.AddItem(EventListener);
 
     CheckMeleeStance = new class'X2Condition_UnitValue';
-    CheckMeleeStance.AddCheckValue(default.MeleeStanceValueName, 1, eCheck_Exact);
-
-    Template.AbilityShooterConditions.AddItem(default.LivingShooterProperty);
+    CheckMeleeStance.AddCheckValue(default.MeleeStanceValueName, 1, eCheck_Exact);	    
     Template.AbilityShooterConditions.AddItem(CheckMeleeStance);
+	Template.AbilityShooterConditions.AddItem(default.LivingShooterProperty);
 
     // Grant ImbueAmmo charge directly - no AP check needed
     GrantCharges = new class'X2Effect_WardenModifyAbilityCharges';
@@ -2598,6 +2634,8 @@ static function X2AbilityTemplate Warden_BD_BattleRhythm_Melee()
 	Template.CustomSelfFireAnim = 'HL_GainingFocus';
     Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
     Template.BuildVisualizationFn = TypicalAbility_BuildVisualization;
+		
+	Template.AdditionalAbilities.AddItem('Warden_BD_SoulBlade');
 
     return Template;
 }
@@ -2645,6 +2683,8 @@ static function X2AbilityTemplate Warden_BD_BattleRhythm_Ranged()
     Template.CustomSelfFireAnim = 'HL_GainingFocus';
     Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
     Template.BuildVisualizationFn = TypicalAbility_BuildVisualization;
+
+	Template.AdditionalAbilities.AddItem('Warden_BD_ImbueAmmo');
 
     return Template;
 }
@@ -2803,6 +2843,9 @@ static function X2AbilityTemplate Warden_BD_FractureRanged()
     Template.bSkipFireAction = true;
     SetFireAnim(Template, 'FF_FireImbuedAmmo');
 
+	// Grant imbueammo if not picked already
+	Template.AdditionalAbilities.AddItem('Warden_BD_GrantImbueAmmoCharges');
+
     return Template;
 }
 
@@ -2900,7 +2943,7 @@ static function X2AbilityTemplate Warden_BD_LastRites()
     Template.AddTargetEffect(WeaponDamageEffect);
 
     // # Weapon effects
-    Template.bAllowBonusWeaponEffects = false;
+    Template.bAllowBonusWeaponEffects = true;
     Template.bSkipMoveStop = true;
     Template.SourceMissSpeech = 'SwordMiss';
 
@@ -2933,6 +2976,9 @@ static function X2AbilityTemplate Warden_BD_LastRites()
 	Template.CustomFireAnim = 'LastRites_FF_MeleeA';
 	Template.CustomFireKillAnim = 'LastRites_FF_MeleeA';
 	SetMovingFireAnim(Template, 'LastRites_MV_MeleeA');
+
+	// Grant soul-blade if not picked already
+	Template.AdditionalAbilities.AddItem('Warden_BD_GrantSoulBladeCharges');
 
     // # Post activation — trigger the rewind
     Template.PostActivationEvents.AddItem('LastRitesRewindTrigger');
@@ -3774,7 +3820,7 @@ function bool LastRitesDamagePreview(XComGameState_Ability AbilityState, StateOb
     MaxDamagePreview.Damage = (BaseDamageValue.Damage + BaseDamageValue.Spread) * ChargeCount;
     MaxDamagePreview.Shred = ChargeCount;
 
-	`LOG("LastRitesDamagePreview: ChargeCount=" $ ChargeCount $ " BaseDamage=" $ BaseDamageValue.Damage $ " Spread=" $ BaseDamageValue.Spread $ " MinPreview=" $ MinDamagePreview.Damage $ " MaxPreview=" $ MaxDamagePreview.Damage,,'BDLOG');
+	//`log("LastRitesDamagePreview: ChargeCount=" $ ChargeCount $ " BaseDamage=" $ BaseDamageValue.Damage $ " Spread=" $ BaseDamageValue.Spread $ " MinPreview=" $ MinDamagePreview.Damage $ " MaxPreview=" $ MaxDamagePreview.Damage,,'BDLOG');
 
     return true;
 }
@@ -3860,9 +3906,9 @@ static final function GrantSpecialAP(XComGameState_Unit UnitState, name ActionPo
 	}
 	//Note that we don't really need to set unitvalues for the other AP types since they only exist 
 	//for the benefit of being minimally invasive to the base-game abilities & to save putting conditions on them
-	`Log("I just added a " @ ActionPointType @ " to the unit",,'BDLOG');
+	//`log("I just added a " @ ActionPointType @ " to the unit",,'BDLOG');
 	UnitState.SetUnitFloatValue(default.FlowAPGrantedValueName, numPoints, eCleanup_BeginTactical);
-	`Log("I just set the FlowAP unitvalue in GrantFlowAPs",,'BDLOG');	
+	//`log("I just set the FlowAP unitvalue in GrantFlowAPs",,'BDLOG');	
     `GAMERULES.SubmitGameState(NewGameState);
 }
 
@@ -3873,13 +3919,13 @@ static final function bool IsAbilityAffectedByTotalCombat(const X2AbilityTemplat
     local X2AbilityCost_ActionPoints		ActionCost;
     local bool								bAffectedByTotalCombat;
 
-    `log("TotalCombatCheck: Checking if affected by total combat on: " @ Template.LocFriendlyName,,'BDLOG');
+    //`log("TotalCombatCheck: Checking if affected by total combat on: " @ Template.LocFriendlyName,,'BDLOG');
     foreach Template.AbilityCosts(Cost)    
 	{       
 		ActionCost = X2AbilityCost_ActionPoints(Cost);
 		if (ActionCost == none || ActionCost.bFreeCost || !ActionCost.bConsumeAllPoints)           
 		{
-			 `log("TotalCombatCheck: bFreeCost: " @ActionCost.bFreeCost@ "ConsumeAllPoints: " @ ActionCost.bConsumeAllPoints,,'BDLOG');
+			 //`log("TotalCombatCheck: bFreeCost: " @ActionCost.bFreeCost@ "ConsumeAllPoints: " @ ActionCost.bConsumeAllPoints,,'BDLOG');
 			continue;
 		}	
        
@@ -3888,18 +3934,18 @@ static final function bool IsAbilityAffectedByTotalCombat(const X2AbilityTemplat
         if (ActionCost.DoNotConsumeAllSoldierAbilities.Find('TotalCombat') != INDEX_NONE)
         {
             // If Totalcombat is in the array, set bAffected to true
-            `log("TotalCombatCheck: Found an instance of ability cost affected by total combat",,'BDLOG');
+            //`log("TotalCombatCheck: Found an instance of ability cost affected by total combat",,'BDLOG');
 			bAffectedByTotalCombat = true;
 		}
         else
         {
             // But return false if at lest one of the action costs isn't affected by it.
-            `log("TotalCombatCheck: Another ability cost on the same ability isn't affected by total combat - returning false",,'BDLOG');
+            //`log("TotalCombatCheck: Another ability cost on the same ability isn't affected by total combat - returning false",,'BDLOG');
 			return false;
         }
     }
 	// If at this point bAffectedByTotalCombat is true, then all of this ability's action costs are effected by Total Combat.
-    `log("TotalCombatCheck:" @ Template.LocFriendlyName @ " Affected by total combat status returning: " @ bAffectedByTotalCombat,,'BDLOG');
+    //`log("TotalCombatCheck:" @ Template.LocFriendlyName @ " Affected by total combat status returning: " @ bAffectedByTotalCombat,,'BDLOG');
 	return bAffectedByTotalCombat;
 }
 
@@ -4114,7 +4160,7 @@ static function PrintActionRecursive(X2Action Action, int iLayer)
 {
 	local X2Action ChildAction;
 
-	`LOG("Action layer: " @ iLayer @ ": " @ Action.Class.Name @ Action.StateChangeContext.AssociatedState.HistoryIndex,,'BDLOG'); 
+	//`log("Action layer: " @ iLayer @ ": " @ Action.Class.Name @ Action.StateChangeContext.AssociatedState.HistoryIndex,,'BDLOG'); 
 	foreach Action.ChildActions(ChildAction)
 	{
 		PrintActionRecursive(ChildAction, iLayer + 1);
@@ -4156,7 +4202,7 @@ static final function EventListenerReturn SpecialAPTrigger_EventListenerFn(Objec
 
 	// Fallback if no template
     AbilityTemplate = ActivatedAbilityState.GetMyTemplate();	
-   `log("SpeialAPTrigger Eventlistener triggered with: " @ActivatedAbilityState.GetMyTemplateName(),,'BDLOG');
+   //`log("SpeialAPTrigger Eventlistener triggered with: " @ActivatedAbilityState.GetMyTemplateName(),,'BDLOG');
     if (AbilityTemplate == none)
         return ELR_NoInterrupt;
 	
@@ -4169,18 +4215,18 @@ static final function EventListenerReturn SpecialAPTrigger_EventListenerFn(Objec
 	If (!bIsAffectedByTotalCombat)
 	{
 		// fallback if it's not offensive (skip totalcombat)
-		 `log("SpeialAPTrigger Hostility: " @AbilityTemplate.Hostility,,'BDLOG');
+		 //`log("SpeialAPTrigger Hostility: " @AbilityTemplate.Hostility,,'BDLOG');
 		if (AbilityTemplate.Hostility != eHostility_Offensive)  
 			return ELR_NoInterrupt;
     
 		// Fallback if no weapon (skip totalcombat)
 		SourceWeapon = ActivatedAbilityState.GetSourceWeapon();
-		`log("SpeialAPTrigger Weapon: " @SourceWeapon,,'BDLOG');
+		//`log("SpeialAPTrigger Weapon: " @SourceWeapon,,'BDLOG');
 		if (SourceWeapon == none)
 			return ELR_NoInterrupt; 
 		
 		// fallback if it does no damage (skip totalcombat)
-		`log("SpecialAPTrigger Ability Deals Damage: " @ AbilityTemplate.TargetEffectsDealDamage(SourceWeapon, ActivatedAbilityState),,'BDLOG');    
+		//`log("SpecialAPTrigger Ability Deals Damage: " @ AbilityTemplate.TargetEffectsDealDamage(SourceWeapon, ActivatedAbilityState),,'BDLOG');    
 		if (!AbilityTemplate.TargetEffectsDealDamage(SourceWeapon, ActivatedAbilityState))
 	         return ELR_NoInterrupt; 
 
@@ -4190,8 +4236,8 @@ static final function EventListenerReturn SpecialAPTrigger_EventListenerFn(Objec
 			return ELR_NoInterrupt;
 
 		// fallback if we missed
-		if (AbilityContext.ResultContext.HitResult == eHit_Miss)
-			return ELR_NoInterrupt;
+		//if (AbilityContext.ResultContext.HitResult == eHit_Miss)
+		//	return ELR_NoInterrupt;
 	}
 	// Fallback if any of these APs (apart from charge which can get activated multiple times) have been granted already
 	If (AbilityTemplate.DataName != 'Warden_BD_Charge')
@@ -4212,7 +4258,7 @@ static final function EventListenerReturn SpecialAPTrigger_EventListenerFn(Objec
 	// Grant APs if turn ending attack in correct stance (or ability is affected by total combat)
 	if ((SourceUnit.GetUnitValue(default.MeleeStanceValueName, UV) && SourceWeapon.InventorySlot == eInvSlot_SecondaryWeapon && SourceUnit.NumAllActionPoints() == 0) || (SourceUnit.GetUnitValue(default.RangedStanceValueName, UV) && SourceWeapon.InventorySlot == eInvSlot_PrimaryWeapon && SourceUnit.NumAllActionPoints() == 0) || bIsAffectedByTotalCombat)
     {
-    `LOG("SpecialAPTrigger Passed - Granting Flow APs",,'BDLOG');
+    //`log("SpecialAPTrigger Passed - Granting Flow APs",,'BDLOG');
 		//Assign one of the several million combinations of action point types based on the various passive abilities which are active at any given moment
 		GrantSpecialAP(SourceUnit, GetCompositeAPType(SourceUnit));
 	}
@@ -4228,23 +4274,23 @@ static function EventListenerReturn EbbAndFlowDischarge_EventListenerFn(Object E
     local X2GameRulesetVisibilityManager    VisibilityMgr;
     local GameRulesCache_VisibilityInfo     VisInfo;
     local XComGameState_Ability             AbilityState;
-    local StateObjectReference              TargetRef;
+	local StateObjectReference              TargetRef;
     local int                               TargetIndex;
 
     History = `XCOMHISTORY;
     VisibilityMgr = `TACTICALRULES.VisibilityMgr;
-
-    SourceUnit = XComGameState_Unit(EventSource);
+	
+	SourceUnit = XComGameState_Unit(EventSource);
     if (SourceUnit == none)
     {
-        `LOG("EbbAndFlowDischarge: SourceUnit not found",,'BDLOG');
+        //`log("EbbAndFlowDischarge: SourceUnit not found",,'BDLOG');
         return ELR_NoInterrupt;
     }
 
     AbilityState = XComGameState_Ability(CallbackData);
     if (AbilityState == none)
     {
-        `LOG("EbbAndFlowDischarge: AbilityState not found",,'BDLOG');
+        //`log("EbbAndFlowDischarge: AbilityState not found",,'BDLOG');
         return ELR_NoInterrupt;
     }
 
@@ -4265,7 +4311,7 @@ static function EventListenerReturn EbbAndFlowDischarge_EventListenerFn(Object E
 
     if (ValidTargets.Length == 0)
     {
-        `LOG("EbbAndFlowDischarge: No valid targets found",,'BDLOG');
+        //`log("EbbAndFlowDischarge: No valid targets found",,'BDLOG');
         return ELR_NoInterrupt;
     }
 
@@ -4273,60 +4319,119 @@ static function EventListenerReturn EbbAndFlowDischarge_EventListenerFn(Object E
     TargetIndex = `SYNC_RAND_STATIC(ValidTargets.Length);
     TargetRef = ValidTargets[TargetIndex].GetReference();
 
-    `LOG("EbbAndFlowDischarge: Firing at " $ ValidTargets[TargetIndex].GetFullName(),,'BDLOG');
+    //`log("EbbAndFlowDischarge: Firing at " $ ValidTargets[TargetIndex].GetFullName(),,'BDLOG');
 
     AbilityState.AbilityTriggerAgainstSingleTarget(TargetRef, false);
+
+	//`log("EbbAndFlowDischarge: AbilityTriggerAgainstSingleTarget returned " $ AbilityState.AbilityTriggerAgainstSingleTarget(TargetRef, false),,'BDLOG');
 
     return ELR_NoInterrupt;
 }
 
 static function EventListenerReturn BattleRhythm_Melee_EventListenerFn(Object EventData, Object EventSource, XComGameState GameState, Name EventID, Object CallbackData)
 {
-    local XComGameState_Ability KillingAbility;
-    local XComGameState_Ability ThisAbility;
-    local XComGameState_Item SourceWeapon;
+    local XComGameState_Ability				KillingAbility;
+    local XComGameState_Ability				ThisAbility;
+    local XComGameState_Item				SourceWeapon;
+	local XComGameState_Unit				WardenUnit;
+	local UnitValue                         BattleRhythmNumMeleeGrants;
 
-    KillingAbility = XComGameState_Ability(EventData);
-    if (KillingAbility == none)
+	KillingAbility = XComGameState_Ability(EventData);
+    //`log("BattleRhythmM Triggered with:" @ KillingAbility.GetMyTemplateName(),,'BDLOG');
+	if (KillingAbility == none)
+        return ELR_NoInterrupt;
+
+	ThisAbility = XComGameState_Ability(CallbackData);
+    if (ThisAbility == none)
         return ELR_NoInterrupt;
 
 	// Ensure the kill was made by the Warden who owns this ability
 	if (KillingAbility.OwnerStateObject.ObjectID != ThisAbility.OwnerStateObject.ObjectID)
+    {
+		//`log("Bailing due to unit killed by non warden",,'BDLOG');
+		return ELR_NoInterrupt;
+	}
+
+	// Must be a genuine weapon attack
+    if (!KillingAbility.GetMyTemplate().bAllowBonusWeaponEffects)
         return ELR_NoInterrupt;
 
     SourceWeapon = KillingAbility.GetSourceWeapon();
     if (SourceWeapon == none || SourceWeapon.InventorySlot != eInvSlot_SecondaryWeapon)
-        return ELR_NoInterrupt;
+	{
+		//`log("Bailing due to no weapon or wrong weapon",,'BDLOG');
+		return ELR_NoInterrupt;
+	}
+	
+	WardenUnit = XComGameState_Unit(EventSource);
+	if (WardenUnit == none)
+		return ELR_NoInterrupt;
+	
+	// Allow BATTLE_RHYTHM_MAX_CHARGES of grants Per-stance (i.e. you can get 1 astral bullet and 1 soul blade if you kill something, switch stance and kill something else)
+	WardenUnit.GetUnitValue('BD_BattleRhythmMeleeGrants', BattleRhythmNumMeleeGrants);
+	//`log("BattleRhythmGrants:" @ BattleRhythmNumMeleeGrants.fValue,,'BDLOG');
+    if (int(BattleRhythmNumMeleeGrants.fValue) >= default.BATTLE_RHYTHM_MAX_CHARGES)
+    {
+		WardenUnit.SetUnitFloatValue('BD_BattleRhythmMeleeGrants', BattleRhythmNumMeleeGrants.fValue + 1, eCleanup_BeginTurn);
+		return ELR_NoInterrupt;
+	}
 
-    ThisAbility = XComGameState_Ability(CallbackData);
-    if (ThisAbility == none)
-        return ELR_NoInterrupt;
+	WardenUnit.SetUnitFloatValue('BD_BattleRhythmMeleeGrants', BattleRhythmNumMeleeGrants.fValue + 1, eCleanup_BeginTurn);
 
-    ThisAbility.AbilityTriggerAgainstSingleTarget(ThisAbility.OwnerStateObject, false);
+	ThisAbility.AbilityTriggerAgainstSingleTarget(ThisAbility.OwnerStateObject, false);
     return ELR_NoInterrupt;
 }
 
 static function EventListenerReturn BattleRhythm_Ranged_EventListenerFn(Object EventData, Object EventSource, XComGameState GameState, Name EventID, Object CallbackData)
 {
-    local XComGameState_Ability KillingAbility;
-    local XComGameState_Ability ThisAbility;
-    local XComGameState_Item SourceWeapon;
+    local XComGameState_Ability				KillingAbility;
+    local XComGameState_Ability				ThisAbility;
+    local XComGameState_Item				SourceWeapon;
+	local XComGameState_Unit				WardenUnit;
+	local UnitValue                         BattleRhythmNumRangedGrants;
 
     KillingAbility = XComGameState_Ability(EventData);
+    //`log("BattleRhythmR Triggered with:" @ KillingAbility.GetMyTemplateName(),,'BDLOG');
+
     if (KillingAbility == none)
+        return ELR_NoInterrupt;
+
+	ThisAbility = XComGameState_Ability(CallbackData);
+    if (ThisAbility == none)
         return ELR_NoInterrupt;
 
 	// Ensure the kill was made by the Warden who owns this ability
 	if (KillingAbility.OwnerStateObject.ObjectID != ThisAbility.OwnerStateObject.ObjectID)
+    {
+		//`log("Bailing due to unit killed by non warden",,'BDLOG');
+		return ELR_NoInterrupt;
+	}
+	
+	// Must be a genuine weapon attack
+    if (!KillingAbility.GetMyTemplate().bAllowBonusWeaponEffects)
         return ELR_NoInterrupt;
 
-    SourceWeapon = KillingAbility.GetSourceWeapon();
+	SourceWeapon = KillingAbility.GetSourceWeapon();
     if (SourceWeapon == none || SourceWeapon.InventorySlot != eInvSlot_PrimaryWeapon)
-        return ELR_NoInterrupt;
+	{
+		//`log("Bailing due to no weapon or wrong weapon",,'BDLOG');
+		return ELR_NoInterrupt;
+	}
+	
+	WardenUnit = XComGameState_Unit(EventSource);
+	if (WardenUnit == none)
+		return ELR_NoInterrupt;
+	
+	// Allow BATTLE_RHYTHM_MAX_CHARGES of grants Per-stance (i.e. you can get 1 astral bullet and 1 soul blade if you kill something, switch stance and kill something else) 
+	WardenUnit.GetUnitValue('BD_BattleRhythmRangedGrants', BattleRhythmNumRangedGrants);
+	//`log("BattleRhythmGrants:" @ BattleRhythmNumRangedGrants.fValue,,'BDLOG');
+    if (int(BattleRhythmNumRangedGrants.fValue) >= default.BATTLE_RHYTHM_MAX_CHARGES)
+    {
+		WardenUnit.SetUnitFloatValue('BD_BattleRhythmRangedGrants', BattleRhythmNumRangedGrants.fValue + 1, eCleanup_BeginTurn);
+		return ELR_NoInterrupt;
+	}
 
-    ThisAbility = XComGameState_Ability(CallbackData);
-    if (ThisAbility == none)
-        return ELR_NoInterrupt;
+	WardenUnit.SetUnitFloatValue('BD_BattleRhythmRangedGrants', BattleRhythmNumRangedGrants.fValue + 1, eCleanup_BeginTurn);
 
     ThisAbility.AbilityTriggerAgainstSingleTarget(ThisAbility.OwnerStateObject, false);
     return ELR_NoInterrupt;
@@ -4368,7 +4473,7 @@ static function XComGameState EbbAndFlowManual_BuildGameState(XComGameStateConte
         if (AfterCount < BeforeCount)
         {
             UnitState.ActionPoints.AddItem(APType);
-            `LOG("EbbAndFlowManual: Granted back " $ APType,,'BDLOG');
+            //`log("EbbAndFlowManual: Granted back " $ APType,,'BDLOG');
             break;
         }
     }
@@ -4442,7 +4547,7 @@ static function XComGameState FlowFocus_BuildGameState(XComGameStateContext Cont
             NewGameState.ModifyStateObject(AbilityState.class, AbilityState.ObjectID));
         AbilityState.iCooldown = 0;
 
-        `LOG("FlowFocus: Reset cooldown on " @ AbilityTemplate.DataName,,'BDLOG');
+        //`log("FlowFocus: Reset cooldown on " @ AbilityTemplate.DataName,,'BDLOG');
     }
 
     return NewGameState;
@@ -4478,7 +4583,7 @@ static function XComGameState Charge_BuildGameState(XComGameStateContext Context
 
     UnitState.SetUnitFloatValue(default.FlowAPGrantedValueName, default.CHARGE_NUMPOINTS, eCleanup_BeginTactical);
 
-    `LOG("Charge_BuildGameState: Granted " $ default.CHARGE_NUMPOINTS $ "x " $ APType $ " to " $ UnitState.GetFullName(),,'BDLOG');
+    //`log("Charge_BuildGameState: Granted " $ default.CHARGE_NUMPOINTS $ "x " $ APType $ " to " $ UnitState.GetFullName(),,'BDLOG');
 
     return NewGameState;
 }
@@ -4516,7 +4621,7 @@ static function XComGameState FractureRanged_BuildGameState(XComGameStateContext
                     ImbueAmmoState.iCharges += default.FRACTURE_RANGED_BULLET_CHARGES;
                     ShotsToFire = Min(ImbueAmmoState.iCharges, AbilityContext.InputContext.MultiTargets.Length +1);
                     UnitState.SetUnitFloatValue(default.FractureRangedShotsFired, ShotsToFire, eCleanup_BeginTactical);
-                    `LOG("FractureRanged: MultiTargets.Length=" $ AbilityContext.InputContext.MultiTargets.Length $ " ShotsToFire=" $ ShotsToFire $ " ImbueAmmoCharges=" $ ImbueAmmoState.iCharges,,'BDLOG');
+                    //`log("FractureRanged: MultiTargets.Length=" $ AbilityContext.InputContext.MultiTargets.Length $ " ShotsToFire=" $ ShotsToFire $ " ImbueAmmoCharges=" $ ImbueAmmoState.iCharges,,'BDLOG');
                 }
             }
         }
@@ -5178,14 +5283,14 @@ static simulated function Rewind_ModifyActivatedAbilityContext(XComGameStateCont
     local bool                          bFoundMoveStart, bInsideMoveChain;
     local name                          ContextName;
 
-    `LOG("Rewind: ModifyActivatedAbilityContext fired",,'BDLOG');
+    //`log("Rewind: ModifyActivatedAbilityContext fired",,'BDLOG');
 
     History = `XCOMHISTORY;
     World = `XWORLD;
     AbilityContext = XComGameStateContext_Ability(Context);
     UnitState = XComGameState_Unit(History.GetGameStateForObjectID(AbilityContext.InputContext.SourceObject.ObjectID));
 
-    `LOG("Rewind: CurrentHistoryIndex=" $ History.GetCurrentHistoryIndex() $ " UnitTile=(" $ UnitState.TileLocation.X $ "," $ UnitState.TileLocation.Y $ "," $ UnitState.TileLocation.Z $ ") TurnStart=(" $ UnitState.TurnStartLocation.X $ "," $ UnitState.TurnStartLocation.Y $ "," $ UnitState.TurnStartLocation.Z $ ")",,'BDLOG');
+    //`log("Rewind: CurrentHistoryIndex=" $ History.GetCurrentHistoryIndex() $ " UnitTile=(" $ UnitState.TileLocation.X $ "," $ UnitState.TileLocation.Y $ "," $ UnitState.TileLocation.Z $ ") TurnStart=(" $ UnitState.TurnStartLocation.X $ "," $ UnitState.TurnStartLocation.Y $ "," $ UnitState.TurnStartLocation.Z $ ")",,'BDLOG');
 
     NewTileLocation = UnitState.TurnStartLocation;
     bFoundMoveStart = false;
@@ -5208,7 +5313,7 @@ static simulated function Rewind_ModifyActivatedAbilityContext(XComGameStateCont
             ContextName = PreviousAbilityContext.InputContext.AbilityTemplateName;
         }
 
-        `LOG("Rewind WalkBack ContextName=" $ (ContextName != '' ? string(ContextName) : "none") $ " UnitTile=(" $ PreviousUnitState.TileLocation.X $ "," $ PreviousUnitState.TileLocation.Y $ "," $ PreviousUnitState.TileLocation.Z $ ") TargetTile=(" $ UnitState.TileLocation.X $ "," $ UnitState.TileLocation.Y $ "," $ UnitState.TileLocation.Z $ ") bInsideMoveChain=" $ bInsideMoveChain $ " bFoundMoveStart=" $ bFoundMoveStart,,'BDLOG');
+        //`log("Rewind WalkBack ContextName=" $ (ContextName != '' ? string(ContextName) : "none") $ " UnitTile=(" $ PreviousUnitState.TileLocation.X $ "," $ PreviousUnitState.TileLocation.Y $ "," $ PreviousUnitState.TileLocation.Z $ ") TargetTile=(" $ UnitState.TileLocation.X $ "," $ UnitState.TileLocation.Y $ "," $ UnitState.TileLocation.Z $ ") bInsideMoveChain=" $ bInsideMoveChain $ " bFoundMoveStart=" $ bFoundMoveStart,,'BDLOG');
 
         if (ContextName == 'StandardMove')
         {
@@ -5278,7 +5383,7 @@ static simulated function Rewind_ModifyActivatedAbilityContext(XComGameStateCont
         PreviousUnitState = XComGameState_Unit(PreviousUnitState.GetPreviousVersion());
     }
 
-    `LOG("Rewind: Using destination tile (" $ NewTileLocation.X $ "," $ NewTileLocation.Y $ "," $ NewTileLocation.Z $ ")",,'BDLOG');
+    //`log("Rewind: Using destination tile (" $ NewTileLocation.X $ "," $ NewTileLocation.Y $ "," $ NewTileLocation.Z $ ")",,'BDLOG');
 
     InputData.MovementTiles.AddItem(UnitState.TileLocation);
     NextPoint.Position = World.GetPositionFromTileCoordinates(UnitState.TileLocation);
@@ -5325,6 +5430,8 @@ defaultproperties
 	NumberOfCounterAttacksValueName = "BD_NumberOfCounterAttacks_Value"
 	ConsumeBonusDamageValue = "BD_ConsumeBonusDamageValue"
 	FractureRangedShotsFired = "BD_FractureRangedShotsFired"
+	BattleRhythmRangedGrants = "BD_BattleRhythmRangedGrants"
+	BattleRhythmMeleeGrants = "BD_BattleRhythmMeleeGrants"
 
 	//Effect Names
 	MeleeStanceMobilityEffectName = "BD_MeleeStanceMobilityEffect"	

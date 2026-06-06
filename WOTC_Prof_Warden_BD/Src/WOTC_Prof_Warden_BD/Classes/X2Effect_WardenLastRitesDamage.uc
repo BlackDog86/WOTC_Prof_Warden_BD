@@ -1,4 +1,4 @@
-class X2Effect_WardenLastRitesDamage extends X2Effect_ApplyWeaponDamage;
+class X2Effect_WardenLastRitesDamage extends X2Effect_ApplyWeaponDamage config (WardenSkills);
 
 simulated protected function OnEffectAdded(const out EffectAppliedData ApplyEffectParameters, XComGameState_BaseObject kNewTargetState, XComGameState NewGameState, XComGameState_Effect NewEffectState)
 {
@@ -10,13 +10,13 @@ simulated protected function OnEffectAdded(const out EffectAppliedData ApplyEffe
 	local XComGameState_Unit		TargetUnit;
    
 	TargetUnit = XComGameState_Unit(kNewTargetState);
-    `log("Target Unit:" @ TargetUnit.GetMyTemplateName(),,'BDLOG');
+    //`log("Target Unit:" @ TargetUnit.GetMyTemplateName(),,'BDLOG');
 	TargetUnit.GetUnitValue(class'X2Effect_WardenLastRitesCharge'.default.LastRitesChargeCountValue, ChargeCountUV);
     ChargeCount = int(ChargeCountUV.fValue);
 
     if (ChargeCount <= 0)
     {
-        `LOG("LastRitesDamage: No charges stored, skipping damage",,'BDLOG');
+        //`log("LastRitesDamage: No charges stored, skipping damage",,'BDLOG');
         return;
     }
 
@@ -28,7 +28,7 @@ simulated protected function OnEffectAdded(const out EffectAppliedData ApplyEffe
         if (SourceWeapon != none)
         {
             SourceWeapon.GetBaseWeaponDamageValue(TargetUnit, BaseDamageValue);
-            EffectDamageValue.Damage = BaseDamageValue.Damage * ChargeCount;
+            EffectDamageValue.Damage = (BaseDamageValue.Damage + class'X2Ability_Warden'.default.SOULBLADE_DAMAGE_BONUS) * ChargeCount;
             EffectDamageValue.Spread = BaseDamageValue.Spread * ChargeCount;
         }
     }
@@ -37,7 +37,7 @@ simulated protected function OnEffectAdded(const out EffectAppliedData ApplyEffe
     EffectDamageValue.Shred = ChargeCount;
     bIgnoreBaseDamage = true;
 
-    `LOG("LastRitesDamage: Detonating with " $ ChargeCount $ " charges, damage: " $ EffectDamageValue.Damage,,'BDLOG');
+    //`log("LastRitesDamage: Detonating with " $ ChargeCount $ " charges, damage: " $ EffectDamageValue.Damage,,'BDLOG');
 
     super.OnEffectAdded(ApplyEffectParameters, kNewTargetState, NewGameState, NewEffectState);
 }

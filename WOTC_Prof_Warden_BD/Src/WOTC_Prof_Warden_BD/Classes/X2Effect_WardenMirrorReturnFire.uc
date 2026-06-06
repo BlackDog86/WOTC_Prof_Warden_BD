@@ -9,7 +9,7 @@ function WeaponDamageValue GetBonusEffectDamageValue(XComGameState_Ability Abili
     SourceUnit.GetUnitValue('BD_MirrorReturnFireDamage', DamageUV);
     StoredDamage = DamageUV.fValue;
 
-    `LOG("Mirror return fire - StoredDamage: " $ StoredDamage $ " MIRROR_RETURN_FULL_DAMAGE: " $ class'X2Ability_Warden'.default.MIRROR_RETURN_FULL_DAMAGE,,'BDLOG');
+    //`log("Mirror return fire - StoredDamage: " $ StoredDamage $ " MIRROR_RETURN_FULL_DAMAGE: " $ class'X2Ability_Warden'.default.MIRROR_RETURN_FULL_DAMAGE,,'BDLOG');
 
     if (class'X2Ability_Warden'.default.MIRROR_RETURN_FULL_DAMAGE && class'X2Effect_ApplyWeaponDamage'.default.GRAZE_DMG_MULT > 0)
     {
@@ -20,7 +20,7 @@ function WeaponDamageValue GetBonusEffectDamageValue(XComGameState_Ability Abili
         DamageValue.Damage = int(StoredDamage);
     }
 
-    `LOG("Mirror return fire - Final damage to deal: " $ DamageValue.Damage,,'BDLOG');
+    //`log("Mirror return fire - Final damage to deal: " $ DamageValue.Damage,,'BDLOG');
 
     return DamageValue;
 }
