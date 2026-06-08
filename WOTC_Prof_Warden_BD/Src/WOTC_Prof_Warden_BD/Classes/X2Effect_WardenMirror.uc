@@ -30,8 +30,12 @@ function int GetDefendingDamageModifier(XComGameState_Effect EffectState, XComGa
 {
     local XComGameStateContext_Ability  AbilityContext;
     local XComGameState_Unit            TargetUnit;
+    local XComGameState_Unit            WardenUnit;
 
-    // Only handle the no-context case here — absorb damage and tick the shield
+    WardenUnit = XComGameState_Unit(`XCOMHISTORY.GetGameStateForObjectID(EffectState.ApplyEffectParameters.SourceStateObjectRef.ObjectID));
+    if (WardenUnit != none)
+        WardenUnit.SetUnitFloatValue('BD_MirrorReturnFireDamage', CurrentDamage, eCleanup_BeginTurn);
+
     if (NewGameState == none)
         return 0;
 
@@ -39,7 +43,6 @@ function int GetDefendingDamageModifier(XComGameState_Effect EffectState, XComGa
     if (AbilityContext == none)
     {
         TargetUnit = XComGameState_Unit(TargetDamageable);
-        //`log("Mirror absorbing no-context damage of " $ CurrentDamage,,'BDLOG');
         `XEVENTMGR.TriggerEvent('MirrorManualTick', TargetUnit, TargetUnit, NewGameState);
         return -CurrentDamage;
     }
@@ -58,7 +61,6 @@ static function EventListenerReturn OnUnitTookDamage(Object EventData, Object Ev
     local XComGameStateContext_Ability      AbilityContext;
     local bool                              bWasGrazed;
     local int                               i;
-    local int                               DamageToStore;
     local XComGameState_Player              Player;
     local UnitValue                         LastReturnFireAttackUV;
 
@@ -119,19 +121,7 @@ static function EventListenerReturn OnUnitTookDamage(Object EventData, Object Ev
 
     WardenUnit.SetUnitFloatValue('BD_MirrorLastReturnFireAttack', GameState.HistoryIndex, eCleanup_BeginTurn);
 
-    // Store pre-armor damage (DamageAmount + MitigationAmount) for return fire
-    for (i = 0; i < TargetUnit.DamageResults.Length; i++)
-    {
-        if (TargetUnit.DamageResults[i].SourceEffect.AbilityStateObjectRef.ObjectID != 0)
-        {
-            DamageToStore = TargetUnit.DamageResults[i].DamageAmount + TargetUnit.DamageResults[i].MitigationAmount;
-            //`log("Mirror storing pre-armor damage: " $ DamageToStore,,'BDLOG');
-            break;
-        }
-    }
-    WardenUnit.SetUnitFloatValue('BD_MirrorReturnFireDamage', DamageToStore, eCleanup_BeginTurn);
-
-    // Find the return fire ability on the Warden
+   // Find the return fire ability on the Warden
     ReturnFireAbilityRef = WardenUnit.FindAbility('Warden_BD_MirrorReturnFire');
     ReturnFireAbility = XComGameState_Ability(`XCOMHISTORY.GetGameStateForObjectID(ReturnFireAbilityRef.ObjectID));
 

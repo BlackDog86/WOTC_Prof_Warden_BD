@@ -4,7 +4,7 @@
 
 [WOTC_Prof_Warden_BD X2SoldierClassTemplate]
 DisplayName="Warden"
-ClassSummary="Wardens are a militarised wing of the Templars which act as front-line and supporting class. They possess two stances, <font color='#CA7200'>Ranged stance</font> and <font color='#0058CA'>Melee stance</font>, which switch whenever an attack with a matching stance/weapon combination is made. Such an attack also grants the warden a <font color='#8f3fbf'>flow</font> action point at the end of the turn which they can use to activate their powerful support abilities."
+ClassSummary="Wardens are a militarised wing of the Templars which act as front-line and supporting class. They possess two stances, <font color='#CA7200'>Ranged Stance</font> and <font color='#0058CA'>Melee Stance</font>. These stances switch at the end of a turn, if an attack with a matching stance/weapon combination is made. Such attacks also grant the warden a <font color='#8f3fbf'>flow</font> action point which can be used to activate powerful supporting abilities."
 AbilityTreeTitles[0]="Inquisitor"
 AbilityTreeTitles[1]="Spiritblade"
 AbilityTreeTitles[2]="Adept"
@@ -116,10 +116,10 @@ LocHelpText="While in <font color='#CA7200'>Ranged stance</font>, gain <font col
 LocFlyOverText="Ranged Stance"
 
 [Warden_BD_WrongStancePenalties X2AbilityTemplate]
-LocFriendlyName="Wrong Stance"
-LocLongDescription="While trying to use a ranged weapon in <font color='#0058CA'>Melee stance</font>, receive a <font color='#CA7200'><Ability:MELEESTANCE_AIM_PENALTY/></font>% Aim penalty. While trying to use a melee weapon in <font color='#CA7200'>Ranged stance</font>, receive a <font color='#CA7200'><Ability:RANGEDSTANCE_AIM_PENALTY/></font>% Aim penalty."
-LocHelpText="While trying to use a ranged weapon in <font color='#0058CA'>Melee stance</font>, receive a <font color='#CA7200'><Ability:MELEESTANCE_AIM_PENALTY/></font>% Aim penalty. While trying to use a melee weapon in <font color='#CA7200'>Ranged stance</font>, receive a <font color='#CA7200'><Ability:RANGEDSTANCE_AIM_PENALTY/></font>% Aim penalty."
-LocFlyOverText="Wrong Stance"
+LocFriendlyName="Stance Penalty"
+LocLongDescription="While trying to use a <font color='#CA7200'>Ranged Weapon</font> in <font color='#0058CA'>Melee Stance</font>, receive a <font color='#CA7200'><Ability:MELEESTANCE_AIM_PENALTY/></font>% Aim penalty. While trying to use a <font color='#0058CA'>Melee Weapon</font> in <font color='#CA7200'>Ranged Stance</font>, receive a <font color='#CA7200'><Ability:RANGEDSTANCE_AIM_PENALTY/></font>% Aim penalty."
+LocHelpText="While trying to use a <font color='#CA7200'>Ranged Weapon</font> in <font color='#0058CA'>Melee Stance</font>, receive a <font color='#CA7200'><Ability:MELEESTANCE_AIM_PENALTY/></font>% Aim penalty. While trying to use a <font color='#0058CA'>Melee Weapon</font> in <font color='#CA7200'>Ranged stance</font>, receive a <font color='#CA7200'><Ability:RANGEDSTANCE_AIM_PENALTY/></font>% Aim penalty."
+LocFlyOverText="Stance Penalty"
 
 [Warden_BD_EbbAndFlow X2AbilityTemplate]
 LocFriendlyName="Ebb & Flow - Hidden"
@@ -135,8 +135,8 @@ LocFlyOverText="Ebb & Flow - Hidden"
 
 [Warden_BD_EbbAndFlowDummy X2AbilityTemplate]
 LocFriendlyName="Ebb & Flow"
-LocLongDescription="Release latent psionic energy against a random enemy, dealing 1 damage per 20 Psi-Offense and switch stances at the start of the next turn. Uses a <font color='#8f3fbf'>flow</font> action point."
-LocHelpText="Release latent psionic energy against a random enemy, dealing 1 damage per 20 Psi-Offense and switch stances at the start of the next turn. Uses a <font color='#8f3fbf'>flow</font> action point."
+LocLongDescription="Release latent psionic energy against a random enemy, dealing 1 damage per 20 Psi-Offense. Uses a <font color='#8f3fbf'>flow</font> action point."
+LocHelpText="Release latent psionic energy against a random enemy, dealing 1 damage per 20 Psi-Offense. Uses a <font color='#8f3fbf'>flow</font> action point."
 LocFlyOverText="Ebb & Flow"
 
 [Warden_BD_EbbAndFlowManual X2AbilityTemplate]
@@ -146,15 +146,15 @@ LocHelpText="Release latent psionic energy against a random enemy and switch sta
 LocFlyOverText="Flow Mastery"
 
 [Warden_BD_ProficiencyPassives X2AbilityTemplate]
-LocFriendlyName="Proficiency Bonuses - Warden"
-LocLongDescription="Hidden ability which grants charges to Flow Mastery & sets up the default aim bonus for the warden's sword."
-LocHelpText="Hidden ability which grants charges to Flow Mastery & sets up the default aim bonus for the warden's sword."
+LocFriendlyName="Proficiency Bonuses"
+LocLongDescription="While in <font color='#0058CA'>Melee stance</font>, gain <font color='#CA7200'><Ability:MELEESTANCE_I_MOBILITY_BONUS/></font>/<font color='#CA7200'><Ability:MELEESTANCE_II_MOBILITY_BONUS/></font>/<font color='#CA7200'><Ability:MELEESTANCE_III_MOBILITY_BONUS/></font> mobility and <font color='#CA7200'><Ability:WARDENSSWORD_AIM_I_BONUS/></font>/<font color='#CA7200'><Ability:WARDENSSWORD_AIM_II_BONUS/></font>/<font color='#CA7200'><Ability:WARDENSSWORD_AIM_III_BONUS/></font> sword aim per proficiency rank. While in <font color='#CA7200'>Ranged stance</font>, gain <font color='#CA7200'><Ability:RANGEDSTANCE_I_CDEF_BONUS/></font>/<font color='#CA7200'><Ability:RANGEDSTANCE_II_CDEF_BONUS/></font>/<font color='#CA7200'><Ability:RANGEDSTANCE_III_CDEF_BONUS/></font>% reduction in enemy defense from cover and <font color='#CA7200'><Ability:RANGEDSTANCE_I_CRIT_BONUS/></font>/<font color='#CA7200'><Ability:RANGEDSTANCE_II_CRIT_BONUS/></font>/<font color='#CA7200'><Ability:RANGEDSTANCE_III_CRIT_BONUS/></font>% critical hit chance per proficiency rank. Gain additional charges of <font color='#8f3fbf'>Flow Mastery</font> at each proficiency rank."
+LocHelpText="While in <font color='#0058CA'>Melee stance</font>, gain <font color='#CA7200'><Ability:MELEESTANCE_I_MOBILITY_BONUS/></font>/<font color='#CA7200'><Ability:MELEESTANCE_II_MOBILITY_BONUS/></font>/<font color='#CA7200'><Ability:MELEESTANCE_III_MOBILITY_BONUS/></font> mobility and <font color='#CA7200'><Ability:WARDENSSWORD_AIM_I_BONUS/></font>/<font color='#CA7200'><Ability:WARDENSSWORD_AIM_II_BONUS/></font>/<font color='#CA7200'><Ability:WARDENSSWORD_AIM_III_BONUS/></font> sword aim per proficiency rank. While in <font color='#CA7200'>Ranged stance</font>, gain <font color='#CA7200'><Ability:RANGEDSTANCE_I_CDEF_BONUS/></font>/<font color='#CA7200'><Ability:RANGEDSTANCE_II_CDEF_BONUS/></font>/<font color='#CA7200'><Ability:RANGEDSTANCE_III_CDEF_BONUS/></font>% reduction in enemy defense from cover and <font color='#CA7200'><Ability:RANGEDSTANCE_I_CRIT_BONUS/></font>/<font color='#CA7200'><Ability:RANGEDSTANCE_II_CRIT_BONUS/></font>/<font color='#CA7200'><Ability:RANGEDSTANCE_III_CRIT_BONUS/></font>% critical hit chance per proficiency rank. Gain additional charges of <font color='#8f3fbf'>Flow Mastery</font> at each proficiency rank."
 LocFlyOverText="Proficiency Bonuses - Warden"
 
 [Warden_BD_Rewind X2AbilityTemplate]
 LocFriendlyName="Blink"
-LocLongDescription="Vanish and re-appear at your previous movement location. Uses a <font color='#8f3fbf'>flow</font> action point.<font color='#CA7200'><Ability:REWIND_COOLDOWN/></font>-turn cooldown."
-LocHelpText="Vanish and re-appear at your previous movement location. Uses a <font color='#8f3fbf'>flow</font> action point.<font color='#CA7200'><Ability:REWIND_COOLDOWN/></font>-turn cooldown."
+LocLongDescription="Vanish and re-appear at your previous movement location. Uses a <font color='#8f3fbf'>flow</font> action point. <font color='#CA7200'><Ability:REWIND_COOLDOWN/></font>-turn cooldown."
+LocHelpText="Vanish and re-appear at your previous movement location. Uses a <font color='#8f3fbf'>flow</font> action point. <font color='#CA7200'><Ability:REWIND_COOLDOWN/></font>-turn cooldown."
 LocFlyOverText="Blink"
 
 [Warden_BD_Mirror X2AbilityTemplate]

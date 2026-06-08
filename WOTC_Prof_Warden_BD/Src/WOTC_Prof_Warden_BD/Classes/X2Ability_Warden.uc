@@ -232,13 +232,8 @@ static function X2AbilityTemplate Warden_BD_ProficiencyPassives()
 	local X2Condition_WardenTargetRankRequirement				RankCondition1, RankCondition2, RankCondition3, RankCondition_GrantAbility, RankCondition_GrantCharges;
 	local X2Effect_WardenModifyAbilityCharges					BonusCharges;
 
-	`CREATE_X2ABILITY_TEMPLATE(Template, 'Warden_BD_ProficiencyPassives');
-
-	// Icon Properties	
-	Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_SwordSlash";
-	Template.AbilitySourceName = 'eAbilitySource_Perk';
-	Template.eAbilityIconBehaviorHUD = EAbilityIconBehavior_NeverShow;
-	Template.Hostility = eHostility_Neutral;
+	Template = CreatePassiveAbility('Warden_BD_ProficiencyPassives', "img:///UILibrary_PerkIcons.UIPerk_extraconditioning");
+	Template.ShotHUDPriority = 101;
 
 	//Create Ranks for Proficiency Effects
 	RankCondition1 = new class 'X2Condition_WardenTargetRankRequirement';
@@ -271,12 +266,10 @@ static function X2AbilityTemplate Warden_BD_ProficiencyPassives()
 	RankCondition_GrantCharges.LogEffectName = "EbbAndFlowChargesCondition";
 	RankCondition_GrantCharges.GiveProject = 'WOTC_Prof_Warden_BD_Unlock2';
 
-	// Hide this ability altogether
-	Template.bDontDisplayInAbilitySummary = true;
-	Template.bHideOnClassUnlock = true;
+	SetHidden(Template);
+	
 	Template.AbilityToHitCalc = default.DeadEye;
 	Template.AbilityTargetStyle = default.SelfTarget;
-	Template.AbilityTriggers.AddItem(default.UnitPostBeginPlayTrigger);
 
 	// Grant Flow Mastery, single charge at appropriate rank
 	AddAbilityEffect = new class'X2Effect_WardenAddAbilitiesToTarget';
@@ -318,7 +311,7 @@ static function X2AbilityTemplate Warden_BD_ProficiencyPassives()
 	HitModEffect3.TargetConditions.AddItem(RankCondition3);
 	HitModEffect3.EffectName = 'WardensSwordAim3';
 
-	Template.AddTargetEffect(HitModEffect3);	
+	Template.AddTargetEffect(HitModEffect3);
 
 	Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
 	return Template;
@@ -329,7 +322,10 @@ static function X2AbilityTemplate Warden_BD_Stances()
 {
 	local X2AbilityTemplate                 Template;
 
-	Template = CreatePassiveAbility('Warden_BD_Stances', "img:///UILibrary_XPACK_Common.PerkIcons.UIPerk_chimeraxws");
+	`CREATE_X2ABILITY_TEMPLATE(Template, 'Warden_BD_Stances');
+	HiddenPurePassive('Warden_BD_Stances', "img:///UILibrary_XPACK_Common.PerkIcons.UIPerk_chimeraxws",,,false);
+
+	//Template = CreatePassiveAbility('Warden_BD_Stances', "img:///UILibrary_XPACK_Common.PerkIcons.UIPerk_chimeraxws");
 	Template.AdditionalAbilities.AddItem('Warden_BD_RangedStance');
 	Template.AdditionalAbilities.AddItem('Warden_BD_MeleeStance');
 	Template.AdditionalAbilities.AddItem('Warden_BD_WrongStancePenalties');
@@ -337,7 +333,9 @@ static function X2AbilityTemplate Warden_BD_Stances()
 	Template.AdditionalAbilities.AddItem('Warden_BD_EbbAndFlowDischarge');
 	Template.AdditionalAbilities.Additem('Warden_BD_ProficiencyPassives');
 	Template.AdditionalAbilities.Additem('Warden_BD_EbbandFlow');
-	SetVeryHidden(Template);
+	SetHidden(Template);
+
+	Template.ShotHUDPriority = 100;
 
 	return Template;
 }
@@ -398,7 +396,7 @@ static final function X2AbilityTemplate Warden_BD_RangedStance()
 	// # Icon Setup
 	Template.AbilitySourceName = 'eAbilitySource_Psionic';
 	Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_runandgun";
-	SetHidden(Template);
+	SetVeryHidden(Template);
 
 	// # Targeting and Triggering
 	Template.AbilityToHitCalc = default.DeadEye;
@@ -424,7 +422,7 @@ static final function X2AbilityTemplate Warden_BD_RangedStance()
 	IgnoreCoverEffect1.EffectName = default.RangedStanceCdefEffectName;
 	IgnoreCoverEffect1.AttackerRank = 1;
 	IgnoreCoverEffect1.BuildPersistentEffect(1, true, false, false, eGameRule_PlayerTurnEnd);	
-	IgnoreCoverEffect1.SetDisplayInfo(ePerkBuff_Bonus, Template.LocFriendlyName, Template.GetMyLongDescription(), Template.IconImage, true, "", Template.AbilitySourceName);
+	IgnoreCoverEffect1.SetDisplayInfo(ePerkBuff_Bonus, Template.LocFriendlyName, Template.GetMyLongDescription(), Template.IconImage, false, "", Template.AbilitySourceName);
 	IgnoreCoverEffect1.DuplicateResponse = eDupe_Ignore;
 	IgnoreCoverEffect1.TargetConditions.AddItem(RankCondition1);	
 	Template.AddTargetEffect(IgnoreCoverEffect1);
@@ -433,7 +431,7 @@ static final function X2AbilityTemplate Warden_BD_RangedStance()
 	IgnoreCoverEffect2.EffectName = default.RangedStanceCdefEffectName;
 	IgnoreCoverEffect2.AttackerRank = 2;
 	IgnoreCoverEffect2.BuildPersistentEffect(1, true, false, false, eGameRule_PlayerTurnEnd);
-	IgnoreCoverEffect2.SetDisplayInfo(ePerkBuff_Bonus, Template.LocFriendlyName, Template.GetMyLongDescription(), Template.IconImage, true, "", Template.AbilitySourceName);
+	IgnoreCoverEffect2.SetDisplayInfo(ePerkBuff_Bonus, Template.LocFriendlyName, Template.GetMyLongDescription(), Template.IconImage, false, "", Template.AbilitySourceName);
 	IgnoreCoverEffect2.DuplicateResponse = eDupe_Ignore;
 	IgnoreCoverEffect2.TargetConditions.AddItem(RankCondition2);	
 	Template.AddTargetEffect(IgnoreCoverEffect2);
@@ -442,7 +440,7 @@ static final function X2AbilityTemplate Warden_BD_RangedStance()
 	IgnoreCoverEffect3.EffectName = default.RangedStanceCdefEffectName;
 	IgnoreCoverEffect3.AttackerRank = 3;
 	IgnoreCoverEffect3.BuildPersistentEffect(1, true, false, false,eGameRule_PlayerTurnEnd);
-	IgnoreCoverEffect3.SetDisplayInfo(ePerkBuff_Bonus, Template.LocFriendlyName, Template.GetMyLongDescription(), Template.IconImage, true, "", Template.AbilitySourceName);
+	IgnoreCoverEffect3.SetDisplayInfo(ePerkBuff_Bonus, Template.LocFriendlyName, Template.GetMyLongDescription(), Template.IconImage, false, "", Template.AbilitySourceName);
 	IgnoreCoverEffect3.DuplicateResponse = eDupe_Ignore;
 	IgnoreCoverEffect3.TargetConditions.AddItem(RankCondition3);	
 	Template.AddTargetEffect(IgnoreCoverEffect3);
@@ -549,7 +547,7 @@ static final function X2AbilityTemplate Warden_BD_MeleeStance()
 	// # Icon Setup
 	Template.AbilitySourceName = 'eAbilitySource_Psionic';
 	Template.IconImage = "img:///UILibrary_XPACK_Common.PerkIcons.UIPerk_partingsilk";
-	SetHidden(Template);
+	SetVeryHidden(Template);
 
 	// # Targeting and Triggering
 	Template.AbilityToHitCalc = default.DeadEye;
@@ -570,7 +568,7 @@ static final function X2AbilityTemplate Warden_BD_MeleeStance()
 	MobilityEffect1.EffectName = default.MeleeStanceMobilityEffectName;
 	MobilityEffect1.BuildPersistentEffect(1, true, false, false, eGameRule_PlayerTurnEnd);
 	MobilityEffect1.AddPersistentStatChange(eStat_Mobility, default.MELEESTANCE_I_MOBILITY_BONUS);
-	MobilityEffect1.SetDisplayInfo(ePerkBuff_Bonus, Template.LocFriendlyName, Template.GetMyLongDescription(), Template.IconImage, true, "", Template.AbilitySourceName);	
+	MobilityEffect1.SetDisplayInfo(ePerkBuff_Bonus, Template.LocFriendlyName, Template.GetMyLongDescription(), Template.IconImage, false, "", Template.AbilitySourceName);	
 	MobilityEffect1.DuplicateResponse = eDupe_Ignore;
 	MobilityEffect1.TargetConditions.AddItem(RankCondition1);
 	Template.AddTargetEffect(MobilityEffect1);
@@ -579,7 +577,7 @@ static final function X2AbilityTemplate Warden_BD_MeleeStance()
 	MobilityEffect2.EffectName = default.MeleeStanceMobilityEffectName;
 	MobilityEffect2.BuildPersistentEffect(1, true, false, false, eGameRule_PlayerTurnEnd);
 	MobilityEffect2.AddPersistentStatChange(eStat_Mobility, default.MELEESTANCE_II_MOBILITY_BONUS);
-	MobilityEffect2.SetDisplayInfo(ePerkBuff_Bonus, Template.LocFriendlyName, Template.GetMyLongDescription(), Template.IconImage, true, "", Template.AbilitySourceName);	
+	MobilityEffect2.SetDisplayInfo(ePerkBuff_Bonus, Template.LocFriendlyName, Template.GetMyLongDescription(), Template.IconImage, false, "", Template.AbilitySourceName);	
 	MobilityEffect2.DuplicateResponse = eDupe_Ignore;
 	MobilityEffect2.TargetConditions.AddItem(RankCondition2);
 	Template.AddTargetEffect(MobilityEffect2);
@@ -588,7 +586,7 @@ static final function X2AbilityTemplate Warden_BD_MeleeStance()
 	MobilityEffect3.EffectName = default.MeleeStanceMobilityEffectName;
 	MobilityEffect3.BuildPersistentEffect(1, true, false, false, eGameRule_PlayerTurnEnd);
 	MobilityEffect3.AddPersistentStatChange(eStat_Mobility, default.MELEESTANCE_III_MOBILITY_BONUS);
-	MobilityEffect3.SetDisplayInfo(ePerkBuff_Bonus, Template.LocFriendlyName, Template.GetMyLongDescription(), Template.IconImage, true, "", Template.AbilitySourceName);	
+	MobilityEffect3.SetDisplayInfo(ePerkBuff_Bonus, Template.LocFriendlyName, Template.GetMyLongDescription(), Template.IconImage, false, "", Template.AbilitySourceName);	
 	MobilityEffect3.DuplicateResponse = eDupe_Ignore;
 	MobilityEffect3.TargetConditions.AddItem(RankCondition3);
 	Template.AddTargetEffect(MobilityEffect3);
@@ -640,16 +638,10 @@ static final function X2AbilityTemplate Warden_BD_WrongStancePenalties()
 	local X2Effect_ToHitModifier								AimPenaltyEffect;
 	local X2Condition_Unitvalue									CheckMeleeStance;
 	local X2Condition_Unitvalue									CheckRangedStance;
-	local X2Effect_Persistent									IconEffect;
 	local X2AbilityTrigger_EventListener						PenaltyCheckTrigger; 
 
-	`CREATE_X2ABILITY_TEMPLATE(Template, 'Warden_BD_WrongStancePenalties');		
-		
-	// # Icon Setup
-	Template.AbilitySourceName = 'eAbilitySource_Psionic';
-	Template.IconImage = "img:///UILibrary_XPACK_Common.PerkIcons.UIPerk_partingsilk";
-	SetHidden(Template);
-	
+	Template = CreatePassiveAbility('Warden_BD_WrongStancePenalties', "img:///UILibrary_XPACK_Common.PerkIcons.UIPerk_invert");			
+	Template.ShotHUDPriority = 102;
 	// # Targeting and Triggering
 	Template.AbilityToHitCalc = default.DeadEye;
 	Template.AbilityTargetStyle = default.SelfTarget;	
@@ -659,14 +651,6 @@ static final function X2AbilityTemplate Warden_BD_WrongStancePenalties()
 
 	// # Shooter Conditions
 	Template.AbilityShooterConditions.AddItem(default.LivingShooterProperty);
-
-	//Display the localisation on the passive icon at all times  (not gated by conditions)
-	IconEffect = new class'X2Effect_Persistent';
-	IconEffect.BuildPersistentEffect(1, true, false);
-	IconEffect.SetDisplayInfo(ePerkBuff_Penalty, Template.LocFriendlyName, Template.GetMyLongDescription(), Template.IconImage, true, , Template.AbilitySourceName);
-	IconEffect.DuplicateResponse = eDupe_Ignore;
-	IconEffect.EffectName = 'WardenWrongStancePenalties';
-	Template.AddTargetEffect(IconEffect);
 
 	PenaltyCheckTrigger = new class'X2AbilityTrigger_EventListener';
 	PenaltyCheckTrigger.ListenerData.EventID = 'PenaltyTrigger';
@@ -710,9 +694,7 @@ static final function X2AbilityTemplate Warden_BD_WrongStancePenalties()
 	Template.bShowActivation = false;
 	Template.bSkipFireAction = true;
 	Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
-	Template.BuildVisualizationFn = TypicalAbility_BuildVisualization;	
-	
-	Template.bDontDisplayInAbilitySummary = false;
+	Template.BuildVisualizationFn = TypicalAbility_BuildVisualization;		
 
 	return Template;
 }
@@ -1637,12 +1619,12 @@ static function X2AbilityTemplate Warden_BD_SoulBlade()
 	// Damage Effect
 	WeaponDamageEffect = class'X2Ability_GrenadierAbilitySet'.static.ShredderDamageEffect();
 	WeaponDamageEffect.EffectDamageValue.DamageType = 'Psi';
-	// This was an idea for additional inclusion in CHL - need to remember why it's needed - WeaponDamageEffect.bIgnoreWeaponBaseDamageTypeForFlyover = true;
 	WeaponDamageEffect.bBypassShields = true;
 	WeaponDamageEffect.bBypassSustainEffects = true;
 	WeaponDamageEffect.EffectDamageValue.Pierce = 99;
 	WeaponDamageEffect.DamageTypes.Length=0;
 	WeaponDamageEffect.DamageTypes.AddItem('Psi');
+	WeaponDamageEffect.DamageTypes.AddItem('Melee');
 	WeaponDamageEffect.EffectDamageValue.Damage = default.SOULBLADE_DAMAGE_BONUS;
 	Template.AddTargetEffect(WeaponDamageEffect);
 	
@@ -1665,7 +1647,7 @@ static function X2AbilityTemplate Warden_BD_DefenderPassive()
 	local X2AbilityTemplate						Template;
 
 	Template = CreatePassiveAbility('Warden_BD_DefenderPassive', "img:///UILibrary_PerkIcons.UIPerk_one_for_all");
-	Template.bCrossClassEligible = false;
+	Template.ShotHUDPriority = 103;
 	Template.AbilitySourceName = 'eAbilitySource_psionic';
 
 	return Template;
@@ -1730,7 +1712,7 @@ static function X2AbilityTemplate Warden_BD_WatcherPassive()
 	local X2Effect_NegateOWPenalty		         NegateOWPenaltyEffect;
 
 	Template = CreatePassiveAbility('Warden_BD_WatcherPassive', "img:///UILibrary_XPACK_Common.PerkIcons.UIPerk_squadsightprotocol");
-	Template.bCrossClassEligible = false;
+	Template.ShotHUDPriority = 104;
 	Template.AbilitySourceName = 'eAbilitySource_psionic';
 
 	NegateOWPenaltyEffect = new class'X2Effect_NegateOWPenalty';
@@ -1744,7 +1726,7 @@ static function X2AbilityTemplate Warden_BD_RagePassive()
 	local X2AbilityTemplate						Template;
 
 	Template = CreatePassiveAbility('Warden_BD_RagePassive', "img:///UILibrary_PerkIcons.UIPerk_rapidfire");
-	Template.bCrossClassEligible = false;
+	Template.ShotHUDPriority = 105;	
 	Template.AbilitySourceName = 'eAbilitySource_psionic';
 
 
@@ -1907,9 +1889,7 @@ static function X2DataTemplate Warden_BD_Consume()
 	Cooldown = new class'X2AbilityCooldown';
 	Cooldown.iNumTurns = default.CONSUME_COOLDOWN;
 	Template.AbilityCooldown = Cooldown;
-
-	Template.AbilityShooterConditions.AddItem(default.LivingShooterProperty);
-
+	
 	Template.AbilityToHitCalc = default.DeadEye;
 	Template.AbilityShooterConditions.AddItem(default.LivingShooterProperty);
 	Template.AddShooterEffectExclusions();
@@ -2557,7 +2537,7 @@ static function X2AbilityTemplate Warden_BD_StanceUnity()
     local X2Effect_WardenMeleeDamageFocus   MeleeFocusEffect;
 
     Template = CreatePassiveAbility('Warden_BD_StanceUnity', "img:///Warden_BD_PerkIcons.UIPerk_WardenEbb");
-    Template.bCrossClassEligible = false;
+    Template.ShotHUDPriority = 106;
     Template.AbilitySourceName = 'eAbilitySource_Psionic';	
 
 	// Ranged damage focus — stacks on ranged attacks in ranged stance
@@ -2580,8 +2560,8 @@ static function X2AbilityTemplate Warden_BD_BattleRhythm()
     local X2AbilityTemplate		Template;
 
 	Template = CreatePassiveAbility('Warden_BD_BattleRhythm', "img:///UILibrary_XPACK_Common.PerkIcons.UIPerk_innerfocus");
-    Template.bCrossClassEligible = false;
-    Template.AbilitySourceName = 'eAbilitySource_Psionic';	
+	Template.ShotHUDPriority = 107;
+    Template.AbilitySourceName = 'eAbilitySource_Psionic';
 	
     Template.AdditionalAbilities.AddItem('Warden_BD_BattleRhythm_Melee');
     Template.AdditionalAbilities.AddItem('Warden_BD_BattleRhythm_Ranged');
@@ -2858,7 +2838,6 @@ static function X2AbilityTemplate Warden_BD_LastRitesChargeDummy()
     Template.AbilitySourceName = 'eAbilitySource_Psionic';
     Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_deathblossom";
     SetVeryHidden(Template);
-    Template.AbilityToHitCalc = default.DeadEye;
     Template.AbilityTargetStyle = default.SelfTarget;
     Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
 
@@ -4305,6 +4284,9 @@ static function EventListenerReturn EbbAndFlowDischarge_EventListenerFn(Object E
 
         if (!VisibilityMgr.GetVisibilityInfo(SourceUnit.ObjectID, TargetUnit.ObjectID, VisInfo) || !VisInfo.bVisibleGameplay)
             continue;
+		
+		if (!TargetUnit.CanAbilityHitUnit(AbilityState.GetMyTemplateName()))
+			continue;
 
         ValidTargets.AddItem(TargetUnit);
     }
