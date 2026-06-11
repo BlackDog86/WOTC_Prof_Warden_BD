@@ -40,6 +40,7 @@ simulated protected function OnEffectAdded(const out EffectAppliedData ApplyEffe
 
     //`log("LastRitesCharge: Storing " $ ChargeCount $ " charges on target" @ TargetUnit.GetMyTemplateName(),,'BDLOG');
 	TargetUnit.SetUnitFloatValue(default.LastRitesChargeCountValue, ChargeCount, eCleanup_BeginTactical);
+	SourceUnit.SetUnitFloatValue(default.LastRitesChargeCountValue, ChargeCount, eCleanup_BeginTactical);
 }
 
 function RegisterForEvents(XComGameState_Effect EffectGameState)

@@ -11,16 +11,16 @@ function WeaponDamageValue GetBonusEffectDamageValue(XComGameState_Ability Abili
 
     //`log("Mirror return fire - StoredDamage: " $ StoredDamage $ " MIRROR_RETURN_FULL_DAMAGE: " $ class'X2Ability_Warden'.default.MIRROR_RETURN_FULL_DAMAGE,,'BDLOG');
 
-    if (class'X2Ability_Warden'.default.MIRROR_RETURN_FULL_DAMAGE && class'X2Effect_ApplyWeaponDamage'.default.GRAZE_DMG_MULT > 0)
-    {
-        DamageValue.Damage = int(StoredDamage / class'X2Effect_ApplyWeaponDamage'.default.GRAZE_DMG_MULT);
-    }
-    else
-    {
-        DamageValue.Damage = int(StoredDamage);
-    }
+    if (class'X2Ability_Warden'.default.MIRROR_RETURN_FULL_DAMAGE)
+	{
+		DamageValue.Damage = int(StoredDamage);
+	}
+	else
+	{
+		DamageValue.Damage = int(StoredDamage * class'X2Effect_ApplyWeaponDamage'.default.GRAZE_DMG_MULT);
+	}
 
-    //`log("Mirror return fire - Final damage to deal: " $ DamageValue.Damage,,'BDLOG');
+   //`log("Mirror return fire - Final damage to deal: " $ DamageValue.Damage,,'BDLOG');
 
     return DamageValue;
 }

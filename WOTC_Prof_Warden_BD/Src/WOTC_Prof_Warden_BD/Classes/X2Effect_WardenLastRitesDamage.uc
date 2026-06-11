@@ -28,7 +28,7 @@ simulated protected function OnEffectAdded(const out EffectAppliedData ApplyEffe
         if (SourceWeapon != none)
         {
             SourceWeapon.GetBaseWeaponDamageValue(TargetUnit, BaseDamageValue);
-            EffectDamageValue.Damage = (BaseDamageValue.Damage + class'X2Ability_Warden'.default.SOULBLADE_DAMAGE_BONUS) * ChargeCount;
+            EffectDamageValue.Damage = (BaseDamageValue.Damage + class'X2Ability_Warden'.default.LAST_RITES_DAMAGE_BONUS) * ChargeCount;
             EffectDamageValue.Spread = BaseDamageValue.Spread * ChargeCount;
         }
     }
@@ -37,7 +37,7 @@ simulated protected function OnEffectAdded(const out EffectAppliedData ApplyEffe
     EffectDamageValue.Shred = ChargeCount;
     bIgnoreBaseDamage = true;
 
-    //`log("LastRitesDamage: Detonating with " $ ChargeCount $ " charges, damage: " $ EffectDamageValue.Damage,,'BDLOG');
+    `log("LastRitesDamage: Detonating with " $ ChargeCount $ " charges, damage: " $ EffectDamageValue.Damage $ "spread:" $ EffectDamageValue.Spread,,'BDLOG');
 
     super.OnEffectAdded(ApplyEffectParameters, kNewTargetState, NewGameState, NewEffectState);
 }

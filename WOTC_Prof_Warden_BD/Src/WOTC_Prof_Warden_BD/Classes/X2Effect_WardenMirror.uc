@@ -38,7 +38,7 @@ function int GetDefendingDamageModifier(XComGameState_Effect EffectState, XComGa
 
     if (NewGameState == none)
         return 0;
-
+	//`log("Mirror Return Fire Damage:" @ CurrentDamage,,'BDLOG');
     AbilityContext = XComGameStateContext_Ability(NewGameState.GetContext());
     if (AbilityContext == none)
     {

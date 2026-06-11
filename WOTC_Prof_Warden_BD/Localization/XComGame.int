@@ -99,20 +99,20 @@ BrandedFriendlyName = "Branded"
 
 [Warden_BD_Stances X2AbilityTemplate]
 LocFriendlyName="Stances"
-LocLongDescription="Gain a <font color='#8f3fbf'>flow</font> action point by carrying out a turn-ending attack in the correct stance. Gain bonus sword aim and mobility in <font color='#0058CA'>Melee stance</font> and reduced enemy defense from cover and a critical hit bonus in <font color='#CA7200'>Ranged stance</font>. Receive an aim penalty of -<Ability:RANGEDSTANCE_AIM_PENALTY> when attacking using an incorrect stance / weapon combination."
-LocHelpText="Gain a <font color='#8f3fbf'>flow</font> action point by carrying out a turn-ending attack in the correct stance. Gain bonus sword aim and mobility in <font color='#0058CA'>Melee stance</font> and reduced enemy defense from cover and a critical hit bonus in <font color='#CA7200'>Ranged stance</font>. Receive an aim penalty of -<Ability:RANGEDSTANCE_AIM_PENALTY> when attacking using an incorrect stance / weapon combination."
+LocLongDescription="Gain a <font color='#8f3fbf'>flow</font> action point by carrying out a turn-ending attack in the correct stance. Gain bonus sword aim and mobility in <font color='#0058CA'>Melee stance</font> and reduced enemy defense from cover and a critical hit bonus in <font color='#CA7200'>Ranged stance</font>. Receive an aim penalty of <font color='#CA7200'><Ability:RANGEDSTANCE_AIM_PENALTY></font>% when attacking using an incorrect stance / weapon combination."
+LocHelpText="Gain a <font color='#8f3fbf'>flow</font> action point by carrying out a turn-ending attack in the correct stance. Gain bonus sword aim and mobility in <font color='#0058CA'>Melee stance</font> and reduced enemy defense from cover and a critical hit bonus in <font color='#CA7200'>Ranged stance</font>. Receive an aim penalty of <font color='#CA7200'><Ability:RANGEDSTANCE_AIM_PENALTY></font>% when attacking using an incorrect stance / weapon combination."
 LocFlyOverText="Stances"
 
 [Warden_BD_MeleeStance X2AbilityTemplate]
 LocFriendlyName="Melee Stance"
-LocLongDescription="While in <font color='#0058CA'>Melee stance</font>, gain <font color='#CA7200'><Ability:MELEESTANCE_I_MOBILITY_BONUS/></font>/<font color='#CA7200'><Ability:MELEESTANCE_II_MOBILITY_BONUS/></font>/<font color='#CA7200'><Ability:MELEESTANCE_III_MOBILITY_BONUS/></font> mobility and <font color='#CA7200'><Ability:WARDENSSWORD_AIM_I_BONUS/></font>/<font color='#CA7200'><Ability:WARDENSSWORD_AIM_II_BONUS/></font>/<font color='#CA7200'><Ability:WARDENSSWORD_AIM_III_BONUS/></font> sword aim per proficiency rank."
-LocHelpText="While in <font color='#0058CA'>Melee stance</font>, gain <font color='#CA7200'><Ability:MELEESTANCE_I_MOBILITY_BONUS/></font>/<font color='#CA7200'><Ability:MELEESTANCE_II_MOBILITY_BONUS/></font>/<font color='#CA7200'><Ability:MELEESTANCE_III_MOBILITY_BONUS/></font> mobility and <font color='#CA7200'><Ability:WARDENSSWORD_AIM_I_BONUS/></font>/<font color='#CA7200'><Ability:WARDENSSWORD_AIM_II_BONUS/></font>/<font color='#CA7200'><Ability:WARDENSSWORD_AIM_III_BONUS/></font> sword aim per proficiency rank."
+LocLongDescription="While in <font color='#0058CA'>Melee stance</font>, gain +<font color='#CA7200'><Ability:MELEESTANCE_CURRENT_MOBILITY_BONUS/></font> mobility and +<font color='#CA7200'><Ability:WARDENSSWORD_CURRENT_AIM_BONUS/></font> sword aim."
+LocHelpText="While in <font color='#0058CA'>Melee stance</font>, gain +<font color='#CA7200'><Ability:MELEESTANCE_CURRENT_MOBILITY_BONUS/></font> mobility and +<font color='#CA7200'><Ability:WARDENSSWORD_CURRENT_AIM_BONUS/></font> sword aim."
 LocFlyOverText="Melee Stance"
 
 [Warden_BD_RangedStance X2AbilityTemplate]
 LocFriendlyName="Ranged Stance"
-LocLongDescription="While in <font color='#CA7200'>Ranged stance</font>, gain <font color='#CA7200'><Ability:RANGEDSTANCE_I_CDEF_BONUS/></font>/<font color='#CA7200'><Ability:RANGEDSTANCE_II_CDEF_BONUS/></font>/<font color='#CA7200'><Ability:RANGEDSTANCE_III_CDEF_BONUS/></font>% reduction in enemy defense from cover and <font color='#CA7200'><Ability:RANGEDSTANCE_I_CRIT_BONUS/></font>/<font color='#CA7200'><Ability:RANGEDSTANCE_II_CRIT_BONUS/></font>/<font color='#CA7200'><Ability:RANGEDSTANCE_III_CRIT_BONUS/></font>% critical hit chance per proficiency rank."
-LocHelpText="While in <font color='#CA7200'>Ranged stance</font>, gain <font color='#CA7200'><Ability:RANGEDSTANCE_I_CDEF_BONUS/></font>/<font color='#CA7200'><Ability:RANGEDSTANCE_II_CDEF_BONUS/></font>/<font color='#CA7200'><Ability:RANGEDSTANCE_III_CDEF_BONUS/></font>% reduction in enemy defense from cover and <font color='#CA7200'><Ability:RANGEDSTANCE_I_CRIT_BONUS/></font>/<font color='#CA7200'><Ability:RANGEDSTANCE_II_CRIT_BONUS/></font>/<font color='#CA7200'><Ability:RANGEDSTANCE_III_CRIT_BONUS/></font>% critical hit chance per proficiency rank."
+LocLongDescription="While in <font color='#CA7200'>Ranged stance</font>, gain <font color='#CA7200'><Ability:RANGEDSTANCE_CURRENT_CDEF_BONUS/></font>% reduction in enemy defense from cover and <font color='#CA7200'><Ability:RANGEDSTANCE_CURRENT_CRIT_BONUS/></font>% critical hit chance."
+LocHelpText="While in <font color='#CA7200'>Ranged stance</font>, gain <font color='#CA7200'><Ability:RANGEDSTANCE_CURRENT_CDEF_BONUS/></font>% reduction in enemy defense from cover and <font color='#CA7200'><Ability:RANGEDSTANCE_CURRENT_CRIT_BONUS/></font>% critical hit chance."
 LocFlyOverText="Ranged Stance"
 
 [Warden_BD_WrongStancePenalties X2AbilityTemplate]
@@ -135,20 +135,20 @@ LocFlyOverText="Ebb & Flow - Hidden"
 
 [Warden_BD_EbbAndFlowDummy X2AbilityTemplate]
 LocFriendlyName="Ebb & Flow"
-LocLongDescription="Release latent psionic energy against a random enemy, dealing 1 damage per 20 Psi-Offense. Uses a <font color='#8f3fbf'>flow</font> action point."
-LocHelpText="Release latent psionic energy against a random enemy, dealing 1 damage per 20 Psi-Offense. Uses a <font color='#8f3fbf'>flow</font> action point."
+LocLongDescription="Release latent psionic energy against a random enemy, dealing <font color='#CA7200'><Ability:EBB_FLOW_DISCHARGE_DAMAGE/></font> psionic damage (Scales with Psi-Offense, bypasses armour & shields). Uses a <font color='#8f3fbf'>flow</font> action point."
+LocHelpText="Release latent psionic energy against a random enemy, dealing <font color='#CA7200'><Ability:EBB_FLOW_DISCHARGE_DAMAGE/></font> psionic damage (Scales with Psi-Offense, bypasses armour & shields). Uses a <font color='#8f3fbf'>flow</font> action point."
 LocFlyOverText="Ebb & Flow"
 
 [Warden_BD_EbbAndFlowManual X2AbilityTemplate]
 LocFriendlyName="Flow Mastery"
-LocLongDescription="Release latent psionic energy against a random enemy and switch stance immediately. Free Action."
-LocHelpText="Release latent psionic energy against a random enemy and switch stance immediately. Free Action."
+LocLongDescription="Release latent psionic energy against a random enemy, dealing <font color='#CA7200'><Ability:EBB_FLOW_DISCHARGE_DAMAGE/></font> psionic damage (Scales with Psi-Offense, bypasses armour & shields). Switch stance immediately. Free Action."
+LocHelpText="Release latent psionic energy against a random enemy, dealing <font color='#CA7200'><Ability:EBB_FLOW_DISCHARGE_DAMAGE/></font> psionic damage (Scales with Psi-Offense, bypasses armour & shields). Switch stance immediately. Free Action."
 LocFlyOverText="Flow Mastery"
 
 [Warden_BD_ProficiencyPassives X2AbilityTemplate]
 LocFriendlyName="Proficiency Bonuses"
-LocLongDescription="While in <font color='#0058CA'>Melee stance</font>, gain <font color='#CA7200'><Ability:MELEESTANCE_I_MOBILITY_BONUS/></font>/<font color='#CA7200'><Ability:MELEESTANCE_II_MOBILITY_BONUS/></font>/<font color='#CA7200'><Ability:MELEESTANCE_III_MOBILITY_BONUS/></font> mobility and <font color='#CA7200'><Ability:WARDENSSWORD_AIM_I_BONUS/></font>/<font color='#CA7200'><Ability:WARDENSSWORD_AIM_II_BONUS/></font>/<font color='#CA7200'><Ability:WARDENSSWORD_AIM_III_BONUS/></font> sword aim per proficiency rank. While in <font color='#CA7200'>Ranged stance</font>, gain <font color='#CA7200'><Ability:RANGEDSTANCE_I_CDEF_BONUS/></font>/<font color='#CA7200'><Ability:RANGEDSTANCE_II_CDEF_BONUS/></font>/<font color='#CA7200'><Ability:RANGEDSTANCE_III_CDEF_BONUS/></font>% reduction in enemy defense from cover and <font color='#CA7200'><Ability:RANGEDSTANCE_I_CRIT_BONUS/></font>/<font color='#CA7200'><Ability:RANGEDSTANCE_II_CRIT_BONUS/></font>/<font color='#CA7200'><Ability:RANGEDSTANCE_III_CRIT_BONUS/></font>% critical hit chance per proficiency rank. Gain additional charges of <font color='#8f3fbf'>Flow Mastery</font> at each proficiency rank."
-LocHelpText="While in <font color='#0058CA'>Melee stance</font>, gain <font color='#CA7200'><Ability:MELEESTANCE_I_MOBILITY_BONUS/></font>/<font color='#CA7200'><Ability:MELEESTANCE_II_MOBILITY_BONUS/></font>/<font color='#CA7200'><Ability:MELEESTANCE_III_MOBILITY_BONUS/></font> mobility and <font color='#CA7200'><Ability:WARDENSSWORD_AIM_I_BONUS/></font>/<font color='#CA7200'><Ability:WARDENSSWORD_AIM_II_BONUS/></font>/<font color='#CA7200'><Ability:WARDENSSWORD_AIM_III_BONUS/></font> sword aim per proficiency rank. While in <font color='#CA7200'>Ranged stance</font>, gain <font color='#CA7200'><Ability:RANGEDSTANCE_I_CDEF_BONUS/></font>/<font color='#CA7200'><Ability:RANGEDSTANCE_II_CDEF_BONUS/></font>/<font color='#CA7200'><Ability:RANGEDSTANCE_III_CDEF_BONUS/></font>% reduction in enemy defense from cover and <font color='#CA7200'><Ability:RANGEDSTANCE_I_CRIT_BONUS/></font>/<font color='#CA7200'><Ability:RANGEDSTANCE_II_CRIT_BONUS/></font>/<font color='#CA7200'><Ability:RANGEDSTANCE_III_CRIT_BONUS/></font>% critical hit chance per proficiency rank. Gain additional charges of <font color='#8f3fbf'>Flow Mastery</font> at each proficiency rank."
+LocLongDescription="In <font color='#0058CA'>Melee stance</font>, gain +<font color='#CA7200'><Ability:MELEESTANCE_CURRENT_MOBILITY_BONUS/></font> mobility and +<font color='#CA7200'><Ability:WARDENSSWORD_CURRENT_AIM_BONUS/></font> aim when using swords. In <font color='#CA7200'>Ranged stance</font>, gain <font color='#CA7200'><Ability:RANGEDSTANCE_CURRENT_CDEF_BONUS/></font>% reduction in enemy defense from cover and <font color='#CA7200'><Ability:RANGEDSTANCE_CURRENT_CRIT_BONUS/></font>% critical hit chance. Gain <Ability:FLOW_MASTERY_CHARGES/> charges of <font color='#8f3fbf'>Flow Mastery</font>, allowing an immediate stance-change as a free-action."
+LocHelpText="In <font color='#0058CA'>Melee stance</font>, gain +<font color='#CA7200'><Ability:MELEESTANCE_CURRENT_MOBILITY_BONUS/></font> mobility and +<font color='#CA7200'><Ability:WARDENSSWORD_CURRENT_AIM_BONUS/></font> aim when using swords. In <font color='#CA7200'>Ranged stance</font>, gain <font color='#CA7200'><Ability:RANGEDSTANCE_CURRENT_CDEF_BONUS/></font>% reduction in enemy defense from cover and <font color='#CA7200'><Ability:RANGEDSTANCE_CURRENT_CRIT_BONUS/></font>% critical hit chance. Gain <Ability:FLOW_MASTERY_CHARGES/> charges of <font color='#8f3fbf'>Flow Mastery</font>, allowing an immediate stance-change as a free-action."
 LocFlyOverText="Proficiency Bonuses - Warden"
 
 [Warden_BD_Rewind X2AbilityTemplate]
@@ -273,8 +273,8 @@ LocFlyOverText="Tide"
 
 [Warden_BD_Consume X2AbilityTemplate]
 LocFriendlyName="Consume"
-LocLongDescription="Cleanse all mental and active damage-over-time effects from XCOM soldiers in the area of effect & provide them with immunity for 1 turn. Add <font color='#CA7200'><Ability:CONSUME_MULTIPLIER/></font> damage per turn remaining of each effect, to the Warden's next attack. Uses a <font color='#8f3fbf'>flow</font> action point. <font color='#CA7200'><Ability:CONSUME_COOLDOWN/></font>-turn cooldown."
-LocHelpText="Cleanse all mental and active damage-over-time effects from XCOM soldiers in the area of effect & provide them with immunity for 1 turn. Add <font color='#CA7200'><Ability:CONSUME_MULTIPLIER/></font> damage per turn remaining of each effect, to the Warden's next attack. Uses a <font color='#8f3fbf'>flow</font> action point. <font color='#CA7200'><Ability:CONSUME_COOLDOWN/></font>-turn cooldown."
+LocLongDescription="Cleanse all mental and active damage-over-time effects from XCOM soldiers in the area of effect & provide them with immunity for 1 turn. Add <font color='#CA7200'><Ability:CONSUME_MULTIPLIER/></font> damage per turn remaining of each effect, to the Warden's next attack. Does not remove active mind-control. Uses a <font color='#8f3fbf'>flow</font> action point. <font color='#CA7200'><Ability:CONSUME_COOLDOWN/></font>-turn cooldown."
+LocHelpText="Cleanse all mental and active damage-over-time effects from XCOM soldiers in the area of effect & provide them with immunity for 1 turn. Add <font color='#CA7200'><Ability:CONSUME_MULTIPLIER/></font> damage per turn remaining of each effect, to the Warden's next attack. Does not remove active mind-control. Uses a <font color='#8f3fbf'>flow</font> action point. <font color='#CA7200'><Ability:CONSUME_COOLDOWN/></font>-turn cooldown."
 LocFlyOverText="Consume"
 
 [Warden_BD_ConsumeAdditionalDamage X2AbilityTemplate]
@@ -315,8 +315,8 @@ LocFlyOverText="Last Rites — Detonation"
 
 [Warden_BD_LastRitesCharge X2AbilityTemplate]
 LocFriendlyName="Last Rites"
-LocHelpText="This unit has been marked by a Warden's Last Rites. The unit will receive damage from a devastating detonation in <font color='#CA7200'><Ability:LAST_RITES_DURATION/></font> turns, or on the next instance of psionic damage."
-LocLongDescription="This unit has been marked by a Warden's Last Rites. The unit will receive damage from a devastating detonation in <font color='#CA7200'><Ability:LAST_RITES_DURATION/></font> turns, or on the next instance of psionic damage."
+LocHelpText="This unit has been marked by a Warden's Last Rites. The unit will receive <font color='#CA7200'><Ability:LAST_RITES_CURRENT_DAMAGE/></font> damage from a devastating detonation in <font color='#CA7200'><Ability:LAST_RITES_DURATION/></font> turns, or on the next instance of psionic damage."
+LocLongDescription="This unit has been marked by a Warden's Last Rites. The unit will receive <font color='#CA7200'><Ability:LAST_RITES_CURRENT_DAMAGE/></font> damage from a devastating detonation in <font color='#CA7200'><Ability:LAST_RITES_DURATION/></font> turns, or on the next instance of psionic damage."
 LocFlyOverText="Last Rites"
 
 [Warden_BD_Charge X2AbilityTemplate]

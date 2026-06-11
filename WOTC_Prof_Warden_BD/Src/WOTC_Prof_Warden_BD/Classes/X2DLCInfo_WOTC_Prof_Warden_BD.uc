@@ -16,52 +16,162 @@ static event OnPostTemplatesCreated()
 
 static function bool AbilityTagExpandHandler_CH(string InString, out string OutString, Object ParseObj, Object StrategyParseObj, XComGameState GameState)
 {
-	//local XComGameState_Ability AbilityState;
-	//local XComGameState_Effect EffectState;
-	//local X2AbilityTemplate AbilityTemplate;
-	//local X2ItemTemplate ItemTemplate;
-	local name Type;
-	
-    Type = name(InString);
+	local XComGameState_Ability		AbilityState, LastRitesAbility;
+	local XComGameState_Unit		UnitState, TargetUnit;
+	local XComGameState_Effect		EffectState;
+	local StateObjectReference		LastRitesRef;
+	local XComGameState_Item        SourceWeapon;
+	local UnitValue					LastRitesUV;
+	local WeaponDamageValue         LastRitesDamageValue;
+	local int						Rank, LastRitesChargeCount, LastRitesMinDamage, LastRitesMaxDamage;
+	local name						Type;
+
+	Type = name(InString);
+
+	if (StrategyParseObj != none)
+	{
+		UnitState = XComGameState_Unit(StrategyParseObj);
+	}
+	else
+	{
+		AbilityState = XComGameState_Ability(ParseObj);
+		EffectState = XComGameState_Effect(ParseObj);
+		
+		if (AbilityState == none && EffectState != none)
+		{
+			AbilityState = XComGameState_Ability(`XCOMHISTORY.GetGameStateForObjectID(EffectState.ApplyEffectParameters.AbilityStateObjectRef.ObjectID));
+		}
+		
+		if (AbilityState != none)
+		{
+			UnitState = XComGameState_Unit(`XCOMHISTORY.GetGameStateForObjectID(AbilityState.OwnerStateObject.ObjectID));
+		}
+
+		if (EffectState != none)
+		{
+			UnitState = XComGameState_Unit(`XCOMHISTORY.GetGameStateForObjectID(EffectState.ApplyEffectParameters.SourceStateObjectRef.ObjectID));
+			TargetUnit = XComGameState_Unit(`XCOMHISTORY.GetGameStateForObjectID(EffectState.ApplyEffectParameters.TargetStateObjectRef.ObjectID));
+		}
+	}
+
+	if (UnitState != none)
+	{
+		Rank = UnitState.GetSoldierRank();		
+	}
+	//`log("Unit:" @ UnitState.GetFullName() @ "Rank:" @ UnitState.GetSoldierRank(),,'BDLOG');
+	//`log("String:" @ InString,,'BDLOG');
+
     switch(Type)
 		{
-		case 'MELEESTANCE_I_MOBILITY_BONUS':
-			OutString = string(class'X2Ability_Warden'.default.MELEESTANCE_I_MOBILITY_BONUS);
+		case 'MELEESTANCE_CURRENT_MOBILITY_BONUS':
+			if (Rank >= 6)
+            {
+				OutString = string(class'X2Ability_Warden'.default.MELEESTANCE_III_MOBILITY_BONUS);				
+			}
+			else if (Rank >= 3)
+			{
+				OutString = string(class'X2Ability_Warden'.default.MELEESTANCE_II_MOBILITY_BONUS);
+			}
+			else
+			{
+				OutString = string(class'X2Ability_Warden'.default.MELEESTANCE_I_MOBILITY_BONUS);				
+			}	
+			return true;	
+		case 'WARDENSSWORD_CURRENT_AIM_BONUS':
+			if (Rank >= 6)
+            {
+				OutString = string(class'X2Ability_Warden'.default.WARDENSSWORD_AIM_III_BONUS);
+			}
+			else if (Rank >= 3)
+			{
+				OutString = string(class'X2Ability_Warden'.default.WARDENSSWORD_AIM_II_BONUS);
+			}
+			else
+			{
+				OutString = string(class'X2Ability_Warden'.default.WARDENSSWORD_AIM_I_BONUS);				
+			}
 			return true;
-		case 'MELEESTANCE_II_MOBILITY_BONUS':
-			OutString = string(class'X2Ability_Warden'.default.MELEESTANCE_II_MOBILITY_BONUS);
+		case 'RANGEDSTANCE_CURRENT_CDEF_BONUS':
+			if (Rank >= 6)
+            {
+				OutString = string(class'X2Effect_WardenCounterDefense'.default.RANGEDSTANCE_III_CDEF_BONUS);
+			}
+			else if (Rank >= 3)
+			{
+				OutString = string(class'X2Effect_WardenCounterDefense'.default.RANGEDSTANCE_II_CDEF_BONUS);
+			}
+			else
+			{
+				OutString = string(class'X2Effect_WardenCounterDefense'.default.RANGEDSTANCE_I_CDEF_BONUS);				
+			}
 			return true;
-		case 'MELEESTANCE_III_MOBILITY_BONUS':
-			OutString = string(class'X2Ability_Warden'.default.MELEESTANCE_III_MOBILITY_BONUS);
+		case 'RANGEDSTANCE_CURRENT_CRIT_BONUS':
+			if (Rank >= 6)
+            {
+				OutString = string(class'X2Ability_Warden'.default.RANGEDSTANCE_III_CRIT_BONUS);
+			}
+			else if (Rank >= 3)
+			{
+				OutString = string(class'X2Ability_Warden'.default.RANGEDSTANCE_II_CRIT_BONUS);
+			}
+			else
+			{
+				OutString = string(class'X2Ability_Warden'.default.RANGEDSTANCE_I_CRIT_BONUS);				
+			}		
+			return true;	
+		case 'FLOW_MASTERY_CHARGES':
+			if (Rank >= 6)
+            {
+				OutString = string((class'X2Ability_Warden'.default.FLOW_MASTERY_BASE_CHARGES + class'X2Ability_Warden'.default.FLOW_MASTERY_CHARGE_INCREASE));
+			}
+			else if (Rank >= 3)
+			{
+				OutString = string(class'X2Ability_Warden'.default.FLOW_MASTERY_BASE_CHARGES);
+			}
+			else
+			{
+				OutString = string(0);				
+			}
 			return true;
-		case 'WARDENSSWORD_AIM_I_BONUS':
-			OutString = string(class'X2Ability_Warden'.default.WARDENSSWORD_AIM_I_BONUS);
+			case 'LAST_RITES_CURRENT_DAMAGE':
+			if (TargetUnit != none)
+			{
+				TargetUnit.GetUnitValue(class'X2Effect_WardenLastRitesCharge'.default.LastRitesChargeCountValue, LastRitesUV);
+				LastRitesChargeCount = int(LastRitesUV.fValue);
+			}
+			if (UnitState != none)
+			{
+				LastRitesRef = UnitState.FindAbility('Warden_BD_LastRites');
+				if (LastRitesRef.ObjectID > 0)
+					{
+					LastRitesAbility = XComGameState_Ability(`XCOMHISTORY.GetGameStateForObjectID(LastRitesRef.ObjectID));
+					if (LastRitesAbility != none)
+					{
+						SourceWeapon = LastRitesAbility.GetSourceWeapon();
+					}
+				}
+			}
+			if (SourceWeapon != none && LastRitesChargeCount > 0)
+			{
+				SourceWeapon.GetBaseWeaponDamageValue(TargetUnit, LastRitesDamageValue);
+				LastRitesMinDamage = (LastRitesDamageValue.Damage - LastRitesDamageValue.Spread + class'X2Ability_Warden'.default.SOULBLADE_DAMAGE_BONUS) * LastRitesChargeCount;
+				LastRitesMaxDamage = (LastRitesDamageValue.Damage + LastRitesDamageValue.Spread + class'X2Ability_Warden'.default.SOULBLADE_DAMAGE_BONUS) * LastRitesChargeCount;
+				if (LastRitesMinDamage == LastRitesMaxDamage)
+				{
+					OutString = string(LastRitesMinDamage);
+				}
+				else
+				{
+					OutString = string(LastRitesMinDamage) $ "-" $ string(LastRitesMaxDamage);
+				}
+				return true;
+			}
+			OutString = "0";
 			return true;
-		case 'WARDENSSWORD_AIM_II_BONUS':
-			OutString = string(class'X2Ability_Warden'.default.WARDENSSWORD_AIM_II_BONUS);
+		case 'EBB_FLOW_DISCHARGE_DAMAGE':
+			OutString = String(int((UnitState.GetCurrentStat(eStat_PsiOffense) / class'X2Effect_EbbAndFlowDischarge'.default.EBB_FLOW_DISCHARGE_SCALAR)));
 			return true;
-		case 'WARDENSSWORD_AIM_III_BONUS':
-			OutString = string(class'X2Ability_Warden'.default.WARDENSSWORD_AIM_III_BONUS);
-			return true;
-		case 'RANGEDSTANCE_I_CDEF_BONUS':
-			OutString = string(class'X2Effect_WardenCounterDefense'.default.RANGEDSTANCE_I_CDEF_BONUS);
-			return true;
-		case 'RANGEDSTANCE_II_CDEF_BONUS': 
-			OutString = string(class'X2Effect_WardenCounterDefense'.default.RANGEDSTANCE_II_CDEF_BONUS);
-			return true;
-		case 'RANGEDSTANCE_III_CDEF_BONUS':
-			OutString = string(class'X2Effect_WardenCounterDefense'.default.RANGEDSTANCE_III_CDEF_BONUS);
-			return true;
-		case 'RANGEDSTANCE_I_CRIT_BONUS':
-			OutString = string(class'X2Ability_Warden'.default.RANGEDSTANCE_I_CRIT_BONUS);
-			return true;
-		case 'RANGEDSTANCE_II_CRIT_BONUS': 
-			OutString = string(class'X2Ability_Warden'.default.RANGEDSTANCE_II_CRIT_BONUS);
-			return true;
-		case 'RANGEDSTANCE_III_CRIT_BONUS':
-			OutString = string(class'X2Ability_Warden'.default.RANGEDSTANCE_III_CRIT_BONUS);
-			return true;
-		case 'RANGEDSTANCE_AIM_PENALTY': 
+		case 'RANGEDSTANCE_AIM_PENALTY':
 			OutString = string(class'X2Ability_Warden'.default.RANGEDSTANCE_AIM_PENALTY);
 			return true;
 		case 'MELEESTANCE_AIM_PENALTY':
@@ -473,12 +583,7 @@ static function PatchLastRitesChargeDisplayInfo()
     {
         ChargeEffect = X2Effect_WardenLastRitesCharge(LastRitesTemplate.AbilityTargetEffects[i]);
         if (ChargeEffect == none) continue;
-
-        ChargeEffect.SetDisplayInfo(ePerkBuff_Penalty,
-            ChargeDisplayTemplate.LocFriendlyName,
-            ChargeDisplayTemplate.GetMyLongDescription(),
-            "img:///UILibrary_XPACK_Common.PerkIcons.UIPerk_HomingMine",
-            true, , LastRitesTemplate.AbilitySourceName);
+        ChargeEffect.SetDisplayInfo(ePerkBuff_Penalty, ChargeDisplayTemplate.LocFriendlyName, ChargeDisplayTemplate.LocLongDescription, "img:///UILibrary_PerkIcons.UIPerk_deathblossom", true,, LastRitesTemplate.AbilitySourceName);
         break;
     }
 }
